@@ -1,27 +1,16 @@
 # ft_irc
-### Create your own IRC server in C++, fully compatible with an official client.  
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    bind.txt                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/02/25 11:18:21 by lahammam          #+#    #+#              #
-#    Updated: 2023/02/25 12:31:06 by lahammam         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+
+
 
 tcp et udp : des protocoles de transmission des données
 
-tcp : transmission control protocol 
-    - three-way handshake, guarntee that the data is received correctly.
+tcp : transmission control protocol.
+    . three-way handshake, guarntee that the data is received correctly.
 udp : user datagram protocol
-    - fire and forget protocol, faster than TCP, 
+    . fire and forget protocol, faster than TCP, 
 
 
-### bind
-
+### bind :
 - the Socket need to bind with specific IP address amd port number, for linsting to incoming commections.
 - The syntax : 
     int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
@@ -42,3 +31,19 @@ udp : user datagram protocol
             its binary form.
         - The htons() function is used to convert the port number to network byte order. 
     . addrlen : The size of addr in bytes.
+### Listen : 
+- listen: is a function that is used to put a server socket into a passive mode, waiting for incoming client connections.
+- The syntax :
+    int listen(int sockfd, int backlog);
+    . sockfd : socket descriptor.
+    . backlog :  the maximum length of the queue of pending connections that the kernel should allow for this socket.
+### Accept :
+- accept: is a function that is used in conjunction with sockets to accept incoming connection requests from clients and establish a new connection with the client.
+- The syntax: 
+    int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);
+    . sock: socket descriptor.
+    . address: is a pointer to a sockaddr structe that will be filled with the address of the client that is making the connection request.
+    . address_len: length of the sockaddr structure.
+    . Accept return a new socket file descriptor that can be used to communicate with the client.
+
+
