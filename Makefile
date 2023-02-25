@@ -6,32 +6,36 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:45:10 by lahammam          #+#    #+#              #
-#    Updated: 2023/02/24 08:45:29 by lahammam         ###   ########.fr        #
+#    Updated: 2023/02/25 18:12:55 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = server
+# NAME = server
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+# CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCS =	main.cpp 
+# SRCS =	main.cpp\
+# 		client.cpp
+# Include	=  
 
-Include	=  
+# OBJSRC = ${SRCS:.cpp=.o}
 
-OBJSRC = ${SRCS:.cpp=.o}
+# CC = c++
 
-CC = c++
+# %.o:%.cpp ${Include}
+# 		${CC} ${CFLAGS} -c $< -o $@
 
-%.o:%.cpp ${Include}
-		${CC} ${CFLAGS} -c $< -o $@
+# $(NAME): ${OBJSRC}  
+# 	${CC} ${CFLAGS} ${OBJSRC} -o ${NAME} 
 
-$(NAME): ${OBJSRC}  
-	${CC} ${CFLAGS} ${OBJSRC} -o ${NAME} 
-
-all: ${NAME}
+# all: ${NAME}
+all:
+	g++ client.cpp -o client
+	g++ main.cpp -o server
 
 clean:
 	rm -f ${OBJSRC}
+	rm -rf client server
 
 fclean: clean
 	rm -f ${NAME}

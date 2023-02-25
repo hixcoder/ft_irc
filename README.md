@@ -11,15 +11,23 @@ udp : user datagram protocol
 
 ### Socket:
 -  socket is an endpoint for sending and receiving data across a network.
--  The syntax : 
+-  The syntax: 
     ```c++
     int sockfd = socket(domain, type, protocol);
     ```
-    - sockfd: socket descripto
+    - sockfd: the socket file descriptor
     - domain: specifies communication domain (like address family).
     - type: communication type.
         - SOCK_STREAM: TCP
         - SOCK_DGRAM: UDP
+### Setsockopt:
+- setsockopt is a function that allows you to set options on a socket.
+- The syntax:
+    ```c++
+    int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
+    ```
+    - sockfd: the socket file descriptor
+    - level: the protocol level at which the option resides
 
 ### bind :
 - the Socket need to bind with specific IP address amd port number, for linsting to incoming commections.
