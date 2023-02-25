@@ -15,11 +15,11 @@ udp : user datagram protocol
     ```c++
     int sockfd = socket(domain, type, protocol);
     ```
-    . sockfd: socket descripto
-    . domain: specifies communication domain (like address family).
-    . type: communication type.
-        * SOCK_STREAM: TCP
-        * SOCK_DGRAM: UDP
+    - sockfd: socket descripto
+    - domain: specifies communication domain (like address family).
+    - type: communication type.
+        - SOCK_STREAM: TCP
+        - SOCK_DGRAM: UDP
 
 ### bind :
 - the Socket need to bind with specific IP address amd port number, for linsting to incoming commections.
