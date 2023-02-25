@@ -9,6 +9,17 @@ tcp : transmission control protocol.
 udp : user datagram protocol
     . fire and forget protocol, faster than TCP, 
 
+### Socket:
+-  socket is an endpoint for sending and receiving data across a network.
+-  The syntax : 
+    ```c++
+    int sockfd = socket(domain, type, protocol);
+    ```
+    . sockfd: socket descripto
+    . domain: specifies communication domain (like address family).
+    . type: communication type.
+        * SOCK_STREAM: TCP
+        * SOCK_DGRAM: UDP
 
 ### bind :
 - the Socket need to bind with specific IP address amd port number, for linsting to incoming commections.
