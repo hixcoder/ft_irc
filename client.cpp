@@ -6,12 +6,10 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 16:58:52 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/26 10:40:41 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:56:09 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Client side C/C++ program to demonstrate Socket
-// programming
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
