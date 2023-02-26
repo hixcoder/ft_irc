@@ -6,7 +6,7 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:45:10 by lahammam          #+#    #+#              #
-#    Updated: 2023/02/25 18:12:55 by lahammam         ###   ########.fr        #
+#    Updated: 2023/02/26 10:41:17 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,10 +31,11 @@
 # all: ${NAME}
 all:
 	g++ client.cpp -o client
-	g++ main.cpp -o server
+	g++ server.cpp -o server
 
 clean:
-	rm -f ${OBJSRC}
+	# rm -f ${OBJSRC}
+	rm -f *.o
 	rm -rf client server
 
 fclean: clean

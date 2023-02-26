@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 16:58:52 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/25 18:31:57 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:40:41 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int main()
 {
 	int status, valread, client_fd;
 	struct sockaddr_in serv_addr;
-	// char *hello = (char *)"Hello from client";
 	char buffer[1024] = {0};
 	if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
@@ -36,8 +35,6 @@ int main()
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORT);
 
-	// Convert IPv4 and IPv6 addresses from text to binary
-	// form
 	if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0)
 	{
 		perror(

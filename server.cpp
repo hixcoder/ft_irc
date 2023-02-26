@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:34:17 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/25 18:41:22 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:40:27 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int main()
     bind(sock, (struct sockaddr *)&server_address, sizeof(server_address));
 
     listen(sock, 5);
+
     struct sockaddr_in client_addr;
     memset(&client_addr, 0, sizeof(client_addr));
     socklen_t client_addrlen = sizeof(client_addr);
-
     int clientfd = accept(sock, (struct sockaddr *)&client_addr, &client_addrlen);
     if (clientfd < 0)
     {
@@ -50,28 +50,28 @@ int main()
         return -1;
     }
 
-    char buffer[1024] = {0};
-    // int total_bytes_received = 0;
+    char buffer[1] = {0};
 
-    char *hello = (char *)"Hello from server";
+    char *hello = (char *)"Hello from server\n";
     int valread;
 
-    do
+    while (true)
     {
-        char buffer[1024] = {0};
-        valread = recv(clientfd, buffer, sizeof(buffer), 0); // receive data
+        valread = recv(clientfd, buffer, sizeof(buffer), 0);
         if (valread < 0)
         {
             perror("Failed to receive data");
             exit(1);
         }
+        if (valread == 0)
+        {
+            printf("Client disconnected\n");
+            break;
+        }
         printf("%s\n", buffer);
-        // total_bytes_received += valread;
-    } while (valread > 0);
-    // valread = recv(clientfd, buffer, sizeof(buffer), 0);
-    // printf("%s\n", buffer);
-    send(clientfd, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
+        send(clientfd, hello, strlen(hello), 0);
+        printf("Response sent\n");
+    }
     close(clientfd);
 
     close(sock);
