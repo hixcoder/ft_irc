@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.hpp": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "locale": "cpp"
     }
 }

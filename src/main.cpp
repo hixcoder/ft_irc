@@ -6,21 +6,39 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:07 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/26 19:14:22 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/02/26 19:51:18 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
+void doProcessing(int clientSockFd)
+{
+    int n;
+    char buffer[1024];
+
+    // receives client message 
+    bzero(&buffer, sizeof(buffer));
+    n = recv(clientSockFd, buffer, sizeof(buffer), 0);
+    if (n < 0)
+        fun_error("Error receiving from client socket", 1);
+
+    std::cout << "client: " << buffer;
+    
+    // send message to client
+    // char msg[] = "hello client!\n";
+    // n = send(clientSockFd, msg, sizeof(msg), 0);
+    // if (n < 0)
+    //     fun_error("Error sending to client socket", 1);
+}
 
 int main(int ac, char **av)
 {
     if (ac == 3)
     {
         int serverSockFd, clientSockFd, portno;
-        char buffer[1024];
         struct sockaddr_in server_addr, client_addr;
-        int n;
+        int pid;
         socklen_t clientlen;
         
 
@@ -43,35 +61,33 @@ int main(int ac, char **av)
         
 
         // listening for the clients (wait for incoming connection from the client)
-        if (listen(serverSockFd, 5) < 0)
+        if (listen(serverSockFd, 2) < 0)
             fun_error("Error on binding host adress.", 1);
         
-
-        // accept actual connection from the client
-        clientlen = sizeof(client_addr);
-        clientSockFd = accept(serverSockFd, (struct sockaddr *) &client_addr, &clientlen);
-        if (clientSockFd < 0)
-            fun_error("Error accepting connection with the client.", 1);
-        
-        // start communicating if the connection is established
-        // receives client message 
-        bzero(&buffer, sizeof(buffer));
-        n = recv(clientSockFd, buffer, sizeof(buffer), 0);
-        if (n < 0)
-            fun_error("Error reading from client socket", 1);
-
-        std::cout << "client message: " << buffer << "\n";
-        
-        // send message to client
-        char msg[] = "hello client!\n";
-        n = send(clientSockFd, msg, sizeof(msg), 0);
-        if (n < 0)
-            fun_error("Error writting to client socket", 1);
-
-        close(clientSockFd);
-        close(serverSockFd);
-        
-        
+        while (1)
+        {
+            // accept actual connection from the client
+            clientlen = sizeof(client_addr);
+            clientSockFd = accept(serverSockFd, (struct sockaddr *) &client_addr, &clientlen);
+            if (clientSockFd < 0)
+                fun_error("Error accepting connection with the client.", 1);
+            
+            // create child process for each connection
+            pid = fork();
+            if (pid < 0)
+                fun_error("Error: fork faild to create a child process", 1);
+            if (pid == 0)
+            {
+                close(serverSockFd);
+                while (1)
+                {
+                    doProcessing(clientSockFd);
+                }
+                exit(0);
+            }
+            else
+                close(clientSockFd);
+        }
     }
     else
         std::cout << "=> please enter: ./ircserv: <port> <password>\n";
