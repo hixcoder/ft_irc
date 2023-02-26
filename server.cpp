@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:34:17 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/26 15:39:36 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 17:14:51 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <poll.h>
-
+#include <vector>
 int main()
 {
     // int opt = 1;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-    printf("---fd main socket=%d\n", sock);
     // setsockopt(sock, SOL_SOCKET,
     //            SO_REUSEADDR | SO_REUSEPORT, &opt,
     //            sizeof(opt));
@@ -40,6 +39,7 @@ int main()
 
     listen(sock, 5);
 
+    // ---> multiple msg from one client.
     // struct sockaddr_in client_addr;
     // memset(&client_addr, 0, sizeof(client_addr));
     // socklen_t client_addrlen = sizeof(client_addr);
@@ -50,15 +50,12 @@ int main()
     //     close(sock);
     //     return -1;
     // }
-
     // char buffer[5] = {0};
-
     // char *hello = (char *)"Hello from server\n";
     // int valread;
-
     // while (true)
     // {
-    //     valread = recv(clientfd, buffer, sizeof(buffer), MSG_WAITALL);
+    //     valread = recv(clientfd, buffer, sizeof(buffer), 0);
     //     if (valread < 0)
     //     {
     //         perror("Failed to receive data");
@@ -74,30 +71,25 @@ int main()
     //     printf("Response sent\n");
     // }
 
-    int new_socket, valread, opt = 1;
+    int new_socket, valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
 
-    struct pollfd pollfds[10];
-    pollfds[0].fd = sock;
-    pollfds[0].events = POLLIN;
-
-    // Initialize the other sockets
-    for (int i = 1; i < 10; i++)
-    {
-        pollfds[i].fd = -1;
-    }
+    std::vector<pollfd> pollfds;
+    pollfd mainSocket = {sock, POLLIN, 0};
+    pollfds.push_back(mainSocket);
+    printf("-----> %p\n", pollfds.data());
     while (1)
     {
 
-        int ready_sockets = poll(pollfds, 10, -1);
+        int ready_sockets = poll(pollfds.data(), pollfds.size(), -1);
         if (ready_sockets < 0)
         {
             perror("poll failed");
             exit(EXIT_FAILURE);
         }
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < pollfds.size(); i++)
         {
             if (pollfds[i].revents != 0)
             {
@@ -108,22 +100,15 @@ int main()
                         perror("accept");
                         exit(EXIT_FAILURE);
                     }
-                    for (int j = 1; j < 10; j++)
-                    {
-                        if (pollfds[j].fd == -1)
-                        {
-                            pollfds[j].fd = new_socket;
-                            pollfds[j].events = POLLIN;
-                            break;
-                        }
-                    }
+                    pollfd addSocket = {new_socket, POLLIN, 0};
+                    pollfds.push_back(addSocket);
                 }
                 else
                 {
                     if ((valread = recv(pollfds[i].fd, buffer, 1024, 0)) == 0)
                     {
                         close(pollfds[i].fd);
-                        pollfds[i].fd = -1;
+                        pollfds.erase(pollfds.begin() + i);
                     }
                     else
                     {
