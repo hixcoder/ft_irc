@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 16:58:52 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/26 10:56:09 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 14:45:30 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int main()
 			std::cerr << "Error sending message\n";
 			break;
 		};
-		valread = read(client_fd, buffer, 1024);
-		printf("%s\n", buffer);
+		// valread = read(client_fd, buffer, 1024);
+		// printf("%s\n", buffer);
 	}
 	close(client_fd);
 	return 0;

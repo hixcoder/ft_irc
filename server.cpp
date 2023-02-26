@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:34:17 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/26 14:28:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/26 15:39:36 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main()
 {
     // int opt = 1;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-
+    printf("---fd main socket=%d\n", sock);
     // setsockopt(sock, SOL_SOCKET,
     //            SO_REUSEADDR | SO_REUSEPORT, &opt,
     //            sizeof(opt));
@@ -88,26 +88,19 @@ int main()
     {
         pollfds[i].fd = -1;
     }
-
     while (1)
     {
-        // Wait for any activity on any of the sockets
+
         int ready_sockets = poll(pollfds, 10, -1);
-        printf("------\n");
         if (ready_sockets < 0)
         {
             perror("poll failed");
             exit(EXIT_FAILURE);
         }
-
-        // Check each socket for activity
         for (int i = 0; i < 10; i++)
         {
-            // Check if the socket has activity
             if (pollfds[i].revents != 0)
             {
-                // If it's the server socket, accept a new connection
-
                 if (pollfds[i].fd == sock)
                 {
                     if ((new_socket = accept(sock, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
@@ -115,8 +108,6 @@ int main()
                         perror("accept");
                         exit(EXIT_FAILURE);
                     }
-
-                    // Add the new socket to the pollfd structure
                     for (int j = 1; j < 10; j++)
                     {
                         if (pollfds[j].fd == -1)
@@ -127,26 +118,21 @@ int main()
                         }
                     }
                 }
-                // If it's not the server socket, receive the data and echo it back
                 else
                 {
-                    if ((valread = read(pollfds[i].fd, buffer, 1024)) == 0)
+                    if ((valread = recv(pollfds[i].fd, buffer, 1024, 0)) == 0)
                     {
-                        // Connection closed
                         close(pollfds[i].fd);
                         pollfds[i].fd = -1;
                     }
                     else
                     {
                         std::cout << "Received: " << buffer << std::endl;
-                        send(pollfds[i].fd, buffer, strlen(buffer), 0);
+                        // send(pollfds[i].fd, buffer, strlen(buffer), 0);
                     }
                 }
             }
         }
-        printf("Polling...\n");
     }
-
-    // close(clientfd);
     close(sock);
 }
