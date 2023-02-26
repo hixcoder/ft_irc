@@ -96,7 +96,7 @@ udp : user datagram protocol
     ```c++
     int poll(struct pollfd *fds, nfds_t nfds, int timeout);
     ```
-    . fds: a pointer to an array of struct pollfd elements.
+    - fds: a pointer to an array of struct pollfd elements.
     ```c++
     struct pollfd {
 	    int     fd;
@@ -104,15 +104,15 @@ udp : user datagram protocol
 	    short   revents;
     };
     ```
-        . fd: socket descriptor.
-        . events: events to monitor for the given file descriptor.
-            . POLLIN: Data is available to be read from the file descriptor.
-            . POLLOUT: Data can be written to the file descriptor without blocking.
-            . POLLERR, POLLHUP(disconnected) and POLLNVAL(not open).
-        . revents :  the same as for events.
-    . nfds: the number of struct pollfd elements in the fds array.
-    . timeout: specifies the time-out interval in milliseconds.
-        . -1: if one file descriptor that is ready for I/O.
-        . 0 : should return immediately. (poll without blocking)
-        . positive integer : the number of milliseconds.
+        - fd: socket descriptor.
+        - events: events to monitor for the given file descriptor.
+            - POLLIN: Data is available to be read from the file descriptor.
+            - POLLOUT: Data can be written to the file descriptor without blocking.
+            - POLLERR, POLLHUP(disconnected) and POLLNVAL(not open).
+        - revents :  the same as for events.
+    - nfds: the number of struct pollfd elements in the fds array.
+    - timeout: specifies the time-out interval in milliseconds.
+        - -1: if one file descriptor that is ready for I/O.
+        - 0 : should return immediately. (poll without blocking)
+        - positive integer : the number of milliseconds.
 
