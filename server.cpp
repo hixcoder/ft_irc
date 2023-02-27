@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:34:17 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/26 17:14:51 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/27 10:00:19 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,8 @@ int main()
     std::vector<pollfd> pollfds;
     pollfd mainSocket = {sock, POLLIN, 0};
     pollfds.push_back(mainSocket);
-    printf("-----> %p\n", pollfds.data());
     while (1)
     {
-
         int ready_sockets = poll(pollfds.data(), pollfds.size(), -1);
         if (ready_sockets < 0)
         {

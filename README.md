@@ -105,11 +105,11 @@ udp : user datagram protocol
     };
     ```
         - fd: socket descriptor.
-        - events: events to monitor for the given file descriptor.
+        - events:  events you want to monitor for file descriptor.
             - POLLIN: Data is available to be read from the file descriptor.
             - POLLOUT: Data can be written to the file descriptor without blocking.
             - POLLERR, POLLHUP(disconnected) and POLLNVAL(not open).
-        - revents :  the same as for events.
+        - revents :  indicate which events actually occurred on the corresponding file descriptor, returned by poll.
     - nfds: the number of struct pollfd elements in the fds array.
     - timeout: specifies the time-out interval in milliseconds.
         - -1: if one file descriptor that is ready for I/O.
