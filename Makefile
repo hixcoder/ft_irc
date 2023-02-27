@@ -6,37 +6,33 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:45:10 by lahammam          #+#    #+#              #
-#    Updated: 2023/02/26 10:41:17 by lahammam         ###   ########.fr        #
+#    Updated: 2023/02/27 10:23:22 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# NAME = server
+NAME = ft_irc
 
-# CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-# SRCS =	main.cpp\
-# 		client.cpp
-# Include	=  
+SRCS =	main.cpp server/server.cpp
 
-# OBJSRC = ${SRCS:.cpp=.o}
+Include	=  ft_irc.hpp server/server.hpp
 
-# CC = c++
+OBJSRC = ${SRCS:.cpp=.o}
 
-# %.o:%.cpp ${Include}
-# 		${CC} ${CFLAGS} -c $< -o $@
+CC = c++
 
-# $(NAME): ${OBJSRC}  
-# 	${CC} ${CFLAGS} ${OBJSRC} -o ${NAME} 
+%.o:%.cpp ${Include}
+		${CC} ${CFLAGS} -c $< -o $@
 
-# all: ${NAME}
-all:
-	g++ client.cpp -o client
-	g++ server.cpp -o server
+$(NAME): ${OBJSRC}  
+	${CC} ${CFLAGS} ${OBJSRC} -o ${NAME} 
+
+all: ${NAME}
+
 
 clean:
-	# rm -f ${OBJSRC}
-	rm -f *.o
-	rm -rf client server
+	rm -f ${OBJSRC}
 
 fclean: clean
 	rm -f ${NAME}
