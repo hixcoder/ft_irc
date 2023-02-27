@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:07 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/27 12:58:25 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:13:27 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ void doProcessing(int newSocket)
 int main(int ac, char **av)
 {
     int serverSocket, newSocket, portno;
-    struct sockaddr_in server_addr, client_addr;
+    struct sockaddr_in server_addr;
     std::vector<pollfd> pollfds;
-    int rc;
+    int rc, closeCon;
+   
+    int endServer = 0;
     
     if (ac == 3)
     {
@@ -62,28 +64,23 @@ int main(int ac, char **av)
         
 
         // listening for the clients (wait for incoming connection from the client)
-        if (listen(serverSocket, 2) < 0)
+        if (listen(serverSocket, 10) < 0)
             fun_error("Error on binding host adress.", 1, serverSocket);
         
-        pollfds.push_back({serverSocket, POLLIN, 0});
-        int timeout = (3 * 1000);
+        pollfd servSocket = {serverSocket, POLLIN, 0};
+        pollfds.push_back(servSocket);
+        // int timeout = 1000 * 1;
         // establish connections and start communication
         do
         {
             // call poll() and wait
-            rc = poll(pollfds.data(), pollfds.size(), timeout);
+            rc = poll(pollfds.data(), pollfds.size(), 0);
+
 
             // check if poll() call failed
             if (rc < 0)
             {
                 std::cout << "poll() call failed!\n";
-                break;
-            }
-            
-            // check to see if time out
-            if (rc == 0)
-            {
-                std::cout << "poll() call time out!\n";
                 break;
             }
             
@@ -93,14 +90,84 @@ int main(int ac, char **av)
                 if (pollfds[i].revents == 0)
                     continue;
 
-                if (pollfds)
+                if (pollfds[i].revents != POLLIN)
+                {
+                    std::cout << "client " << pollfds[i].fd << " disconnected\n";
+                    close(pollfds[i].fd);
+                    pollfds.erase(pollfds.begin() + i);
+                    break; 
+                }
                 
+                if (pollfds[i].fd == serverSocket)
+                {
+                    // here we loop and accept incoming connections
+                    std::cout << "listening socket is readable\n";
+                    while(true)
+                    {
+                        newSocket = accept(serverSocket, NULL, NULL);
+                        if (newSocket < 0)
+                        {
+                            if (errno != EWOULDBLOCK)
+                            {
+                                std::cout << "accept() failed\n";
+                                endServer = 1;
+                            }
+                            break;
+                        }
+                        
+                        // add the new incoming connection to pollfds
+                        std::cout << "New incoming connection: " << newSocket << "\n";
+                        pollfd cliSocket = {newSocket, POLLIN, 0};
+                        pollfds.push_back(cliSocket);
+                    } 
+                }
+                else
+                {
+                    std::cout << "Client " << pollfds[i].fd << ":";
+                    closeCon = 0;
+                    do
+                    {
+                        // if recv function fails with EWOULDBLOCK
+                        char buffer[1024];
+                        bzero(&buffer, sizeof(buffer));
+                        rc = recv(pollfds[i].fd, buffer, sizeof(buffer), 0);
+                        if (rc < 0)
+                        {
+                            if (errno != EWOULDBLOCK)
+                            {
+                                std::cout << "recv() failed\n";
+                                closeCon = 1;
+                            }
+                            break;
+                        }
+                        // if connection closed by client 
+                        if (rc == 0)
+                        {
+                            std::cout << "Connection closed\n";
+                            closeCon = 1;
+                            break;
+                        }
+                        
+                        // if the data received just print it.
+                        std::cout << buffer;
+                    } while (true);
+                    
+                    if (closeCon)
+                    {
+                        close(pollfds[i].fd);
+                        pollfds.pop_back();
+                    }
+                }
             }
-            
-            
-
-        } while (newSocket != -1);
+        } while (endServer == 0);
         
+        // clean up all the sockets that are open
+        for (size_t i = 0; i < pollfds.size(); i++)
+        {
+            if (pollfds[i].fd > 0)
+                close(pollfds[i].fd);
+        }
+         
 
     }
     else

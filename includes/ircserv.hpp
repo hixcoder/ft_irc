@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/27 11:45:55 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/02/27 13:44:08 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/poll.h>
+# include <errno.h>
 
 # include "server.hpp"
 # include "../src/utiles/utiles.hpp"
