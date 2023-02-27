@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/27 10:03:06 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/27 19:04:30 by lahammam         ###   ########.fr       */
+/*   Created: 2023/02/27 18:39:02 by lahammam          #+#    #+#             */
+/*   Updated: 2023/02/27 18:58:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#include "user.hpp"
 
-#include "../ft_irc.hpp"
+User::User(/* args */){};
 
-class Server
+User::User(std::string _nick, std::string _username)
 {
-private:
-    int mainsocked;
-    std::vector<pollfd> pollfds;
-    std::vector<int> connected;
-    std::string password;
-
-public:
-    Server();
-
-    void handle_events();
-    void add_guest();
-    void recv_msg(int i);
-
-    ~Server();
+    nick = _nick;
+    username = _username;
 };
 
-#endif
+User::~User(){};

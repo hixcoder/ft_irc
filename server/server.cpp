@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/27 17:10:40 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:41:23 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Server::Server()
 {
     // int opt = 1;
     mainsocked = socket(AF_INET, SOCK_STREAM, 0);
+    password = "1111";
     // setsockopt(sock, SOL_SOCKET,
     //            SO_REUSEADDR | SO_REUSEPORT, &opt,
     //            sizeof(opt));
@@ -32,9 +33,10 @@ Server::Server()
 
     pollfd mainPollfd = {mainsocked, POLLIN, 0};
     pollfds.push_back(mainPollfd);
+    connected.push_back(0);
 };
 
-void Server::add_user()
+void Server::add_guest()
 {
     int new_socket;
     struct sockaddr_in address;
@@ -47,7 +49,7 @@ void Server::add_user()
 
     pollfd addSocket = {new_socket, POLLIN, 0};
     pollfds.push_back(addSocket);
-    printf("New client add\n");
+    connected.push_back(0);
 };
 
 void Server::recv_msg(int i)
@@ -61,7 +63,23 @@ void Server::recv_msg(int i)
     }
     else
     {
-        std::cout << "Received: " << buffer << std::endl;
+        if (connected[i] == 0)
+        {
+            // char *ptr;
+            std::vector<std::string> spl = ft_split(buffer, ' ');
+
+            if (spl.size() != 2)
+                std::cout << "Error command" << std::endl;
+            else
+            {
+                if (strcmp("PASS", spl[0].c_str()) == 0)
+                    std::cout << spl[1] << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Received: " << buffer << std::endl;
+        }
         // send(pollfds[i].fd, buffer, strlen(buffer), 0);
     }
 };
@@ -81,7 +99,7 @@ void Server::handle_events()
             if (pollfds[i].revents != 0)
             {
                 if (pollfds[i].fd == mainsocked)
-                    Server::add_user();
+                    Server::add_guest();
                 else
                     Server::recv_msg(i);
             }

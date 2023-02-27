@@ -4,6 +4,7 @@
         "memory": "cpp",
         "istream": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "ostream": "cpp"
     }
 }

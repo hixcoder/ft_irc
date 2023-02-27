@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:06:33 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/27 10:07:19 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:35:51 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
+
+std::vector<std::string> ft_split(std::string str, char separator);
 
 #endif
