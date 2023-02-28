@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/24 08:46:07 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/28 17:38:45 by hboumahd         ###   ########.fr       */
+/*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
+/*   Updated: 2023/02/28 17:40:49 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ircserv.hpp"
+#pragma once
+# include "ircserv.hpp"
 
-int main(int ac, char **av)
+class Client
 {
-    if (ac == 3)
-    {
-        Server serv(av[1], av[2]);
-        serv.runServer();
-    }
-    else
-        std::cout << "=> please enter: ./ircserv: <port> <password>\n";
-    return 0;
-}
+private:
+    int _fd;
+    int _is_auth;
+    
+    
+    
+    
+public:
+    Client(int fd);
+    ~Client();
+
+    int getFd() const {return _fd;}
+};
+

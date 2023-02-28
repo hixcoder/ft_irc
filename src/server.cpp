@@ -6,13 +6,13 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/28 12:45:41 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:18:55 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
-server::server(char *port, char *passwd)
+Server::Server(char *port, char *passwd)
 {
     _passwd = passwd;
     _port = atoi(port);
@@ -27,13 +27,11 @@ server::server(char *port, char *passwd)
     _pollfds.push_back(servSocket);
 }
 
-server::~server()
+Server::~Server()
 {
 }
 
-
-
-void server::createSocket()
+void Server::createSocket()
 {
     //  create server socket and initialize it
     _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -47,7 +45,7 @@ void server::createSocket()
     _server_addr.sin_port = htons(_port);
 }
 
-void server::bindSocket()
+void Server::bindSocket()
 {
     // here we allow the server socket fd to be reusable
     int optval = 1;
@@ -64,30 +62,19 @@ void server::bindSocket()
     
 }
 
-void server::listeningToClients(int backlog)
+void Server::listeningToClients(int backlog)
 {
     // listening for the clients (wait for incoming connection from the client)
     if (listen(_serverSocket, backlog) < 0)
         error("Error on binding host adress.", 1, _serverSocket);
 }
 
-void server::error(std::string errorMsg, int exitStatus, int fd)
+// establish connections and start communication
+void Server::runServer()
 {
-    std::cout << errorMsg << "\n";
-    if (fd != -2)
-        close(fd);
-    exit(exitStatus);
-}
-
-void server::runServer()
-{
-    // establish connections and start communication
     do
     {
-        // call poll() and wait
-        _rc = poll(_pollfds.data(), _pollfds.size(), _timeout);
-        // check if poll() call failed
-        if (_rc < 0)
+        if (poll(_pollfds.data(), _pollfds.size(), _timeout) < 0)
         {
             std::cout << "poll() call failed!\n";
             break;
@@ -109,19 +96,13 @@ void server::runServer()
             if (_pollfds[i].fd == _serverSocket)
                 addClient();
             else
-                recvClientMsg(_pollfds[i]);
+                recvClientMsg(_clients[i - 1]);
         }
     } while (_endServer == 0);
-
-    // clean up all the sockets that are open
-    for (size_t i = 0; i < _pollfds.size(); i++)
-    {
-        if (_pollfds[i].fd > 0)
-            close(_pollfds[i].fd);
-    }
+    clean();
 }
 
-void server::addClient()
+void Server::addClient()
 {
     // here we loop and accept incoming connections
     while(true)
@@ -136,24 +117,26 @@ void server::addClient()
             }
             break;
         }
-        
         // add the new incoming connection to _pollfds
         std::cout << "New incoming connection: " << _newSocket << "\n";
         pollfd cliSocket = {_newSocket, POLLIN, 0};
         _pollfds.push_back(cliSocket);
-    } 
+        // add client
+        Client newclient(cliSocket.fd);
+        _clients.push_back(newclient);
+    }
 }
 
-void server::recvClientMsg(pollfd arPollfd)
+void Server::recvClientMsg(Client &client)
 {
-    std::cout << "Client" << arPollfd.fd << ": ";
+    std::cout << "Client" << client.getFd() << ": ";
     _closeCon = 0;
     do
     {
         // if recv function fails with EWOULDBLOCK
         char buffer[1024];
         bzero(&buffer, sizeof(buffer));
-        _rc = recv(arPollfd.fd, buffer, sizeof(buffer), 0);
+        _rc = recv(client.getFd(), buffer, sizeof(buffer), 0);
         if (_rc < 0)
         {
             if (errno != EWOULDBLOCK)
@@ -170,14 +153,31 @@ void server::recvClientMsg(pollfd arPollfd)
             _closeCon = 1;
             break;
         }
-        
         // here we print the Client message.
         std::cout << buffer;
     } while (true);
     
     if (_closeCon)
     {
-        close(arPollfd.fd);
+        close(client.getFd());
         _pollfds.pop_back();
+    }
+}
+
+void Server::error(std::string errorMsg, int exitStatus, int fd)
+{
+    std::cout << errorMsg << "\n";
+    if (fd != -2)
+        close(fd);
+    exit(exitStatus);
+}
+
+// clean up all the sockets that are open
+void Server::clean()
+{
+    for (size_t i = 0; i < _pollfds.size(); i++)
+    {
+        if (_pollfds[i].fd > 0)
+            close(_pollfds[i].fd);
     }
 }

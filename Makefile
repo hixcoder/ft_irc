@@ -6,7 +6,7 @@
 #    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/02/28 12:38:15 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/02/28 16:12:25 by hboumahd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,11 @@ NAME = ircserv
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
-SRCS =	src/main.cpp src/server.cpp
+SRCS =	src/main.cpp src/server.cpp src/client.cpp
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
-Include = includes/ircserv.hpp includes/server.hpp 
+Include = includes/ircserv.hpp includes/server.hpp includes/client.hpp 
 
 # -g for the debugger
 %.o:%.cpp ${Include}
