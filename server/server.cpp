@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/28 13:48:45 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:36:13 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Server::Server()
 
     User tmp;
     tmp.set_fdClient(0);
-    guests.push_back(tmp);
+    users.push_back(tmp);
 };
 
 void Server::add_guest()
@@ -54,19 +54,9 @@ void Server::add_guest()
 
     User new_gst;
     new_gst.set_fdClient(new_socket);
-    guests.push_back(new_gst);
+    users.push_back(new_gst);
 };
 
-int Server::verifie_pass(std::string _passU)
-{
-
-    if (strcmp(_passU.c_str(), password.c_str()) == 0)
-        return 1;
-
-    std::cout << password << std::endl;
-    std::cout << _passU << std::endl;
-    return 0;
-};
 void Server::recv_msg(int i)
 {
     char buffer[1024] = {0};
@@ -78,36 +68,9 @@ void Server::recv_msg(int i)
     }
     else
     {
-        if (guests[i].get_auth())
-        {
-        }
-        else
-        {
-            std::vector<std::string> spl = ft_split(buffer, ' ');
-            if (spl.size() != 2)
-                std::cout << "Error command" << std::endl;
-            else
-            {
-
-                spl[1][spl[1].size() - 1] = 0;
-
-                if (guests[i].get_pass())
-                {
-                }
-                else
-                {
-                    if (strcmp("PASS", spl[0].c_str()) == 0)
-                    {
-                        if (verifie_pass(spl[1]) == 1)
-                            std::cout << "verified" << std::endl;
-                        else
-                            std::cout << "Error Password" << std::endl;
-                    }
-                    else
-                        std::cout << "not verified" << std::endl;
-                }
-            }
-        }
+        std::vector<std::string> spl = ft_split(buffer, ' ');
+        if (strcmp("PASS", spl[0].c_str()) == 0)
+            Server::ft_pass_cmd(i, spl);
     }
 };
 

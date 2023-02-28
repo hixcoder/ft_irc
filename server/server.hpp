@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:03:06 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/28 13:36:54 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:57:40 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ private:
     int mainsocked;
     std::vector<pollfd> pollfds;
     std::string password;
-    std::vector<User> guests;
     std::vector<User> users;
 
 public:
@@ -31,7 +30,7 @@ public:
     void add_guest();
     void recv_msg(int i);
 
-    int verifie_pass(std::string _passU);
+    void ft_pass_cmd(int i, std::vector<std::string> cmds);
 
     ~Server();
 };
