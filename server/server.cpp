@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/28 18:36:13 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 10:03:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ Server::Server()
     setsockopt(mainsocked, SOL_SOCKET,
                SO_REUSEADDR | SO_REUSEPORT, &opt,
                sizeof(opt));
+
+    fcntl(mainsocked, F_SETFL, O_NONBLOCK);
 
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
@@ -70,7 +72,7 @@ void Server::recv_msg(int i)
     {
         std::vector<std::string> spl = ft_split(buffer, ' ');
         if (strcmp("PASS", spl[0].c_str()) == 0)
-            Server::ft_pass_cmd(i, spl);
+            Server::ft_pass_cmd(i, spl, buffer);
     }
 };
 

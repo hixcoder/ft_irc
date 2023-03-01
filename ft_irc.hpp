@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:06:33 by lahammam          #+#    #+#             */
-/*   Updated: 2023/02/28 17:40:16 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 10:03:59 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #define ERR_NEEDMOREPARAMS 461
 #define ERR_PASSWDMISMATCH 464
-#define ERR_ALREADYREGISTRED 462     
+#define ERR_ALREADYREGISTRED 462
 
 #include <iostream>
 #include <sys/socket.h>
@@ -27,6 +27,7 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
+#include <fcntl.h>
 
 #include "user/user.hpp"
 class User;
