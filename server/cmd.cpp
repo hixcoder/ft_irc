@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 10:08:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 13:25:26 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,30 @@ void Server::ft_pass_cmd(int i, std::vector<std::string> cmds, char *buffer)
         else
             users[i].set_pass(1);
     }
+};
+
+void Server::ft_nick_cmd(int i, std::vector<std::string> cmds)
+{
+    if (cmds.size() == 1)
+        ft_print_error(users[i].get_nickname(), ERR_NONICKNAMEGIVEN, users[i]);
+    else if (ft_isvalid_nickname(cmds[1]) == 0)
+        ft_print_error(cmds[1], ERR_ERRONEUSNICKNAME, users[i]);
+    else if (ft_isalreadyused(cmds[1], 1, users) == 1)
+        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, users[i]);
+    else
+        users[i].set_nickname(cmds[1]);
+};
+
+void Server::ft_user_cmd(int i, std::vector<std::string> cmds)
+{
+    std::string pass = "";
+
+    if (cmds.size() == 1)
+        ft_print_error(users[i].get_nickname(), ERR_NONICKNAMEGIVEN, users[i]);
+    else if (ft_isvalid_nickname(cmds[1]) == 0)
+        ft_print_error(cmds[1], ERR_ERRONEUSNICKNAME, users[i]);
+    else if (ft_isalreadyused(cmds[1], 1, users) == 1)
+        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, users[i]);
+    else
+        users[i].set_nickname(cmds[1]);
 };

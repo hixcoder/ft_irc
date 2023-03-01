@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 10:03:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 13:25:05 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ void Server::recv_msg(int i)
         std::vector<std::string> spl = ft_split(buffer, ' ');
         if (strcmp("PASS", spl[0].c_str()) == 0)
             Server::ft_pass_cmd(i, spl, buffer);
+        else if (strcmp("NICK", spl[0].c_str()) == 0)
+            Server::ft_nick_cmd(i, spl);
+        else if (strcmp("USER", spl[0].c_str()) == 0)
+            Server::ft_user_cmd(i, spl);
     }
 };
 
