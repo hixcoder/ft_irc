@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "/Users/hboumahd/Desktop/ft_irc/ircserv",
-            "args": [],
+            "args": ["12345", "gdfg"],
             "cwd": "/Users/hboumahd/Desktop/ft_irc"
         }
     ]

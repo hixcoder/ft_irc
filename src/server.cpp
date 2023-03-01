@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/28 18:18:55 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:48:05 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ Server::Server(char *port, char *passwd)
     _port = atoi(port);
     _timeout = 0;
     _endServer = 0;
+    _closeCon = 0;
     
     createSocket();
     bindSocket();
@@ -74,7 +75,7 @@ void Server::runServer()
 {
     do
     {
-        if (poll(_pollfds.data(), _pollfds.size(), _timeout) < 0)
+        if (poll(_pollfds.data(), _pollfds.size(), -1) < 0)
         {
             std::cout << "poll() call failed!\n";
             break;
@@ -90,6 +91,7 @@ void Server::runServer()
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
+                _clients.erase(_clients.begin() + i - 1);
                 break; 
             }
             
@@ -97,6 +99,14 @@ void Server::runServer()
                 addClient();
             else
                 recvClientMsg(_clients[i - 1]);
+                
+            if (_closeCon)
+            {
+                close(_pollfds[i].fd);
+                _pollfds.erase(_pollfds.begin() + i);
+                _clients.erase(_clients.begin() + i - 1);
+                _closeCon = 0;
+            }
         }
     } while (_endServer == 0);
     clean();
@@ -130,7 +140,6 @@ void Server::addClient()
 void Server::recvClientMsg(Client &client)
 {
     std::cout << "Client" << client.getFd() << ": ";
-    _closeCon = 0;
     do
     {
         // if recv function fails with EWOULDBLOCK
@@ -156,12 +165,6 @@ void Server::recvClientMsg(Client &client)
         // here we print the Client message.
         std::cout << buffer;
     } while (true);
-    
-    if (_closeCon)
-    {
-        close(client.getFd());
-        _pollfds.pop_back();
-    }
 }
 
 void Server::error(std::string errorMsg, int exitStatus, int fd)

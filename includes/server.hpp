@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/02/28 18:10:13 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:53:31 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ public:
     Server(char *port, char *passwd);
     ~Server();
 
+    void runServer();
+
+private:  
     void createSocket();
     void bindSocket();
     void listeningToClients(int backlog);
     void error(std::string errorMsg, int exitStatus, int fd);
     void clean();
     
-    void runServer();
     void addClient();
     void recvClientMsg(Client &client);
 };
