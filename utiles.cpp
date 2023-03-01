@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 19:23:01 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 12:03:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:30:13 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,14 @@ void ft_print_error(std::string cmd, int type, User user)
         std::string msg = temp + cmd + " :Nickname is already in use\n";
         send(user.get_fdClient(), msg.c_str(), strlen(msg.c_str()), 0);
     }
+}
+
+bool ft_isregister(User user)
+{
+    std::cout << "user.get_pass() :" << user.get_pass() << std::endl;
+    std::cout << "user.get_nickname().size() :" << user.get_nickname().size() << std::endl;
+    std::cout << "user.get_username().size() :" << user.get_username().size() << std::endl;
+    if (user.get_pass() && user.get_nickname().size() && user.get_username().size())
+        return 1;
+    return 0;
 }

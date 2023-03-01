@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:25:30 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:33:08 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void Server::recv_msg(int i)
     }
     else
     {
-        if (ft_isregister(users[i]) == 1)
+        if (ft_isregister(users[i]))
         {
         }
         else

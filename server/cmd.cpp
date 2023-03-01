@@ -6,21 +6,12 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:20:11 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:30:01 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
-bool ft_isregister(User user)
-{
-    std::cout << "user.get_pass() :" << user.get_pass() << std::endl;
-    std::cout << "user.get_nickname().size() :" << user.get_nickname().size() << std::endl;
-    std::cout << "user.get_username().size() :" << user.get_username().size() << std::endl;
-    if (user.get_pass() && user.get_nickname().size() && user.get_username().size())
-        return 1;
-    return 0;
-}
 void Server::ft_pass_cmd(int i, std::vector<std::string> cmds, char *buffer)
 {
     std::string pass = "";
