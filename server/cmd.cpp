@@ -6,12 +6,21 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 13:25:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:20:11 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
+bool ft_isregister(User user)
+{
+    std::cout << "user.get_pass() :" << user.get_pass() << std::endl;
+    std::cout << "user.get_nickname().size() :" << user.get_nickname().size() << std::endl;
+    std::cout << "user.get_username().size() :" << user.get_username().size() << std::endl;
+    if (user.get_pass() && user.get_nickname().size() && user.get_username().size())
+        return 1;
+    return 0;
+}
 void Server::ft_pass_cmd(int i, std::vector<std::string> cmds, char *buffer)
 {
     std::string pass = "";
@@ -46,14 +55,14 @@ void Server::ft_nick_cmd(int i, std::vector<std::string> cmds)
 
 void Server::ft_user_cmd(int i, std::vector<std::string> cmds)
 {
-    std::string pass = "";
 
-    if (cmds.size() == 1)
-        ft_print_error(users[i].get_nickname(), ERR_NONICKNAMEGIVEN, users[i]);
-    else if (ft_isvalid_nickname(cmds[1]) == 0)
-        ft_print_error(cmds[1], ERR_ERRONEUSNICKNAME, users[i]);
-    else if (ft_isalreadyused(cmds[1], 1, users) == 1)
-        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, users[i]);
+    if (cmds.size() < 5)
+        ft_print_error("USER", ERR_NEEDMOREPARAMS, users[i]);
     else
-        users[i].set_nickname(cmds[1]);
+    {
+        users[i].set_username(cmds[1]);
+        users[i].set_hostname(cmds[2]);
+        users[i].set_servername(cmds[3]);
+        users[i].set_realname(cmds[4]);
+    }
 };
