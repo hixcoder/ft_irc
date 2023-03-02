@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:06:33 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:53:47 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:53:21 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 #define ERR_NONICKNAMEGIVEN 431
 #define ERR_ERRONEUSNICKNAME 432
 #define ERR_NICKNAMEINUSE 433
+#define ERR_NORECIPIENT 411
+#define ERR_NOTEXTTOSEND 412
+#define ERR_NOSUCHNICK 401
 
 #include <iostream>
 #include <sys/socket.h>
@@ -40,5 +43,5 @@ void ft_print_error(std::string cmd, int type, User user);
 bool ft_isvalid_nickname(std::string nick);
 bool ft_isalreadyused(std::string nick, size_t j, std::vector<User> users);
 bool ft_isregister(User user);
-
+bool ft_nosuchnick(std::string nick, std::vector<User> users);
 #endif

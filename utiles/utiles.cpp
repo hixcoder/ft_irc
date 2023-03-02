@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 19:23:01 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 10:36:47 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 12:25:48 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool ft_isalreadyused(std::string nick, size_t j, std::vector<User> users)
 {
     for (size_t i = 0; i < users.size(); i++)
     {
-        if (i != j && users[i].get_nickname() == nick)
+        if (i != j && strcmp(users[i].get_nickname().c_str(), nick.c_str()) == 0)
             return (1);
     }
     return (0);
@@ -76,4 +76,14 @@ bool ft_isregister(User user)
     if (user.get_pass() && user.get_nickname().size() && user.get_username().size())
         return 1;
     return 0;
+}
+
+bool ft_nosuchnick(std::string nick, std::vector<User> users)
+{
+    for (size_t i = 0; i < users.size(); i++)
+    {
+        if (ft_isregister(users[i]) && strcmp(nick.c_str(), users[i].get_nickname().c_str()) == 0)
+            return (1);
+    }
+    return (0);
 }
