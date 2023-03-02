@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 13:41:02 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:43:20 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ void Server::ft_hundle_cmd(int i, char *buffer)
         Server::ft_user_cmd(i, spl);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         Server::ft_nick_cmd(i, spl);
+
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
-        Server::ft_privmsg_cmd(i, spl);
+        Server::ft_privmsg_cmd(i, spl, buffer);
 };
 void Server::recv_msg(int i)
 {
