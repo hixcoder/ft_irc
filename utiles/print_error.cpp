@@ -6,13 +6,13 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:36:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 12:18:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:57:01 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_irc.hpp"
 
-void ft_print_error(std::string cmd, int type, User user)
+void ft_printError(std::string cmd, int type, User user)
 {
     std::string temp = ":punch.wa.us.dal.net " + std::to_string(type) + " ";
     std::string msg;

@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 19:23:01 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 14:00:35 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:01:44 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ std::vector<std::string> ft_split(std::string str, char separator)
 // It must not start or end with a special character.
 // It must be between 1 and 9 characters long (inclusive).
 
-bool ft_isvalid_nickname(std::string nick)
+bool ft_isNicknameValide(std::string nick)
 {
     int i = 0;
     std::string s = "[]\\^_-|~{}";
@@ -62,7 +62,7 @@ bool ft_isvalid_nickname(std::string nick)
     return (1);
 };
 
-bool ft_isalreadyused(std::string nick, size_t j, std::vector<User> users)
+bool ft_isAlreadyUsed(std::string nick, size_t j, std::vector<User> users)
 {
     for (size_t i = 0; i < users.size(); i++)
     {
@@ -72,18 +72,18 @@ bool ft_isalreadyused(std::string nick, size_t j, std::vector<User> users)
     return (0);
 }
 
-bool ft_isregister(User user)
+bool ft_isRegister(User user)
 {
     if (user.get_pass() && user.get_nickname().size() && user.get_username().size())
         return 1;
     return 0;
 }
 
-bool ft_nosuchnick(std::string nick, std::vector<User> users)
+bool ft_noSuchNick(std::string nick, std::vector<User> users)
 {
     for (size_t i = 0; i < users.size(); i++)
     {
-        if (ft_isregister(users[i]) && strcmp(nick.c_str(), users[i].get_nickname().c_str()) == 0)
+        if (ft_isRegister(users[i]) && strcmp(nick.c_str(), users[i].get_nickname().c_str()) == 0)
             return (1);
     }
     return (0);

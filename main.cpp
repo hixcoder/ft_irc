@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:34:17 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:40:07 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:00:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@ int main()
 {
     Server irc;
 
-    irc.start_server();
+    irc.startServer();
 }

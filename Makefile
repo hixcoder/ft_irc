@@ -6,7 +6,7 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:45:10 by lahammam          #+#    #+#              #
-#    Updated: 2023/03/02 10:42:58 by lahammam         ###   ########.fr        #
+#    Updated: 2023/03/02 16:01:54 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,6 @@ $(NAME): ${OBJSRC}
 	${CC} ${CFLAGS} ${OBJSRC} -o ${NAME} 
 
 all: ${NAME}
-
 
 clean:
 	rm -f ${OBJSRC}
