@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:40:39 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 12:41:29 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 13:48:58 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,17 @@ void Server::ft_privmsg_cmd(int i, std::vector<std::string> cmds)
     //     ft_print_error(cmds[1], ERR_NOSUCHNICK, users[i]);
     else
     {
+        std::cout << "-----> " << cmds[1] << std::endl;
+        std::vector<std::string> clts = ft_split(cmds[1], ',');
+        for (size_t k = 0; k < clts.size(); k++)
+        {
+            std::cout << clts[k] << std::endl;
+        }
+
         size_t j = 0;
         for (; j < users.size(); j++)
         {
-            std::cout << j << "cmds[1] ---> " << cmds[1] << "\n";
-            std::cout << j << "users[j].get_nickname() ---> " << users[j].get_nickname() << "\n";
+
             if (strcmp(cmds[1].c_str(), users[j].get_nickname().c_str()) == 0)
             {
                 // :LKK!~WERWE@d2a6-9017-cfb7-6374-1329.iam.net.ma PRIVMSG HAMZ :FA:FAS:
@@ -47,3 +53,4 @@ void Server::ft_privmsg_cmd(int i, std::vector<std::string> cmds)
             ft_print_error(cmds[1], ERR_NOSUCHNICK, users[i]);
     }
 };
+// PRIVMSG USER1,USER2, MESSAGE

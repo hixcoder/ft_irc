@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 19:23:01 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 12:25:48 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 14:00:35 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,26 @@
 std::vector<std::string> ft_split(std::string str, char separator)
 {
     std::vector<std::string> result;
-    int i = 0;
+    size_t i = 0;
     std::string s;
-    while (str[i] != '\0')
+    while (i < str.size())
     {
-        if (str[i] == '\n')
+        if (str[i] == separator || str[i] == '\n')
         {
-            if (str[i - 1] != separator)
+            if (!s.empty())
+            {
                 result.push_back(s);
-            return (result);
+                s.clear();
+            }
+            if (str[i] == '\n')
+                break;
         }
-        if (str[i] != separator)
-            s += str[i];
         else
-        {
-            result.push_back(s);
-            s.clear();
-        }
+            s += str[i];
         i++;
     }
+    if (!s.empty())
+        result.push_back(s);
     return (result);
 }
 
