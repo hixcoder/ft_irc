@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:45:47 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/01 19:56:25 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/02 10:37:38 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,17 @@ void Server::pollSocket()
 		}
 		for (int i = 0; i < _fds.size(); i++)
 		{
-			if (_fds[i].fd == 0)
+			if (_fds[i].revents == 0)
 				continue;
 			if (_fds[i].revents != POLLIN)
 			{
 				exitPerror("Print errore 1");
-			}
+			}  
 			if (_fds[i].fd == _serverSock)
 				acceptSocket();
 			else
 				recvMessage(_fds[i].fd);
 		}
-		
 	}
 	
 }
@@ -88,35 +87,32 @@ void Server::acceptSocket()
 {
 	int addrlen = sizeof(serverAddr);
 	int conectSock;
-	while(1)
+
+	conectSock = accept(_serverSock, NULL, NULL);
+	if (conectSock < 0)
 	{
-		conectSock = accept(_serverSock, NULL, NULL);
-		if (conectSock < 0)
-		{
-			exitPerror("Print error 2");	
-		}
-		pollfd addSocket ={conectSock, POLLIN, 0};
-		_fds.push_back(addSocket);
+		exitPerror("Print error 2");	
 	}
+	pollfd addSocket ={conectSock, POLLIN, 0};
+	_fds.push_back(addSocket);
+
 }
 
 void Server::recvMessage(int fd)
 {
 	char recvBuff[1024];
 	int check;
-	while(1)
+
+	memset(recvBuff, 0, sizeof(recvBuff));
+	check = recv(fd, recvBuff , sizeof(recvBuff), 0);
+	if (check == 0)
 	{
-		memset(recvBuff, 0, sizeof(recvBuff));
-		check = recv(fd, recvBuff , sizeof(recvBuff), 0);
-		if (check == 0)
-		{
-			std::cout << "Client disconnected" << std::endl;
-			exit(1);
-			//break;
-		}
-		else if(check > 0)
-			std::cout << recvBuff;
+		std::cout << "Client disconnected" << std::endl;
+		exit(1);
+		//break;
 	}
+	else if(check > 0)
+		std::cout << recvBuff;
 }
 
 void Server::closeSocket()
