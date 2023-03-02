@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/01 15:48:05 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/02 18:16:39 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void Server::createSocket()
     
     bzero((char *) &_server_addr, sizeof(_server_addr));
     
-    _server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    _server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(_port);
 }
@@ -139,34 +139,29 @@ void Server::addClient()
 
 void Server::recvClientMsg(Client &client)
 {
-    std::cout << "Client" << client.getFd() << ": ";
-    do
+    // if recv function fails with EWOULDBLOCK
+    char buffer[1024];
+    bzero(&buffer, sizeof(buffer));
+    _rc = recv(client.getFd(), buffer, sizeof(buffer), 0);
+    if (_rc < 0)
     {
-        // if recv function fails with EWOULDBLOCK
-        char buffer[1024];
-        bzero(&buffer, sizeof(buffer));
-        _rc = recv(client.getFd(), buffer, sizeof(buffer), 0);
-        if (_rc < 0)
+        if (errno != EWOULDBLOCK)
         {
-            if (errno != EWOULDBLOCK)
-            {
-                std::cout << "recv() failed\n";
-                _closeCon = 1;
-            }
-            break;
-        }
-        // if connection closed by client 
-        if (_rc == 0)
-        {
-            std::cout << "Connection closed\n";
+            std::cout << "recv() failed\n";
             _closeCon = 1;
-            break;
         }
-        // here we print the Client message.
-        std::cout << buffer;
-    } while (true);
+    }
+    else if (_rc == 0)
+    {
+    // if connection closed by client 
+        std::cout << "Connection closed\n";
+        _closeCon = 1;
+    }
+    else
+        ft_hundle_cmd(client, buffer);
 }
 
+// this function for handle sockets errors 
 void Server::error(std::string errorMsg, int exitStatus, int fd)
 {
     std::cout << errorMsg << "\n";

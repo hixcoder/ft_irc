@@ -6,7 +6,7 @@
 #    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/02/28 16:12:25 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/02 18:02:21 by hboumahd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = ircserv
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
-SRCS =	src/main.cpp src/server.cpp src/client.cpp
+SRCS =	src/main.cpp src/server.cpp src/client.cpp src/handle_cmds.cpp \
+		src/utiles/print_error.cpp src/utiles/utiles.cpp 
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
