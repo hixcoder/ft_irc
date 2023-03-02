@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:30:01 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 10:24:58 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,16 @@ void Server::ft_nick_cmd(int i, std::vector<std::string> cmds)
     else if (ft_isalreadyused(cmds[1], 1, users) == 1)
         ft_print_error(cmds[1], ERR_NICKNAMEINUSE, users[i]);
     else
+    {
+        //: nick1!~PPP@d2a6-9017-cfb7-6374-1329.iam.net.ma NICK :nick2
+        if (ft_isregister(users[i]))
+        {
+            std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
+            send(users[i].get_fdClient(), msg.c_str(), strlen(msg.c_str()), 0);
+        }
+
         users[i].set_nickname(cmds[1]);
+    }
 };
 
 void Server::ft_user_cmd(int i, std::vector<std::string> cmds)

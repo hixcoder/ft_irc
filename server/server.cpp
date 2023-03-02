@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/01 14:33:08 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/02 10:16:17 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,19 @@ void Server::add_guest()
     users.push_back(new_gst);
 };
 
+void Server::ft_hundle_cmd(int i, char *buffer)
+{
+    std::vector<std::string> spl = ft_split(buffer, ' ');
+    if (strcmp("PASS", spl[0].c_str()) == 0)
+        Server::ft_pass_cmd(i, spl, buffer);
+    else if (strcmp("USER", spl[0].c_str()) == 0)
+        Server::ft_user_cmd(i, spl);
+    else if (strcmp("NICK", spl[0].c_str()) == 0)
+        Server::ft_nick_cmd(i, spl);
+    else if (ft_isregister(users[i]))
+    {
+    }
+};
 void Server::recv_msg(int i)
 {
     char buffer[1024] = {0};
@@ -69,21 +82,7 @@ void Server::recv_msg(int i)
         pollfds.erase(pollfds.begin() + i);
     }
     else
-    {
-        if (ft_isregister(users[i]))
-        {
-        }
-        else
-        {
-            std::vector<std::string> spl = ft_split(buffer, ' ');
-            if (strcmp("PASS", spl[0].c_str()) == 0)
-                Server::ft_pass_cmd(i, spl, buffer);
-            else if (strcmp("NICK", spl[0].c_str()) == 0)
-                Server::ft_nick_cmd(i, spl);
-            else if (strcmp("USER", spl[0].c_str()) == 0)
-                Server::ft_user_cmd(i, spl);
-        }
-    }
+        ft_hundle_cmd(i, buffer);
 };
 
 void Server::start_server()

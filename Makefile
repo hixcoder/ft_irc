@@ -6,7 +6,7 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:45:10 by lahammam          #+#    #+#              #
-#    Updated: 2023/02/28 17:11:41 by lahammam         ###   ########.fr        #
+#    Updated: 2023/03/02 10:38:07 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = ft_irc
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCS =	main.cpp server/server.cpp server/cmd.cpp utiles.cpp user/user.cpp 
+SRCS =	main.cpp server/server.cpp server/cmd_auth.cpp utiles/utiles.cpp utiles/print_error.cpp user/user.cpp 
 
 Include	=  ft_irc.hpp server/server.hpp user/user.hpp  
 
