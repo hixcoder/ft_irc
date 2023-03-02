@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 16:51:49 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/01 19:42:01 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:20:59 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Server
 	int _port;
 	int _password;
 	struct  sockaddr_in serverAddr;
+	int _end;
 public:
 	Server(int port);
 	~Server();
@@ -41,5 +42,5 @@ public:
 	void closeSocket();
 };
 
-void exitPerror(char *message);
+void exitPerror( const char *message);
 #endif

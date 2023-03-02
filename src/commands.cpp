@@ -1,19 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.cpp                                          :+:      :+:    :+:   */
+/*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/01 18:30:14 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/01 19:49:15 by alouzizi         ###   ########.fr       */
+/*   Created: 2023/03/02 12:23:00 by alouzizi          #+#    #+#             */
+/*   Updated: 2023/03/02 12:32:48 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.hpp"
-
-void exitPerror(char *message)
-{
-	perror(message);
-	exit(1);
-}
+#include "../headers/server.hpp"

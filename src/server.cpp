@@ -6,15 +6,16 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:45:47 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/02 10:37:38 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/02 12:32:40 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.hpp"
+#include "../headers/server.hpp"
 
 Server::Server(int port)
 {
-	_port = port;	
+	_port = port;
+	_end =  1;
 }
 
 Server::~Server()
@@ -58,7 +59,7 @@ void Server::pollSocket()
 	int pollcheck;
 	pollfd fds = {_serverSock, POLLIN, 0};
 	_fds.push_back(fds);
-	while (1)
+	while (_end)
 	{
 		pollcheck = poll(_fds.data(), _fds.size(), -1);
 		if (pollcheck < 0)
@@ -72,15 +73,17 @@ void Server::pollSocket()
 				continue;
 			if (_fds[i].revents != POLLIN)
 			{
-				exitPerror("Print errore 1");
-			}  
+				std::cout << "\033[1;31;04mClient disconnected\033[0m" << std::endl;
+				close(_fds[i].fd);
+				_fds.erase(_fds.begin() + i);
+				break;
+			}
 			if (_fds[i].fd == _serverSock)
 				acceptSocket();
 			else
 				recvMessage(_fds[i].fd);
 		}
 	}
-	
 }
 
 void Server::acceptSocket()
@@ -90,12 +93,10 @@ void Server::acceptSocket()
 
 	conectSock = accept(_serverSock, NULL, NULL);
 	if (conectSock < 0)
-	{
-		exitPerror("Print error 2");	
-	}
+		exitPerror("accept failed");
+	std::cout << "\033[1;33;04mNew connection accepted\033[0m" << std::endl;
 	pollfd addSocket ={conectSock, POLLIN, 0};
 	_fds.push_back(addSocket);
-
 }
 
 void Server::recvMessage(int fd)
@@ -108,14 +109,26 @@ void Server::recvMessage(int fd)
 	if (check == 0)
 	{
 		std::cout << "Client disconnected" << std::endl;
-		exit(1);
-		//break;
+		return ;
 	}
 	else if(check > 0)
+	{
+		if (strcmp(recvBuff, "Pass"))
+		{
+			
+		}
+		//else if ()
 		std::cout << recvBuff;
+	}
 }
 
 void Server::closeSocket()
 {
-	
+	int i = 0;
+	while(i < _fds.size())
+	{
+		if (_fds[i].fd > 0)
+			close(_fds[i].fd);
+		i++;	
+	}
 }

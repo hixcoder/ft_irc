@@ -1,10 +1,10 @@
 NAME = server
 
-SRC	 =	main.cpp\
-		server.cpp\
-		utils.cpp
+SRC	 =	src/main.cpp \
+		src/server.cpp \
+		src/utils.cpp
 
-INC = 	server.hpp
+INC = 	./headers/server.hpp
 
 CC = c++
 
@@ -17,7 +17,7 @@ all: $(NAME)
 		@$(CC) $(FLAGS) -c -o $@ -c $<
 
 $(NAME): $(OBJ) $(INC)
-		@$(CC) $(FLAGS) $(OBJ) -o $@ 
+		@$(CC) $(FLAGS) $(OBJ) -o $@
 
 clean:
 	rm -rf $(OBJ)
