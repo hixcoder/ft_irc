@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 15:52:22 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:28:36 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ private:
     void recvClientMsg(Client &client);
 
 
-    // lhou functions
     void ft_hundle_cmd(Client &client, char *buffer);
     // auth functions
     void handlePassCmd(Client &client, std::vector<std::string> cmds, char *buffer);
@@ -49,6 +48,8 @@ private:
     void handleUserCmd(Client &client, std::vector<std::string> cmds);
     // other functions
     void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds);
+    void handleQuitCmd(Client &client);
+    void handleOperCmd(Client &client, std::vector<std::string> cmds);
     
 };
 

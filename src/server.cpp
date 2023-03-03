@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 18:16:39 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:46:32 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void Server::createSocket()
     
     bzero((char *) &_server_addr, sizeof(_server_addr));
     
-    _server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
+    _server_addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(_port);
 }

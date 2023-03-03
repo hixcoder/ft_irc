@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:01:08 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 12:27:14 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 16:03:16 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         Server::handlePrivmsgCmd(client, spl);
     else if (strcmp("QUIT", spl[0].c_str()) == 0)
-        Server::handleQuitCmd(client, spl);
+        Server::handleQuitCmd(client);
+    else if (strcmp("OPER", spl[0].c_str()) == 0)
+        Server::handleOperCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
         
@@ -69,7 +71,7 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
         if (ft_isregister(client))
         {
             // std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
-            std::string msg = "> " + client.getNickName() + "!~" + (std::string)SERVER_IP + " NICK :" + cmds[1] + "\n";
+            std::string msg = "> " + client.getNickName() + "!~" + (std::string)LOCAL_IP + " NICK :" + cmds[1] + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
         client.setNickName(cmds[1]);
@@ -95,16 +97,7 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds)
 // OTHER IRC COMMANDS
 // ================================================
 
-
-// :punch.wa.us.dal.net 411 ALLL :No recipient given (PRIVMSG)
-// :punch.wa.us.dal.net 412 ALLL :No text to send
-// :punch.wa.us.dal.net 401 ALLL N/C :No such nick/channel
-
-//     ERR_CANNOTSENDTOCHAN ERR_NOTOPLEVEL
-//         ERR_WILDTOPLEVEL ERR_TOOMANYTARGETS
-//
-//                 RPL_AWAY
-
+// handle PRIVMSG command
 void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
@@ -138,4 +131,39 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds)
             ft_print_error(cmds[1], ERR_NOSUCHNICK, client);
     }
 };
-// PRIVMSG USER1,USER2, MESSAGE
+
+
+// handle QUIT command
+void Server::handleQuitCmd(Client &client)
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i].getFd() == client.getFd())
+        {
+            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "user "+ client.getNickName() + " disconnected\n";
+            send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+            close(client.getFd());
+            break;
+        }
+    }
+};
+
+// handle OPER command
+void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() != 3)
+        ft_print_error("OPER", ERR_NEEDMOREPARAMS, client);
+    else
+    {
+        if (cmds[1] != client.getUserName() || cmds[2] != _passwd)
+            ft_print_error("OPER", ERR_PASSWDMISMATCH, client);
+        else
+        {
+            if (client.getHostName() == (std::string)LOCAL_IP)
+                ft_print_error("OPER", RPL_YOUREOPER, client);
+            else
+                ft_print_error("OPER", ERR_NOOPERHOST, client);
+        }
+            
+    }
+};

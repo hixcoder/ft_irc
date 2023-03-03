@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 11:10:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:44:36 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@ Client::Client(int fd)
     _fd = fd;
     _is_auth = 0;
     _pass = 0;
+
+    _nickName = "";
+    _userName = "";
+    _hostName = "127.0.0.1";
+    _serverName = "";
+    _realName = ""; 
 }
 
 Client::~Client() 

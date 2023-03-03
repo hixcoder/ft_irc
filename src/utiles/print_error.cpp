@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 11:38:58 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:55:02 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
-    std::string temp = "> " + (std::string)SERVER_IP + " " + std::to_string(type) + " ";
+    std::string temp = "> " + (std::string)LOCAL_IP + " " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + cmd + " :Not enough parameters\n";
@@ -37,5 +37,9 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + " " + cmd + " :No such nick/channel\n";
     else if (type == ERR_UNKNOWNCOMMAND)
         msg = temp + cmd + " :Unknown command\n";
+    else if (type == RPL_YOUREOPER)
+        msg = temp + cmd + " :You are now an IRC operator\n";
+    else if (type == ERR_NOOPERHOST)
+        msg = temp + cmd + " :No O-lines for your host\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

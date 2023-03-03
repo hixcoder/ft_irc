@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 11:34:01 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:54:25 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "client.hpp"
 
 
-#define SERVER_IP "127.0.0.1" // server ip
+#define LOCAL_IP "127.0.0.1" // server ip
 
 // irc error numbers:
 #define ERR_NEEDMOREPARAMS 461
@@ -42,6 +42,8 @@
 #define ERR_NOTEXTTOSEND 412
 #define ERR_NOSUCHNICK 401
 #define ERR_UNKNOWNCOMMAND 421
+#define RPL_YOUREOPER 381
+#define ERR_NOOPERHOST 491
 
 
 
