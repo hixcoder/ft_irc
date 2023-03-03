@@ -5,16 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/02 10:36:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 18:39:49 by hboumahd         ###   ########.fr       */
+/*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
+/*   Updated: 2023/03/03 11:38:58 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/ircserv.hpp"
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
-    std::string temp = " >" + (std::string)SERVER_IP + " " + std::to_string(type) + " ";
+    std::string temp = "> " + (std::string)SERVER_IP + " " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + cmd + " :Not enough parameters\n";
@@ -34,5 +35,7 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + " :No text to send\n";
     else if (type == ERR_NOSUCHNICK)
         msg = temp + client.getNickName() + " " + cmd + " :No such nick/channel\n";
+    else if (type == ERR_UNKNOWNCOMMAND)
+        msg = temp + cmd + " :Unknown command\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

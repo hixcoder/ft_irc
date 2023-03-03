@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 18:16:34 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:34:01 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 #define ERR_NORECIPIENT 411
 #define ERR_NOTEXTTOSEND 412
 #define ERR_NOSUCHNICK 401
+#define ERR_UNKNOWNCOMMAND 421
 
 
 

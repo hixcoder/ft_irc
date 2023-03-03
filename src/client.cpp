@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 17:58:38 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:10:40 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Client::Client(int fd)
     _pass = 0;
 }
 
-Client::~Client()
+Client::~Client() 
 {
     
 }

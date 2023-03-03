@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 17:51:37 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:10:25 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ private:
     std::string _userName;
     std::string _hostName;
     std::string _serverName;
-    std::string _realName;
+    std::string _realName; 
     
     
 public:

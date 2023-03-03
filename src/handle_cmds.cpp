@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/02 10:40:39 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 18:26:55 by hboumahd         ###   ########.fr       */
+/*   Created: 2023/03/02 19:01:08 by hboumahd          #+#    #+#             */
+/*   Updated: 2023/03/03 12:27:14 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "../includes/ircserv.hpp"
 
@@ -23,6 +25,10 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         Server::handleNickCmd(client, spl);
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         Server::handlePrivmsgCmd(client, spl);
+    else if (strcmp("QUIT", spl[0].c_str()) == 0)
+        Server::handleQuitCmd(client, spl);
+    else
+        ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
         
 }
 
@@ -60,14 +66,12 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
         ft_print_error(cmds[1], ERR_NICKNAMEINUSE, client);
     else
     {
-        //: nick1!~PPP@d2a6-9017-cfb7-6374-1329.iam.net.ma NICK :nick2
-        std::cout << "------\n";
         if (ft_isregister(client))
         {
-            std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
+            // std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
+            std::string msg = "> " + client.getNickName() + "!~" + (std::string)SERVER_IP + " NICK :" + cmds[1] + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
-
         client.setNickName(cmds[1]);
     }
 };
@@ -85,7 +89,6 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds)
         client.setRealName(cmds[4]);
     }
 };
-
 
 
 // ================================================

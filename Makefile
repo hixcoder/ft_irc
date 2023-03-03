@@ -6,7 +6,7 @@
 #    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/02 18:02:21 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/03 12:03:23 by hboumahd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,20 +20,32 @@ SRCS =	src/main.cpp src/server.cpp src/client.cpp src/handle_cmds.cpp \
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
+OBJS_FILES =	main.o server.o client.o handle_cmds.o \
+				print_error.o utiles.o
+OBJS_FOLDER =	./src/output/
+SRCOBJ_OUT = $(addprefix $(OBJS_FOLDER), $(OBJS_FILES))
+
 Include = includes/ircserv.hpp includes/server.hpp includes/client.hpp 
 
 # -g for the debugger
-%.o:%.cpp ${Include}
+%.o:%.cpp ${Include} 
 		${CPP} ${CPPFLAGS} -g -c $< -o $@
+		@mv $@ ./src/output/
+		
 
 $(NAME): ${SRCOBJ} 
-	@$(CPP) ${FLAGS} $(SRCOBJ) -o $(NAME)
+	$(CPP) ${CPPFLAGS} $(SRCOBJ_OUT) -o $(NAME)
 	@echo "|+| make the program [${GREEN}DONE${RESET}]"
-	
+
+s:
+	@./ircserv 12345 00
+c:
+	@nc 127.0.0.1 12345 55
+
 all: ${NAME}
 
 clean:
-	@rm -f ${SRCOBJ}
+	@rm -f ${SRCOBJ_OUT}
 
 fclean: clean
 	@rm -f ${NAME}
