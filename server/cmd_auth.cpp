@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 16:01:19 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:59:15 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void Server::ft_userCmd(int i, std::vector<std::string> cmds)
 
     if (cmds.size() < 5)
         ft_printError("USER", ERR_NEEDMOREPARAMS, _users[i]);
+    else if (!_users[i].get_username().empty())
+        ft_printError("USER", ERR_ALREADYREGISTRED, _users[i]);
     else
     {
         _users[i].set_username(cmds[1]);

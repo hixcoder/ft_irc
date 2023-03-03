@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:06:33 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 16:01:44 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:00:06 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,14 @@
 
 #include "user/user.hpp"
 class User;
+#include "channel/channel.hpp"
+class Channel;
 std::vector<std::string> ft_split(std::string str, char separator);
 void ft_printError(std::string cmd, int type, User user);
 bool ft_isNicknameValide(std::string nick);
 bool ft_isAlreadyUsed(std::string nick, size_t j, std::vector<User> users);
 bool ft_isRegister(User user);
 bool ft_noSuchNick(std::string nick, std::vector<User> users);
+int ft_isUserExist(std::string nik, std::vector<User> urs);
+void error(std::string errorMsg, int exitStatus, int fd);
 #endif

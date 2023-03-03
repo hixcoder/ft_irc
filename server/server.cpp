@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 16:00:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/03 10:59:55 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 Server::Server()
 {
     int opt = 1;
+    _password = "1111";
 
     _mainsocked = socket(AF_INET, SOCK_STREAM, 0);
-    _password = "1111";
-    setsockopt(_mainsocked, SOL_SOCKET,
-               SO_REUSEADDR | SO_REUSEPORT, &opt,
-               sizeof(opt));
+    if (_mainsocked < 0)
+        error("Error building socket", 1, _mainsocked);
 
-    fcntl(_mainsocked, F_SETFL, O_NONBLOCK);
+    if (setsockopt(_mainsocked, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+        error("Error on setsockopt.", 1, _mainsocked);
+
+    if (fcntl(_mainsocked, F_SETFL, O_NONBLOCK) == -1)
+        error("Error on fcntl", 1, _mainsocked);
 
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
@@ -30,9 +33,11 @@ Server::Server()
     server_address.sin_port = htons(8080);
     server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    bind(_mainsocked, (struct sockaddr *)&server_address, sizeof(server_address));
+    if (bind(_mainsocked, (struct sockaddr *)&server_address, sizeof(server_address)) < 0)
+        error("Error on binding host adress.", 1, _mainsocked);
 
-    listen(_mainsocked, 5);
+    if (listen(_mainsocked, 5) < 0)
+        error("Error on binding host adress.", 1, _mainsocked);
 
     pollfd mainPollfd = {_mainsocked, POLLIN, 0};
     _pollfds.push_back(mainPollfd);
@@ -69,9 +74,10 @@ void Server::ft_hundleCmd(int i, char *buffer)
         Server::ft_userCmd(i, spl);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         Server::ft_nickCmd(i, spl);
-
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         Server::ft_privmsgCmd(i, spl, buffer);
+    else if (strcmp("JOIN", spl[0].c_str()) == 0)
+        Server::ft_joinCmd(i, spl, buffer);
 };
 void Server::recv_msg(int i)
 {

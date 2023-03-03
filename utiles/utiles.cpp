@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 19:23:01 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 16:01:44 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/03 10:57:22 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,22 @@ bool ft_noSuchNick(std::string nick, std::vector<User> users)
             return (1);
     }
     return (0);
+}
+
+int ft_isUserExist(std::string nik, std::vector<User> urs)
+{
+    for (size_t j = 0; j < urs.size(); j++)
+    {
+        if (strcmp(nik.c_str(), urs[j].get_nickname().c_str()) == 0)
+            return (j);
+    }
+    return (0);
+};
+
+void error(std::string errorMsg, int exitStatus, int fd)
+{
+    std::cout << errorMsg << "\n";
+    if (fd != -2)
+        close(fd);
+    exit(exitStatus);
 }

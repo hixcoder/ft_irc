@@ -6,29 +6,12 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:40:39 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 16:01:19 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:01:45 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
-// :punch.wa.us.dal.net 411 ALLL :No recipient given (PRIVMSG)
-// :punch.wa.us.dal.net 412 ALLL :No text to send
-// :punch.wa.us.dal.net 401 ALLL N/C :No such nick/channel
 
-//     ERR_CANNOTSENDTOCHAN ERR_NOTOPLEVEL
-//         ERR_WILDTOPLEVEL ERR_TOOMANYTARGETS
-//
-//                 RPL_AWAY
-
-int ft_isUserExist(std::string nik, std::vector<User> urs)
-{
-    for (size_t j = 0; j < urs.size(); j++)
-    {
-        if (strcmp(nik.c_str(), urs[j].get_nickname().c_str()) == 0)
-            return (j);
-    }
-    return (0);
-};
 void Server::ft_privmsgCmd(int i, std::vector<std::string> cmds, char *buffer)
 {
     if (cmds.size() == 1)
@@ -54,4 +37,27 @@ void Server::ft_privmsgCmd(int i, std::vector<std::string> cmds, char *buffer)
                 ft_printError(cmds[k], ERR_NOSUCHNICK, _users[i]);
         }
     }
+};
+
+void Server::ft_joinCmd(int i, std::vector<std::string> cmds, char *buffer)
+{
+    if (cmds.size() == 1)
+        ft_printError("JOIN", ERR_NEEDMOREPARAMS, _users[i]);
+    else
+    {
+
+        std::vector<std::string> chanls;
+        std::vector<std::string> chanlsPass;
+        chanls = ft_split(cmds[1], ',');
+        if (!cmds[2].empty())
+            chanlsPass = ft_split(cmds[2], ',');
+        for (size_t k = 0; k < chanls.size(); k++)
+        {
+            std::cout << "------> " << chanls[k] << std::endl;
+
+            if (!chanlsPass.empty() && k < chanlsPass.size())
+                std::cout << "-> " << chanlsPass[k] << std::endl;
+        }
+    }
+    buffer++;
 };
