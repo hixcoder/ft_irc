@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 11:10:25 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/04 14:54:11 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ private:
     int _is_auth;
 
     bool _pass;
+    bool _isOper;
     std::string _nickName;
     std::string _userName;
     std::string _hostName;

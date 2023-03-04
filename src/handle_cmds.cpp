@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:01:08 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 16:03:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/04 15:37:08 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds)
 
 
 // ================================================
-// OTHER IRC COMMANDS
+// USER COMMANDS
 // ================================================
 
 // handle PRIVMSG command
@@ -167,3 +167,16 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
             
     }
 };
+
+
+// ================================================
+// OPERATOR COMMANDS
+// ================================================
+
+// handle INVITE command
+// handle KICK  command
+// handle WALLOPS command
+// handle GLOBOPS command
+// handle KILL command
+// handle RESTART command
+// handle OPER command
