@@ -6,7 +6,7 @@
 /*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/05 08:39:41 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/05 09:20:25 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void Server::ft_nickCmd(int i, std::vector<std::string> cmds)
         ft_printError(cmds[1], ERR_NICKCOLLISION, _users[i]);
     else
     {
-        //: nick1!~PPP@d2a6-9017-cfb7-6374-1329.iam.net.ma NICK :nick2
         if (ft_isRegister(_users[i]))
         {
             std::string msg = "::punch.wa.us.dal.net NICK :" + cmds[1] + "\n";
@@ -55,7 +54,7 @@ void Server::ft_nickCmd(int i, std::vector<std::string> cmds)
     }
 };
 
-void Server::ft_userCmd(int i, std::vector<std::string> cmds)
+void Server::ft_userCmd(int i, std::vector<std::string> cmds, char *buffer)
 {
 
     if (cmds.size() < 5)
@@ -67,6 +66,13 @@ void Server::ft_userCmd(int i, std::vector<std::string> cmds)
         _users[i].set_username(cmds[1]);
         _users[i].set_hostname(cmds[2]);
         _users[i].set_servername(cmds[3]);
-        _users[i].set_realname(cmds[4]);
+        if (cmds[4][0] == ':')
+        {
+            std::string realnm = buffer + std::strlen((cmds[1] + cmds[2] + cmds[3]).c_str()) + 9;
+            std::cout << "realname" << realnm << "\n";
+            _users[i].set_realname(realnm);
+        }
+        else
+            _users[i].set_realname(cmds[4]);
     }
 };

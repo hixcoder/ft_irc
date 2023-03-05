@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:02:51 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/03 10:59:55 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 09:14:30 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void Server::ft_hundleCmd(int i, char *buffer)
     if (strcmp("PASS", spl[0].c_str()) == 0)
         Server::ft_passCmd(i, spl, buffer);
     else if (strcmp("USER", spl[0].c_str()) == 0)
-        Server::ft_userCmd(i, spl);
+        Server::ft_userCmd(i, spl, buffer);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         Server::ft_nickCmd(i, spl);
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
