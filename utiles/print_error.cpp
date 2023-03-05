@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:36:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 15:57:01 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 08:40:31 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void ft_printError(std::string cmd, int type, User user)
         msg = temp + cmd + " :Erroneus nickname\n";
     else if (type == ERR_NICKNAMEINUSE)
         msg = temp + cmd + " :Nickname is already in use\n";
+    else if (type == ERR_NICKCOLLISION)
+        msg = temp + cmd + " :Nickname collision KILL\n";
     else if (type == ERR_NORECIPIENT)
         msg = temp + user.get_nickname() + " :No recipient given (" + cmd + ")\n";
     else if (type == ERR_NOTEXTTOSEND)

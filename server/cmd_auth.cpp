@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_auth.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:10:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/03 11:59:15 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 08:39:41 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ void Server::ft_nickCmd(int i, std::vector<std::string> cmds)
         ft_printError("", ERR_NONICKNAMEGIVEN, _users[i]);
     else if (ft_isNicknameValide(cmds[1]) == 0)
         ft_printError(cmds[1], ERR_ERRONEUSNICKNAME, _users[i]);
-    else if (ft_isAlreadyUsed(cmds[1], i, _users) == 1)
+    else if (!ft_isRegister(_users[i]) && ft_isAlreadyUsed(cmds[1], i, _users) == 1)
         ft_printError(cmds[1], ERR_NICKNAMEINUSE, _users[i]);
+    else if (ft_isAlreadyUsed(cmds[1], i, _users) == 1)
+        ft_printError(cmds[1], ERR_NICKCOLLISION, _users[i]);
     else
     {
         //: nick1!~PPP@d2a6-9017-cfb7-6374-1329.iam.net.ma NICK :nick2
