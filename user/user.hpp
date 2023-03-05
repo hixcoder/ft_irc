@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 18:38:58 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 15:47:30 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:36:29 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ public:
     std::string get_realname();
     bool get_pass();
     int get_fdClient();
+
+    bool operator==(User &other) const;
+
     ~User();
 };
 

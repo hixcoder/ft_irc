@@ -6,7 +6,7 @@
 /*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:36:25 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/05 08:40:31 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/05 09:58:59 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ void ft_printError(std::string cmd, int type, User user)
         msg = temp + user.get_nickname() + " :No text to send\n";
     else if (type == ERR_NOSUCHNICK)
         msg = temp + user.get_nickname() + " " + cmd + " :No such nick/channel\n";
+    else if (type == ERR_NOSUCHCHANNEL)
+        msg = temp + user.get_nickname() + " " + cmd + " :No such channel\n";
     send(user.get_fdClient(), msg.c_str(), strlen(msg.c_str()), 0);
 }

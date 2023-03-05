@@ -6,7 +6,7 @@
 /*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 10:06:33 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/05 08:40:06 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/05 09:58:17 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #define ERR_NOTEXTTOSEND 412
 #define ERR_NOSUCHNICK 401
 #define ERR_NICKCOLLISION 436
+#define ERR_NOSUCHCHANNEL 403
 
 #include <iostream>
 #include <sys/socket.h>

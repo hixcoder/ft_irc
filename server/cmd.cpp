@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 10:40:39 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/03 11:01:45 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:42:14 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,73 @@ void Server::ft_privmsgCmd(int i, std::vector<std::string> cmds, char *buffer)
     }
 };
 
+//               ERR_BANNEDFROMCHAN
+// ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
+// ERR_CHANNELISFULL               ERR_BADCHANMASK
+//                 ERR_TOOMANYCHANNELS
+// RPL_TOPIC
+
+bool is_validChannel(std::string name)
+{
+    if (name.length() < 2 || name.length() > 50)
+        return false;
+    if (name[0] != '#' && name[0] != '&')
+        return false;
+    for (size_t i = 1; i < name.length(); i++)
+    {
+        if (!isalnum(name[i]) && name[i] != '[' && name[i] != ']' && name[i] != '\\' &&
+            name[i] != '`' && name[i] != '^' && name[i] != '_' && name[i] != '-')
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int is_channel_Exit(std::vector<Channel> chnls, std::string name)
+{
+    for (size_t i = 0; i < chnls.size(); i++)
+    {
+        if (std::strcmp(name.c_str(), chnls[i].get_chanlName().c_str()) == 0)
+            return (i);
+    }
+    return (-1);
+}
+
 void Server::ft_joinCmd(int i, std::vector<std::string> cmds, char *buffer)
 {
     if (cmds.size() == 1)
         ft_printError("JOIN", ERR_NEEDMOREPARAMS, _users[i]);
+    else if (!is_validChannel(cmds[1]))
+        ft_printError("JOIN", ERR_NOSUCHCHANNEL, _users[i]);
     else
     {
-
-        std::vector<std::string> chanls;
-        std::vector<std::string> chanlsPass;
-        chanls = ft_split(cmds[1], ',');
-        if (!cmds[2].empty())
-            chanlsPass = ft_split(cmds[2], ',');
-        for (size_t k = 0; k < chanls.size(); k++)
+        int indx = is_channel_Exit(_channels, cmds[1]);
+        if (indx == -1)
         {
-            std::cout << "------> " << chanls[k] << std::endl;
-
-            if (!chanlsPass.empty() && k < chanlsPass.size())
-                std::cout << "-> " << chanlsPass[k] << std::endl;
+            Channel channel;
+            channel.set_chanlName(cmds[1]);
+            channel.add_user(_users[i]);
+            _channels.push_back(channel);
         }
+        else
+        {
+            if (!_channels[indx].is_userInChannel(_users[i]))
+                _channels[indx].add_user(_users[i]);
+        }
+
+        // std::vector<std::string> chanls;
+        // std::vector<std::string> chanlsPass;
+        // chanls = ft_split(cmds[1], ',');
+        // if (!cmds[2].empty())
+        //     chanlsPass = ft_split(cmds[2], ',');
+        // for (size_t k = 0; k < chanls.size(); k++)
+        // {
+        //     // std::cout << "------> " << chanls[k] << std::endl;
+        //     // if (!chanlsPass.empty() && k < chanlsPass.size())
+        //     //     std::cout << "-> " << chanlsPass[k] << std::endl;
+        // }
+        _channels[indx].printAllUser();
     }
     buffer++;
 };

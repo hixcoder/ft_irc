@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 18:39:02 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/02 15:48:52 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:40:42 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,12 @@ std::string User::get_servername() { return (_servername); };
 std::string User::get_realname() { return (_realname); };
 bool User::get_pass() { return (_setPass); };
 int User::get_fdClient() { return (_fdClient); };
+
+bool User::operator==(User &other) const
+{
+    if (std::strcmp(_nick.c_str(), other.get_nickname().c_str()) == 0)
+        return 1;
+    return 0;
+};
 
 User::~User(){};
