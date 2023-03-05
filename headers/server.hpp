@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 16:51:49 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/03 11:53:41 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:20:35 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,32 @@
 // class Client;
 class Server
 {
-	std::vector<pollfd> _fds;
-	std::vector<Client> client;
-	std::string _password;
-	int _serverSock;
-	int _conectSock;
-	int _port;
-	struct  sockaddr_in serverAddr;
-	int _end;
+	std::vector<pollfd>	_fds;
+	std::vector<Client>	client;
+	std::string			_password;
+	int					_serverSock;
+	int					_conectSock;
+	int					_port;
+	struct sockaddr_in	serverAddr;
+	int					_end;
+
 public:
 	Server(int port, std::string pass);
 	~Server();
-	void createSocket();
-	void bindSocket();
-	void listenSocket();
-	void pollSocket();
-	void acceptSocket();
-	void recvMessage(Client user);
-	void closeSocket();
-	int connectionRegistration(char *message, Client user);
-	void passCmd(std::vector<std::string> cmd, Client user, char *message);
-	void nickCmd(std::vector<std::string> cmd, Client user, char *message);
-	void userMsg(std::vector<std::string> cmd, Client user, char *message);
+	void	createSocket();
+	void	bindSocket();
+	void	listenSocket();
+	void	pollSocket();
+	void	acceptSocket();
+	void	recvMessage(Client user);
+	void	closeSocket();
+	int		connectionRegistration(char *message, Client user);
+	void	passCmd(std::vector<std::string> cmd, Client user, char *message);
+	void	nickCmd(std::vector<std::string> cmd, Client user, char *message);
+	void	userMsg(std::vector<std::string> cmd, Client user, char *message);
+	void	modeCmd(std::vector<std::string> cmd, Client user, char *message);
 };
 
-void exitPerror( const char *message);
+void	exitPerror(const char *message);
+bool validMode(std::string mode);
 #endif

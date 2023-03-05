@@ -11,7 +11,7 @@ INC = 	./headers/server.hpp \
 
 CC = c++
 
-FLAGS =  -std=c++98
+FLAGS =  -fsanitize=address -fno-omit-frame-pointer -g  -std=c++98
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

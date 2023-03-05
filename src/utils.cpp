@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 18:30:14 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/04 08:49:10 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:20:10 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,26 @@ int Server::connectionRegistration(char *message, Client user)
 {
 	
 	std::vector<std::string> cmd = ft_split(message, ' ');
+    if(cmd.size() < 1)
+        return (0);
 	if (strcmp(cmd[0].c_str(), "PASS") == 0)
 		passCmd(cmd, user, message);
 	else if (strcmp(cmd[0].c_str(), "NICK") == 0)
 		nickCmd(cmd, user, message);
 	else if ((strcmp(cmd[0].c_str(), "USER") == 0))
         userMsg(cmd, user, message);
+    else if (strcmp(cmd[0].c_str(), "MODE") == 0)
+        modeCmd(cmd, user, message);
 	else
 		std::cout<<"Cmd cannot found\n";
 	return(0);
+}
+
+bool validMode(std::string mode)
+{
+    if (mode[0] != '+' && mode[0] != '-')
+        return (false);
+    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r')
+        return (true);
+    return (false);
 }

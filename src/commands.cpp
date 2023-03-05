@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 12:23:00 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/03 12:10:28 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:16:58 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,27 @@ void Server::nickCmd(std::vector<std::string> cmd, Client user, char *message)
 		
 	}
 }
+
+void Server::modeCmd(std::vector<std::string> cmd, Client user, char *message)
+{
+	if(!user.isRegistered())
+		std::cerr << "Error: ERR_NEEDMOREPARAMS You need to be registered to use this command\n";
+	else if (cmd.size() < 2)
+		std::cerr << "Error: Not enough arguments\n";
+	if (!user.isRegistered() || cmd.size() < 2)
+		return ;
+	user.setNick(cmd[1]);
+	if (!validMode(cmd[2]))
+	{
+		std::cerr << "Error: Invalid mode\n";
+		return ;
+	}
+	if (cmd[2][0] == '+')
+		user.setModes(cmd[2][1], true);
+	else if (cmd[2][0] == '-')
+		user.setModes(cmd[2][1], false);
+}
+
 
 void Server::userMsg(std::vector<std::string> cmd, Client user, char *message)
 {
