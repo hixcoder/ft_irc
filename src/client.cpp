@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/04 14:54:41 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/05 19:54:28 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Client::Client(int fd)
     _userName = "";
     _hostName = "127.0.0.1";
     _serverName = "";
-    _realName = ""; 
+    _realName = "";
 }
 
 Client::~Client() 
@@ -31,23 +31,72 @@ Client::~Client()
     
 }
 
-void Client::setAuth(int auth) {_is_auth = auth;}
+// client's functions
+bool Client::isRegistered()
+{
+	if (_pass == true && _nickName != "" && _userName != "")
+		return (true);
+	return (false);
+}
 
+bool Client::operator==(Client &other) const
+{
+    if (std::strcmp(_nickName.c_str(), other.getNickName().c_str()) == 0)
+        return 1;
+    return 0;
+};
+
+
+// seters and getters
+void Client::setAuth(int auth) {_is_auth = auth;}
 void Client::setPass(bool pass){_pass = pass;}
 void Client::setNickName(std::string nickName){_nickName = nickName;}
 void Client::setUserName(std::string userName){_userName = userName;}
 void Client::setHostName(std::string hostName){_hostName = hostName;}
 void Client::setServerName(std::string serverName){_serverName = serverName;}
 void Client::setRealName(std::string realName){_realName = realName;}
-
+void Client::setModes(char mode, bool status)
+{
+	if (mode == 'a')
+		_modes.away = status;
+	else if (mode == 'i')
+		_modes.invisible = status;
+	else if (mode == 'w')
+		_modes.wallops = status;
+	else if (mode == 'r' && status == true)
+		_modes.restricted = status;
+	else if (mode == 'o' && status == false)
+		_modes.operator_ = status;
+	else if (mode == 'O' && status == false)
+		_modes.localOperator = status;
+	else if (mode == 's')
+		_modes.receiveServerNotices = status;
+}
 
 int Client::getFd() const {return _fd;}
 int Client::getAuth() const {return _is_auth;}
-
 bool Client::getPass()const{return _pass;}
 std::string Client::getNickName()const{return _nickName;}
 std::string Client::getUserName()const{return _userName;}
 std::string Client::getHostName()const{return _hostName;}
 std::string Client::getServerName()const{return _serverName;}
 std::string Client::getRealName()const{return _realName;}
-
+std::string Client::getModes(char mode)
+{
+	std::string modes = "";
+	if (mode == 'a')
+		modes += _modes.away ? "a" : "";
+	else if (mode == 'i')
+		modes += _modes.invisible ? "i" : "";
+	else if (mode == 'w')
+		modes += _modes.wallops ? "w" : "";
+	else if (mode == 'r')
+		modes += _modes.restricted ? "r" : "";
+	else if (mode == 'o')
+		modes += _modes.operator_ ? "o" : "";
+	else if (mode == 'O')
+		modes += _modes.localOperator ? "O" : "";
+	else if (mode == 's')
+		modes += _modes.receiveServerNotices ? "s" : "";
+	return (modes);
+}

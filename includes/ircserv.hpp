@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 15:54:25 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/05 19:16:37 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 # include "server.hpp"
 # include "client.hpp"
+# include "channel.hpp"
 
 
 #define LOCAL_IP "127.0.0.1" // server ip
@@ -44,6 +45,7 @@
 #define ERR_UNKNOWNCOMMAND 421
 #define RPL_YOUREOPER 381
 #define ERR_NOOPERHOST 491
+#define ERR_NOSUCHCHANNEL 403
 
 
 
@@ -55,3 +57,6 @@ bool ft_isvalid_nickname(std::string nick);
 bool ft_isalreadyused(std::string nick, Client &client, std::vector<Client> clients);
 bool ft_isregister(Client client);
 bool ft_nosuchnick(std::string nick, std::vector<Client> clients);
+bool validMode(std::string mode);
+bool is_validChannel(std::string name);
+int is_channel_Exit(std::vector<Channel> chnls, std::string name);

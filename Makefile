@@ -6,7 +6,7 @@
 #    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/03 12:03:23 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/05 19:58:47 by hboumahd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,17 +15,17 @@ NAME = ircserv
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
-SRCS =	src/main.cpp src/server.cpp src/client.cpp src/handle_cmds.cpp \
+SRCS =	src/main.cpp src/server.cpp src/client.cpp src/commands.cpp src/channel.cpp \
 		src/utiles/print_error.cpp src/utiles/utiles.cpp 
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
-OBJS_FILES =	main.o server.o client.o handle_cmds.o \
-				print_error.o utiles.o
+OBJS_FILES =	main.o server.o client.o commands.o \
+				print_error.o utiles.o channel.o
 OBJS_FOLDER =	./src/output/
 SRCOBJ_OUT = $(addprefix $(OBJS_FOLDER), $(OBJS_FILES))
 
-Include = includes/ircserv.hpp includes/server.hpp includes/client.hpp 
+Include = includes/ircserv.hpp includes/server.hpp includes/client.hpp includes/channel.hpp
 
 # -g for the debugger
 %.o:%.cpp ${Include} 

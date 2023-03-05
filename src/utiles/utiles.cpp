@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/02 19:00:55 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/05 19:14:48 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,40 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
             return (1);
     }
     return (0);
+}
+
+bool validMode(std::string mode)
+{
+    if (mode[0] != '+' && mode[0] != '-')
+        return (false);
+    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r')
+        return (true);
+    return (false);
+}
+
+bool is_validChannel(std::string name)
+{
+    if (name.length() < 2 || name.length() > 50)
+        return false;
+    if (name[0] != '#' && name[0] != '&')
+        return false;
+    for (size_t i = 1; i < name.length(); i++)
+    {
+        if (!isalnum(name[i]) && name[i] != '[' && name[i] != ']' && name[i] != '\\' &&
+            name[i] != '`' && name[i] != '^' && name[i] != '_' && name[i] != '-')
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int is_channel_Exit(std::vector<Channel> chnls, std::string name)
+{
+    for (size_t i = 0; i < chnls.size(); i++)
+    {
+        if (std::strcmp(name.c_str(), chnls[i].get_chanlName().c_str()) == 0)
+            return (i);
+    }
+    return (-1);
 }
