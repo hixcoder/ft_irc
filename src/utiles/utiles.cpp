@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/05 19:14:48 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 13:37:31 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,3 +125,13 @@ int is_channel_Exit(std::vector<Channel> chnls, std::string name)
     }
     return (-1);
 }
+
+int ft_isUserExist(std::string nik, std::vector<Client> urs)
+{
+    for (size_t j = 0; j < urs.size(); j++)
+    {
+        if (strcmp(nik.c_str(), urs[j].getNickName().c_str()) == 0)
+            return (j);
+    }
+    return (0);
+};

@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 15:46:32 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 15:36:47 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Server::Server(char *port, char *passwd)
     _timeout = 0;
     _endServer = 0;
     _closeCon = 0;
+    _serverName = "irc_killers";
     
     createSocket();
     bindSocket();

@@ -24,7 +24,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         handleNickCmd(client, spl);
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
-        handlePrivmsgCmd(client, spl);
+        handlePrivmsgCmd(client, spl, buffer);
     else if (strcmp("QUIT", spl[0].c_str()) == 0)
         handleQuitCmd(client);
     else if (strcmp("OPER", spl[0].c_str()) == 0)
@@ -32,7 +32,9 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
     else if (strcmp("JOIN", spl[0].c_str()) == 0)
         ft_joinCmd(client, spl, buffer);
     else if (strcmp("MODE", spl[0].c_str()) == 0)
-        ft_joinCmd(client, spl, buffer);
+        modeCmd(spl, client);
+    else if (strcmp("KILL", spl[0].c_str()) == 0)
+        handleKillCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
         
@@ -84,7 +86,6 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
 
 void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
-
     if (cmds.size() < 5)
         ft_print_error("USER", ERR_NEEDMOREPARAMS, client);
     else if (!client.getUserName().empty())
@@ -110,44 +111,33 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
 // ================================================
 
 // handle PRIVMSG command
-void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds)
+
+void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
     if (cmds.size() == 1)
         ft_print_error(cmds[0], ERR_NORECIPIENT, client);
     else if (cmds.size() == 2)
         ft_print_error("", ERR_NOTEXTTOSEND, client);
-    // else if (ft_isregister(client))
-    //     ft_print_error(cmds[1], ERR_NOSUCHNICK, client);
     else
     {
-        std::cout << "-----> " << cmds[1] << std::endl;
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
         {
-            std::cout << clts[k] << std::endl;
-        }
-
-        size_t j = 0;
-        for (; j < _clients.size(); j++)
-        {
-
-            if (strcmp(cmds[1].c_str(), _clients[j].getNickName().c_str()) == 0)
+            int fd = ft_isUserExist(clts[k], _clients);
+            if (fd) // ft_isRegister(users[i])
             {
-                // :LKK!~WERWE@d2a6-9017-cfb7-6374-1329.iam.net.ma PRIVMSG HAMZ :FA:FAS:
-                std::string msg = ":" + client.getNickName() + " PRIVMSG " + _clients[j].getNickName() + " " + cmds[2];
-                send(_clients[j].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-                break;
+                std::string msg;
+                if (cmds[2][0] != ':')
+                    msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
+                else
+                    msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':');
+                send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
             }
+            else
+                ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
         }
-        if (j == _clients.size())
-            ft_print_error(cmds[1], ERR_NOSUCHNICK, client);
     }
 };
-
-
-
-
-
 
 
 
@@ -225,6 +215,7 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
 // handle KILL command
 // handle OPER command [OK]
 // handle RESTART command
+// handle WALLOPS 
 
 // handle OPER command
 void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
@@ -238,7 +229,10 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
         else
         {
             if (client.getHostName() == (std::string)LOCAL_IP)
+            {
+                client.setModes('O', true);
                 ft_print_error("OPER", RPL_YOUREOPER, client);
+            }
             else
                 ft_print_error("OPER", ERR_NOOPERHOST, client);
         }
@@ -246,6 +240,39 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
     }
 };
 
+// handle KILL command
+void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() < 3)
+        ft_print_error("KILL", ERR_NEEDMOREPARAMS, client);
+    else
+    {
+        if (client.getModes('O') || client.getModes('o'))
+        {
+            if (cmds[1] == _serverName)
+            {
+                ft_print_error("KILL", ERR_CANTKILLSERVER, client);
+                return ;
+            }
+            for (size_t i = 0; i < _clients.size(); i++)
+            {
+                if (_clients[i].getNickName() == cmds[1])
+                {
+                    std::string reason = cmds[2];
+                    for (size_t i = 2; i < cmds.size(); i++)
+                        reason += " " + cmds[i];
+                    std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " KILL " + cmds[1] + ": " + reason + "\n";
+                    send(_clients[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                    close(_clients[i].getFd());
+                    return ;
+                }
+            }
+            ft_print_error("KILL", ERR_NOSUCHNICK, client);
+        }
+        else
+            ft_print_error("KILL", ERR_NOPRIVILEGES, client);
+    }
+};
 
 
 // ================================================

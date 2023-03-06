@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/03 15:55:02 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 14:55:06 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,9 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + cmd + " :You are now an IRC operator\n";
     else if (type == ERR_NOOPERHOST)
         msg = temp + cmd + " :No O-lines for your host\n";
+    else if (type == ERR_NOPRIVILEGES)
+        msg = temp + cmd + " :Permission Denied- You're not an IRC operator\n";
+    else if (type == ERR_CANTKILLSERVER)
+        msg = temp + cmd + " :You cant kill a server!\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

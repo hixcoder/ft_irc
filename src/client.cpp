@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/05 19:54:28 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 16:04:23 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,15 @@ Client::Client(int fd)
     _hostName = "127.0.0.1";
     _serverName = "";
     _realName = "";
+
+	// user modes:
+	_modes.away = false;
+	_modes.invisible = false;
+	_modes.wallops = false;
+	_modes.restricted = false;
+	_modes.operator_ = false;
+	_modes.localOperator = false;
+	_modes.receiveServerNotices = false;
 }
 
 Client::~Client() 
@@ -63,11 +72,11 @@ void Client::setModes(char mode, bool status)
 		_modes.invisible = status;
 	else if (mode == 'w')
 		_modes.wallops = status;
-	else if (mode == 'r' && status == true)
+	else if (mode == 'r')
 		_modes.restricted = status;
-	else if (mode == 'o' && status == false)
+	else if (mode == 'o')
 		_modes.operator_ = status;
-	else if (mode == 'O' && status == false)
+	else if (mode == 'O')
 		_modes.localOperator = status;
 	else if (mode == 's')
 		_modes.receiveServerNotices = status;
@@ -81,22 +90,22 @@ std::string Client::getUserName()const{return _userName;}
 std::string Client::getHostName()const{return _hostName;}
 std::string Client::getServerName()const{return _serverName;}
 std::string Client::getRealName()const{return _realName;}
-std::string Client::getModes(char mode)
+bool Client::getModes(char mode)
 {
-	std::string modes = "";
+	bool modes = false;
 	if (mode == 'a')
-		modes += _modes.away ? "a" : "";
+		modes = _modes.away;
 	else if (mode == 'i')
-		modes += _modes.invisible ? "i" : "";
+		modes = _modes.invisible;
 	else if (mode == 'w')
-		modes += _modes.wallops ? "w" : "";
+		modes = _modes.wallops;
 	else if (mode == 'r')
-		modes += _modes.restricted ? "r" : "";
+		modes = _modes.restricted;
 	else if (mode == 'o')
-		modes += _modes.operator_ ? "o" : "";
+		modes = _modes.operator_;
 	else if (mode == 'O')
-		modes += _modes.localOperator ? "O" : "";
+		modes = _modes.localOperator;
 	else if (mode == 's')
-		modes += _modes.receiveServerNotices ? "s" : "";
+		modes = _modes.receiveServerNotices;
 	return (modes);
 }

@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/05 19:16:37 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 14:54:42 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@
 #define RPL_YOUREOPER 381
 #define ERR_NOOPERHOST 491
 #define ERR_NOSUCHCHANNEL 403
-
-
+#define ERR_NOPRIVILEGES 481
+#define ERR_CANTKILLSERVER 483
 
 // used functions:
 
@@ -60,3 +60,4 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients);
 bool validMode(std::string mode);
 bool is_validChannel(std::string name);
 int is_channel_Exit(std::vector<Channel> chnls, std::string name);
+int ft_isUserExist(std::string nik, std::vector<Client> urs);

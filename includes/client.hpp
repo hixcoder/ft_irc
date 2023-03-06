@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/05 19:32:56 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 15:06:24 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ public:
     std::string getHostName()const;
     std::string getServerName()const;
     std::string getRealName()const;
-    std::string getModes(char mode);
+    bool getModes(char mode);
 };
 

@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/05 19:55:12 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 15:36:18 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
     std::vector<pollfd> _pollfds;
     std::vector<Client> _clients;
     std::vector<Channel> _channels;
+    std::string _serverName;
     
 public:
     Server(char *port, char *passwd);
@@ -49,11 +50,12 @@ private:
     void handleNickCmd(Client &client, std::vector<std::string> cmds);
     void handleUserCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     // other functions
-    void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds);
     void handleQuitCmd(Client &client);
     void handleOperCmd(Client &client, std::vector<std::string> cmds);
 	void modeCmd(std::vector<std::string> cmd, Client &user);
     void ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer);
+    void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, char *buffer);
+    void handleKillCmd(Client &client, std::vector<std::string> cmds);
     
 };
 
