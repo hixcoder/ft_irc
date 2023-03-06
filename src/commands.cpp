@@ -35,6 +35,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         modeCmd(spl, client);
     else if (strcmp("KILL", spl[0].c_str()) == 0)
         handleKillCmd(client, spl);
+    else if (strcmp("LIST", spl[0].c_str()) == 0)
+        handleListCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
         
@@ -206,13 +208,35 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
     buffer++;
 };
 
+
+void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() == 1)
+    {
+        ft_print_error("LIST", RPL_LISTSTART, client);
+        std::cout << "the channel size: " << _channels.size() << "\n";
+        for (size_t i = 0; i < _channels.size(); i++)
+        {
+            std:: cout << "the i= " << i << "\n";
+            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
+            client.getNickName() + " #" +  _channels[i].get_chanlName() + " " + std::to_string(_channels[i].getChannelClientsSize()) + " :" + _channels[i].getChannelTopic() + "\n";
+            send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+        }
+    }
+    else if (cmds.size() > 1)
+    {
+
+    }
+    ft_print_error("LIST", RPL_LISTEND, client);
+}
+
 // ================================================
 // OPERATOR COMMANDS
 // ================================================
 
 // handle INVITE command
 // handle KICK  command
-// handle KILL command
+// handle KILL command [OK]
 // handle OPER command [OK]
 // handle RESTART command
 // handle WALLOPS 

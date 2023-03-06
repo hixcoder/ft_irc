@@ -6,17 +6,18 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/05 19:36:11 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/06 20:01:46 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 # include "ircserv.hpp"
-
+# include <vector>
 class Channel
 {
 private:
     std::string _chanlName;
+    std::string _chanlTopic;
     std::string _chanlPass;
     std::vector<Client> _chanlUsers;
 
@@ -27,8 +28,13 @@ public:
     // setters and getters
     void set_chanlName(std::string name);
     void set_chanlPass(std::string pass);
+    void setChannelTopic(std::string newTopic);
+
+    
     std::string get_chanlName();
     std::string get_chanlPass() const;
+    std::string getChannelTopic() const;
+    int getChannelClientsSize() const;
 
     // other functions
     void add_user(Client user);
