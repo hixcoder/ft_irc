@@ -149,24 +149,22 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
 
 void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 {
-	if(!user.isRegistered())
-		std::cerr << "Error: ERR_NEEDMOREPARAMS You need to be registered to use this command\n";
-	else if (cmd.size() < 2)
-		std::cerr << "Error: Not enough arguments\n";
-	if (!user.isRegistered() || cmd.size() < 2)
-		return ;
-	user.setNickName(cmd[1]);
+    if(!user.isRegistered())
+        return (ft_print_error("MODE", ERR_NOTREGISTERED, user));
+	if (cmd.size() < 2)
+        return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
+    if (cmd[1] != user.getNickName())
+        return (ft_print_error("MODE", ERR_USERSDONTMATCH, user));
+
 	if (!validMode(cmd[2]))
-	{
-		std::cerr << "Error: Invalid mode\n";
-		return ;
-	}
+        return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
 	if (cmd[2][0] == '+')
 		user.setModes(cmd[2][1], true);
 	else if (cmd[2][0] == '-')
 		user.setModes(cmd[2][1], false);
+    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + user.getNickName() + " " + cmd[2] + "\n";
+    send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
-
 
 void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
@@ -230,7 +228,7 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
         {
             if (client.getHostName() == (std::string)LOCAL_IP)
             {
-                client.setModes('O', true);
+                client.setOper(true);
                 ft_print_error("OPER", RPL_YOUREOPER, client);
             }
             else

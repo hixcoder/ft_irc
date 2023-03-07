@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/06 13:37:31 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:42:19 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
 
 bool validMode(std::string mode)
 {
-    if (mode[0] != '+' && mode[0] != '-')
+    if (mode.length() != 2 &&  (mode[0] != '+' && mode[0] != '-'))
         return (false);
-    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r')
+    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r' || mode[1] == 'a')
         return (true);
     return (false);
 }

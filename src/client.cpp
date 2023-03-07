@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/06 16:04:23 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 15:45:50 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ Client::Client(int fd)
     _fd = fd;
     _is_auth = 0;
     _pass = false;
-    _isOper = false;
 
     _nickName = "";
     _userName = "";
@@ -72,15 +71,17 @@ void Client::setModes(char mode, bool status)
 		_modes.invisible = status;
 	else if (mode == 'w')
 		_modes.wallops = status;
-	else if (mode == 'r')
+	else if (mode == 'r' && status == true)
 		_modes.restricted = status;
-	else if (mode == 'o')
+	else if (mode == 'o' && status == false)
 		_modes.operator_ = status;
-	else if (mode == 'O')
+	else if (mode == 'O' && status == false)
 		_modes.localOperator = status;
 	else if (mode == 's')
 		_modes.receiveServerNotices = status;
 }
+
+void Client::setOper(bool status){ _modes.operator_ = status;}
 
 int Client::getFd() const {return _fd;}
 int Client::getAuth() const {return _is_auth;}

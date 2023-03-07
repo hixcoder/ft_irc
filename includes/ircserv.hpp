@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/06 14:54:42 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:19:52 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOPRIVILEGES 481
 #define ERR_CANTKILLSERVER 483
-
+#define ERR_NOTREGISTERED 451
+#define ERR_USERSDONTMATCH 502
+#define ERR_UMODEUNKNOWNFLAG 501
+#define RPL_UMODEIS 221
 // used functions:
 
 std::vector<std::string> ft_split(std::string str, char separator);
