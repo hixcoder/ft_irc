@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/07 14:26:53 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:37:17 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
-Channel::Channel(){};
+Channel::Channel(){
+
+};
 Channel::~Channel(){};
 
 // setters and getters
@@ -22,9 +24,8 @@ std::string Channel::get_chanlName() { return _chanlName; };
 void Channel::set_chanlPass(std::string pass) { _chanlPass = pass; };
 std::string Channel::get_chanlPass() const { return _chanlPass; };
 
-void Channel::setChannelTopic(std::string newTopic){_chanlTopic = newTopic;}
-std::string Channel::getChannelTopic() const{return _chanlTopic;}
-
+void Channel::setChannelTopic(std::string newTopic) { _chanlTopic = newTopic; }
+std::string Channel::getChannelTopic() const { return _chanlTopic; }
 
 // other functions
 int Channel::getConnectedClientsNbr()
@@ -40,7 +41,11 @@ int Channel::getConnectedClientsNbr()
 
 void Channel::add_user(Client user)
 {
+    std::string msg;
+    //: AHAMMA!~FSD@26d-ac5f-603e-c171-01c.67.196.ip JOIN :#AHAMMAM
+    msg = ":" + user.getNickName() + "!~FSD@26d-ac5f.ip JOIN :" + _chanlName + "\n";
     _chanlUsers.push_back(user);
+    send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
 
 bool Channel::is_userInChannel(Client user)

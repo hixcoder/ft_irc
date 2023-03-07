@@ -3,32 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 17:05:06 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:29:40 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include <iostream>
-# include <string>
-# include <vector>
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <netdb.h>
-# include <netinet/in.h>
-# include <arpa/inet.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/poll.h>
-# include <errno.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/poll.h>
+#include <errno.h>
 
-# include "server.hpp"
-# include "client.hpp"
-# include "channel.hpp"
-
+#include "server.hpp"
+#include "client.hpp"
+#include "channel.hpp"
 
 #define LOCAL_IP "127.0.0.1" // server ip
 
@@ -56,6 +55,10 @@
 #define ERR_USERSDONTMATCH 502
 #define ERR_UMODEUNKNOWNFLAG 501
 #define RPL_UMODEIS 221
+#define ERR_BADCHANNELKEY 475
+
+// OUR
+#define JOIN_CHANNEL 55
 // used functions:
 
 std::vector<std::string> ft_split(std::string str, char separator);

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 17:04:38 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:33:38 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../includes/ircserv.hpp"
-
-
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
@@ -37,6 +34,10 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + " :No text to send\n";
     else if (type == ERR_NOSUCHNICK)
         msg = temp + client.getNickName() + " " + cmd + " :No such nick/channel\n";
+    else if (type == ERR_NOSUCHCHANNEL)
+        msg = temp + client.getNickName() + " " + cmd + " :No such channel\n";
+    else if (type == ERR_BADCHANNELKEY)
+        msg = temp + client.getNickName() + " " + cmd + " :Cannot join channel (+k)\n";
     else if (type == ERR_UNKNOWNCOMMAND)
         msg = temp + cmd + " :Unknown command\n";
     else if (type == RPL_YOUREOPER)

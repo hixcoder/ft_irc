@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 14:55:49 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 17:31:33 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,23 @@ Server::Server(char *port, char *passwd)
     _serverName = "irc_killers";
 
     // create some channels for test:
-    Channel ch1;
-    ch1.set_chanlName("#yankiisChannel");
-    ch1.setChannelTopic("yankiis topic is the best");
-    Channel ch2;
-    ch2.set_chanlName("#l3zawaChannel");
-    ch2.setChannelTopic("l3zawa topic is the greatest");
-    _channels.push_back(ch1);
-    _channels.push_back(ch2);
-    _channels.push_back(ch1);
-    ch2.set_chanlName("#miga");
-    ch2.setChannelTopic("migan topic is the here");
-    _channels.push_back(ch2);
-    ch2.set_chanlName("#mochi");
-    ch2.setChannelTopic("mochi topic bset!");
-    _channels.push_back(ch2);
-    std::cout << "the channel size: " << _channels.size() << "\n";
-    
+    // Channel ch1;
+    // ch1.set_chanlName("#yankiisChannel");
+    // ch1.setChannelTopic("yankiis topic is the best");
+    // Channel ch2;
+    // ch2.set_chanlName("#l3zawaChannel");
+    // ch2.setChannelTopic("l3zawa topic is the greatest");
+    // _channels.push_back(ch1);
+    // _channels.push_back(ch2);
+    // _channels.push_back(ch1);
+    // ch2.set_chanlName("#miga");
+    // ch2.setChannelTopic("migan topic is the here");
+    // _channels.push_back(ch2);
+    // ch2.set_chanlName("#mochi");
+    // ch2.setChannelTopic("mochi topic bset!");
+    // _channels.push_back(ch2);
+    // std::cout << "the channel size: " << _channels.size() << "\n";
+
     createSocket();
     bindSocket();
     listeningToClients(4);
@@ -57,9 +57,9 @@ void Server::createSocket()
     _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (_serverSocket < 0)
         error("Error building socket", 1, _serverSocket);
-    
-    bzero((char *) &_server_addr, sizeof(_server_addr));
-    
+
+    bzero((char *)&_server_addr, sizeof(_server_addr));
+
     _server_addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(_port);
@@ -69,7 +69,7 @@ void Server::bindSocket()
 {
     // here we allow the server socket fd to be reusable
     int optval = 1;
-    if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) == -1) 
+    if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) == -1)
         error("Error on setsockopt.", 1, _serverSocket);
 
     // here we set the server socket to be nonbloking
@@ -77,9 +77,8 @@ void Server::bindSocket()
         error("Error on fcntl", 1, _serverSocket);
 
     // bind the server host address
-    if (bind(_serverSocket, (struct sockaddr *) &_server_addr, sizeof(_server_addr)) < 0)
+    if (bind(_serverSocket, (struct sockaddr *)&_server_addr, sizeof(_server_addr)) < 0)
         error("Error on binding host adress.", 1, _serverSocket);
-    
 }
 
 void Server::listeningToClients(int backlog)
@@ -99,7 +98,7 @@ void Server::runServer()
             std::cout << "poll() call failed!\n";
             break;
         }
-        
+
         // determine the readable fds
         for (size_t i = 0; i < _pollfds.size(); i++)
         {
@@ -111,14 +110,14 @@ void Server::runServer()
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
-                break; 
+                break;
             }
-            
+
             if (_pollfds[i].fd == _serverSocket)
                 addClient();
             else
                 recvClientMsg(_clients[i - 1]);
-                
+
             if (_closeCon)
             {
                 close(_pollfds[i].fd);
@@ -134,7 +133,7 @@ void Server::runServer()
 void Server::addClient()
 {
     // here we loop and accept incoming connections
-    while(true)
+    while (true)
     {
         _newSocket = accept(_serverSocket, NULL, NULL);
         if (_newSocket < 0)
@@ -172,7 +171,7 @@ void Server::recvClientMsg(Client &client)
     }
     else if (_rc == 0)
     {
-    // if connection closed by client 
+        // if connection closed by client
         std::cout << "Connection closed\n";
         _closeCon = 1;
     }
@@ -180,7 +179,7 @@ void Server::recvClientMsg(Client &client)
         ft_hundle_cmd(client, buffer);
 }
 
-// this function for handle sockets errors 
+// this function for handle sockets errors
 void Server::error(std::string errorMsg, int exitStatus, int fd)
 {
     std::cout << errorMsg << "\n";

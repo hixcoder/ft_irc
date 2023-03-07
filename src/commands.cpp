@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../includes/ircserv.hpp"
 
 void Server::ft_hundle_cmd(Client &client, char *buffer)
@@ -41,7 +39,6 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleListCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
-        
 }
 
 // ================================================
@@ -143,29 +140,25 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
     }
 };
 
-
-
-
-
 // ================================================
 // Channel COMMANDS
 // ================================================
 
 void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 {
-    if(!user.isRegistered())
+    if (!user.isRegistered())
         return (ft_print_error("MODE", ERR_NOTREGISTERED, user));
-	if (cmd.size() < 2)
+    if (cmd.size() < 2)
         return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
     if (cmd[1] != user.getNickName())
         return (ft_print_error("MODE", ERR_USERSDONTMATCH, user));
 
-	if (!validMode(cmd[2]))
+    if (!validMode(cmd[2]))
         return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
-	if (cmd[2][0] == '+')
-		user.setModes(cmd[2][1], true);
-	else if (cmd[2][0] == '-')
-		user.setModes(cmd[2][1], false);
+    if (cmd[2][0] == '+')
+        user.setModes(cmd[2][1], true);
+    else if (cmd[2][0] == '-')
+        user.setModes(cmd[2][1], false);
     std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + user.getNickName() + " " + cmd[2] + "\n";
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
@@ -178,36 +171,47 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
         ft_print_error("JOIN", ERR_NOSUCHCHANNEL, client);
     else
     {
-        int indx = is_channel_Exit(_channels, cmds[1]);
-        if (indx == -1)
+        std::vector<std::string> chanls;
+        std::vector<std::string> chanlsPass;
+        chanls = ft_split(cmds[1], ',');
+        if (!cmds[2].empty())
+            chanlsPass = ft_split(cmds[2], ',');
+        for (size_t l = 0; l < chanls.size(); l++)
         {
-            Channel channel;
-            channel.set_chanlName(cmds[1]);
-            channel.add_user(client);
-            _channels.push_back(channel);
-        }
-        else
-        {
-            if (!_channels[indx].is_userInChannel(client))
-                _channels[indx].add_user(client);
+            int indx = is_channel_Exit(_channels, chanls[l]);
+            std::string key;
+            if (!cmds[2].empty() && l < chanlsPass.size())
+                key = chanlsPass[l];
+            if (indx == -1)
+            {
+                Channel channel;
+                channel.set_chanlName(chanls[l]);
+                if (!cmds[2].empty() && l < chanlsPass.size())
+                    channel.set_chanlPass(key);
+                channel.add_user(client);
+                _channels.push_back(channel);
+            }
+            else
+            {
+                if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
+                    _channels[indx].add_user(client);
+                else
+                    ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
+                if (!_channels[indx].is_userInChannel(client))
+                    _channels[indx].add_user(client);
+                _channels[indx].printAllUser();
+            }
         }
 
-        // std::vector<std::string> chanls;
-        // std::vector<std::string> chanlsPass;
-        // chanls = ft_split(cmds[1], ',');
-        // if (!cmds[2].empty())
-        //     chanlsPass = ft_split(cmds[2], ',');
         // for (size_t k = 0; k < chanls.size(); k++)
         // {
         //     // std::cout << "------> " << chanls[k] << std::endl;
         //     // if (!chanlsPass.empty() && k < chanlsPass.size())
         //     //     std::cout << "-> " << chanlsPass[k] << std::endl;
         // }
-        _channels[indx].printAllUser();
     }
     buffer++;
 };
-
 
 void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
 {
@@ -216,9 +220,9 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
-            client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
-            std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
+            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+                              client.getNickName() + " " + _channels[i].get_chanlName() + " " +
+                              std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
     }
@@ -234,9 +238,9 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
-                    client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
-                    std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+                                      client.getNickName() + " " + _channels[i].get_chanlName() + " " +
+                                      std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -254,7 +258,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
 // handle KILL command [OK]
 // handle OPER command [OK]
 // handle RESTART command
-// handle WALLOPS 
+// handle WALLOPS
 
 // handle OPER command
 void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
@@ -275,7 +279,6 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
             else
                 ft_print_error("OPER", ERR_NOOPERHOST, client);
         }
-            
     }
 };
 
@@ -291,7 +294,7 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
             if (cmds[1] == _serverName)
             {
                 ft_print_error("KILL", ERR_CANTKILLSERVER, client);
-                return ;
+                return;
             }
             for (size_t i = 0; i < _clients.size(); i++)
             {
@@ -303,7 +306,7 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
                     std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " KILL " + cmds[1] + ": " + reason + "\n";
                     send(_clients[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                     close(_clients[i].getFd());
-                    return ;
+                    return;
                 }
             }
             ft_print_error("KILL", ERR_NOSUCHNICK, client);
@@ -313,13 +316,9 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
     }
 };
 
-
 // ================================================
 // Server Informations COMMANDS
 // ================================================
-
-
-
 
 // ================================================
 // Other COMMANDS
@@ -332,7 +331,7 @@ void Server::handleQuitCmd(Client &client)
     {
         if (_clients[i].getFd() == client.getFd())
         {
-            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "user "+ client.getNickName() + " disconnected\n";
+            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "user " + client.getNickName() + " disconnected\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
             close(client.getFd());
             break;
