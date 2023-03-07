@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/06 16:04:23 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:25:44 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ Client::Client(int fd)
     _fd = fd;
     _is_auth = 0;
     _pass = false;
-    _isOper = false;
 
     _nickName = "";
     _userName = "";
