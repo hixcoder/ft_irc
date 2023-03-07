@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/06 19:04:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 17:04:38 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/ircserv.hpp"
+
+
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
@@ -45,10 +47,16 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + cmd + " :Permission Denied- You're not an IRC operator\n";
     else if (type == ERR_CANTKILLSERVER)
         msg = temp + cmd + " :You cant kill a server!\n";
-    
     else if (type == RPL_LISTSTART)
         msg = temp + client.getNickName() + " Channel :Users  Name\n";
     else if (type == RPL_LISTEND)
         msg = temp + client.getNickName() + " :End of /LIST\n";
+    else if (type == ERR_NOTREGISTERED)
+        msg = temp + cmd + " :You have not registered\n";
+    else if (type == ERR_USERSDONTMATCH)
+        msg = temp + cmd + " :Cannot change mode for other users\n";
+    else if (type == ERR_UMODEUNKNOWNFLAG)
+        msg = temp + cmd + " :Unknown MODE flag\n";
+
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
