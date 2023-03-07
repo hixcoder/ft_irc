@@ -17,6 +17,8 @@
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
+    if (spl.size() < 1)
+        return;
     if (strcmp("PASS", spl[0].c_str()) == 0)
         handlePassCmd(client, spl, buffer);
     else if (strcmp("USER", spl[0].c_str()) == 0)
@@ -211,21 +213,36 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
 
 void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
 {
+    ft_print_error("LIST", RPL_LISTSTART, client);
     if (cmds.size() == 1)
     {
-        ft_print_error("LIST", RPL_LISTSTART, client);
-        std::cout << "the channel size: " << _channels.size() << "\n";
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std:: cout << "the i= " << i << "\n";
             std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
-            client.getNickName() + " #" +  _channels[i].get_chanlName() + " " + std::to_string(_channels[i].getChannelClientsSize()) + " :" + _channels[i].getChannelTopic() + "\n";
+            client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
+            std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
     }
     else if (cmds.size() > 1)
     {
-
+        std::string allChanls = cmds[1];
+        for (size_t i = 2; i < cmds.size(); i++)
+            allChanls += " " + cmds[i];
+        std::vector<std::string> splChanls = ft_split(allChanls, ',');
+        for (size_t i = 0; i < _channels.size(); i++)
+        {
+            for (size_t j = 0; j < splChanls.size(); j++)
+            {
+                if (splChanls[j] == _channels[i].get_chanlName())
+                {
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
+                    client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
+                    std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
+                    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                }
+            }
+        }
     }
     ft_print_error("LIST", RPL_LISTEND, client);
 }

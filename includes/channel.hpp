@@ -6,13 +6,12 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/06 20:01:46 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 14:25:52 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 # include "ircserv.hpp"
-# include <vector>
 class Channel
 {
 private:
@@ -34,9 +33,9 @@ public:
     std::string get_chanlName();
     std::string get_chanlPass() const;
     std::string getChannelTopic() const;
-    int getChannelClientsSize() const;
 
     // other functions
+    int getConnectedClientsNbr();
     void add_user(Client user);
     bool is_userInChannel(Client user);
     void printAllUser();
