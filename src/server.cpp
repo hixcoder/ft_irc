@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 14:43:42 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 14:55:49 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ Server::Server(char *port, char *passwd)
     _channels.push_back(ch2);
     ch2.set_chanlName("#mochi");
     ch2.setChannelTopic("mochi topic bset!");
-    ch2.add_user("mochi topic bset!");
     _channels.push_back(ch2);
     std::cout << "the channel size: " << _channels.size() << "\n";
     
