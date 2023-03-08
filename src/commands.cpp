@@ -37,6 +37,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleKillCmd(client, spl);
     else if (strcmp("LIST", spl[0].c_str()) == 0)
         handleListCmd(client, spl);
+    else if (strcmp("NAMES", spl[0].c_str()) == 0)
+        handleNamesCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -220,9 +222,9 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
-                              client.getNickName() + " " + _channels[i].get_chanlName() + " " +
-                              std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
+            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
+            client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
+            std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
     }
@@ -238,15 +240,52 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
-                                      client.getNickName() + " " + _channels[i].get_chanlName() + " " +
-                                      std::to_string(_channels[i].getConnectedClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " + \
+                    client.getNickName() + " " +  _channels[i].get_chanlName() + " " + \
+                    std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
         }
     }
     ft_print_error("LIST", RPL_LISTEND, client);
+}
+
+
+void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() == 1)
+    {
+        std::string allUsers = "";
+        for (size_t i = 0; i < _channels.size(); i++)
+            allUsers += " " + _channels[i].getallUsers();
+        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
+        client.getNickName() + " = * :" + allUsers + "\n";
+        send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+        ft_print_error(" *", RPL_ENDOFNAMES, client);
+    }
+    else if (cmds.size() > 1)
+    {
+        std::string allChanls = "";
+        std::string allChanlsTmp = cmds[1];
+        for (size_t i = 2; i < cmds.size(); i++)
+            allChanlsTmp += " " + cmds[i];
+        std::vector<std::string> splChanls = ft_split(allChanlsTmp, ',');
+        for (size_t i = 0; i < _channels.size(); i++)
+        {
+            for (size_t j = 0; j < splChanls.size(); j++)
+            {
+                if (splChanls[j] == _channels[i].get_chanlName())
+                {
+                    allChanls += splChanls[j];
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
+                    client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers() + "\n";
+                    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                }
+            }
+        }
+        ft_print_error(allChanls, RPL_ENDOFNAMES, client);
+    }
 }
 
 // ================================================

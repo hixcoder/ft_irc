@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/07 14:25:52 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:06:46 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ public:
     std::string getChannelTopic() const;
 
     // other functions
-    int getConnectedClientsNbr();
+    std::string getallUsers();
+    int getClientsNbr();
     void add_user(Client user);
     bool is_userInChannel(Client user);
     void printAllUser();

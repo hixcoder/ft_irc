@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/07 18:37:17 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/08 11:10:16 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,19 @@ void Channel::setChannelTopic(std::string newTopic) { _chanlTopic = newTopic; }
 std::string Channel::getChannelTopic() const { return _chanlTopic; }
 
 // other functions
-int Channel::getConnectedClientsNbr()
+int Channel::getClientsNbr(){return _chanlUsers.size();}
+
+std::string Channel::getallUsers()
 {
-    int conectedClientsNbr = 0;
+    std::string users = "";
     for (size_t i = 0; i < _chanlUsers.size(); i++)
     {
-        if (_chanlUsers[i].getModes('i') == false)
-            conectedClientsNbr++;
+        if (_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O'))
+            users += " @" + _chanlUsers[i].getNickName();
+        else
+            users += " " + _chanlUsers[i].getNickName();
     }
-    return conectedClientsNbr;
+    return users;
 }
 
 void Channel::add_user(Client user)

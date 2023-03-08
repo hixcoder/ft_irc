@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 18:33:38 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/08 11:08:07 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,8 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == ERR_UMODEUNKNOWNFLAG)
         msg = temp + cmd + " :Unknown MODE flag\n";
 
+
+    else if (type == RPL_ENDOFNAMES)
+        msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
