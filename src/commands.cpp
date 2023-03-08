@@ -39,6 +39,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleListCmd(client, spl);
     else if (strcmp("NAMES", spl[0].c_str()) == 0)
         handleNamesCmd(client, spl);
+    else if (strcmp("TOPIC", spl[0].c_str()) == 0)
+        handleTopicCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -251,14 +253,14 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     ft_print_error("LIST", RPL_LISTEND, client);
 }
 
-
 void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
     {
         std::string allUsers = "";
         for (size_t i = 0; i < _channels.size(); i++)
-            allUsers += " " + _channels[i].getallUsers();
+            allUsers += _channels[i].getallUsers(allUsers);
+
         std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
         client.getNickName() + " = * :" + allUsers + "\n";
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -278,26 +280,50 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
                     allChanls += splChanls[j];
+                    std::string tmp = "";
                     std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
-                    client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers() + "\n";
+                    client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp) + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
         }
-        ft_print_error(allChanls, RPL_ENDOFNAMES, client);
+        ft_print_error(" " + allChanls, RPL_ENDOFNAMES, client);
+    }
+}
+
+void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() < 2)
+        ft_print_error("TOPIC", ERR_NEEDMOREPARAMS, client);
+    else if (cmds.size() == 2)
+    {
+        for (size_t i = 0; i < _channels.size(); i++)
+        {
+            if (_channels[i].get_chanlName() == cmds[1])
+            {
+                if (_channels[i].getChannelTopic() == "")
+                    ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
+                else
+                {
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " + \
+                    client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() +  "\n";
+                    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                    ft_print_error(_channels[i].get_chanlName(), ERR_NEEDMOREPARAMS, client);
+                }
+                return;
+            }
+        }
+        ft_print_error(cmds[1], ERR_NOSUCHCHANNEL, client);
+    }
+    else
+    {
+        
     }
 }
 
 // ================================================
 // OPERATOR COMMANDS
 // ================================================
-
-// handle INVITE command
-// handle KICK  command
-// handle KILL command [OK]
-// handle OPER command [OK]
-// handle RESTART command
-// handle WALLOPS
 
 // handle OPER command
 void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)

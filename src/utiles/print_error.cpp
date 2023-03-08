@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 11:08:07 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/08 17:12:51 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,15 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + cmd + " :Cannot change mode for other users\n";
     else if (type == ERR_UMODEUNKNOWNFLAG)
         msg = temp + cmd + " :Unknown MODE flag\n";
-
-
     else if (type == RPL_ENDOFNAMES)
         msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
+    
+    else if (type == ERR_NOTONCHANNEL)
+        msg = temp + client.getNickName() + cmd + " :You're not on that channel\n";
+    else if (type == RPL_NOTOPIC)
+        msg = temp + client.getNickName() + cmd + " :No topic is set\n";
+    else if (type == ERR_CHANOPRIVSNEEDED)
+        msg = temp + client.getNickName() + cmd + " :You're not channel operator\n";
+
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

@@ -6,15 +6,17 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/08 17:07:47 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
-Channel::Channel(){
-
+Channel::Channel()
+{
+    _chanlTopic = "";
 };
+
 Channel::~Channel(){};
 
 // setters and getters
@@ -30,15 +32,19 @@ std::string Channel::getChannelTopic() const { return _chanlTopic; }
 // other functions
 int Channel::getClientsNbr(){return _chanlUsers.size();}
 
-std::string Channel::getallUsers()
+std::string Channel::getallUsers(std::string &existedUsers)
 {
     std::string users = "";
     for (size_t i = 0; i < _chanlUsers.size(); i++)
     {
-        if (_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O'))
-            users += " @" + _chanlUsers[i].getNickName();
-        else
-            users += " " + _chanlUsers[i].getNickName();
+        
+        if (existedUsers.find(_chanlUsers[i].getNickName()) == std::string::npos && existedUsers.find("@" + _chanlUsers[i].getNickName() + " ") == std::string::npos)
+        {
+            if (_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O'))
+                users += " @" + _chanlUsers[i].getNickName();
+            else
+                users += " " + _chanlUsers[i].getNickName();
+        }
     }
     return users;
 }
