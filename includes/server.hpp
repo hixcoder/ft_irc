@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 15:04:22 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/08 15:11:23 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 # include "ircserv.hpp"
 # include "client.hpp"
 # include "channel.hpp"
+#include  <sys/time.h>
+
+# define GREEN "\e[1;32m"
+# define RED "\e[1;31m"
+# define YELLOW "\e[1;33m"
+# define BLUE "\e[1;34m"
+# define MAGENTA "\e[1;35m"
+# define CYAN "\e[1;36m"
+# define RESET "\e[0m"
 
 class Server
 {
@@ -58,6 +67,8 @@ private:
     void handleKillCmd(Client &client, std::vector<std::string> cmds);
     void handleListCmd(Client &client, std::vector<std::string> cmds);
     void handleNamesCmd(Client &client, std::vector<std::string> cmds);
-    
+    void handleHelpCmd(Client &client);
+    void handleTimeCmd(Client &client);
+    void handleLusersCmd(Client &client);
 };
 

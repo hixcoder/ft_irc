@@ -39,6 +39,12 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleListCmd(client, spl);
     else if (strcmp("NAMES", spl[0].c_str()) == 0)
         handleNamesCmd(client, spl);
+    else if (strcmp("HELP", spl[0].c_str()) == 0)
+        handleHelpCmd(client);
+    else if (strcmp("TIME", spl[0].c_str()) == 0)
+        handleTimeCmd(client);
+    else if (strcmp("LUSER", spl[0].c_str()) == 0)
+        handleLusersCmd(client);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -359,6 +365,63 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
 // Server Informations COMMANDS
 // ================================================
 
+void    Server::handleHelpCmd(Client &client)
+{
+
+    std::string helpmsg;
+    helpmsg.append(GREEN);
+    helpmsg.append("IRC Server Help: \n");
+    helpmsg.append(RESET);
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Registration Commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tPASS <password> : set your password\n");
+    helpmsg.append("\tNICK <nickname> : set your nickname\n");
+    helpmsg.append("\tUSER <username> <hostname> <servername> <realname> : set your username\n");
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Channel Commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tJOIN <channel>{,<channel>} [<key>{,<key>}]: join a channel\n");
+    helpmsg.append("\tPART <channel>{,<channel>} : leave a channel\n");
+    helpmsg.append("\tList [<channel>{,<channel>}]: list all channels\n");
+    helpmsg.append("\tNAMES <channel> : list all users in a channel\n");
+    helpmsg.append("\tMODE <channel> <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>] : set channel modes\n");
+    helpmsg.append("\tTOPIC <channel> [<topic>] : set or get channel topic\n");
+    helpmsg.append("\tINVITE <nickname> <channel> : invite a user to a channel\n");
+    helpmsg.append("\tKICK <channel> <user> [<comment>] : kick a user from a channel\n");
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Operator Commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tKILL <nickname> <comment> : kill a user\n");
+    helpmsg.append("\tOPER <username> <password> : become an IRC operator\n");
+    helpmsg.append("\tServer Informations Commands:\n");
+    helpmsg.append("\tLUSERS [<mask> [<target>]] : get the number of users\n");
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Send message Commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tPRIVMSG <receiver>{,<receiver>} <text to be sent> : send a message to a user or a channel\n");
+    helpmsg.append("\tNOTICE <nickname> <text> : send a notice to a user\n");
+
+    send(client.getFd(), helpmsg.c_str(), helpmsg.size(), 0);
+}
+void Server::handleTimeCmd(Client &client)
+{
+    time_t time;
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    time = t.tv_sec;
+    struct tm *tm = localtime(&time);
+    std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " Time is :";
+    msg.append(asctime(tm));
+    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+}
+
+void Server::handleLusersCmd(Client &client)
+{
+    std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " LUSER :" + std::to_string(_clients.size()) + "\n";
+    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+}
+
 // ================================================
 // Other COMMANDS
 // ================================================
@@ -370,7 +433,7 @@ void Server::handleQuitCmd(Client &client)
     {
         if (_clients[i].getFd() == client.getFd())
         {
-            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "user " + client.getNickName() + " disconnected\n";
+            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "client " + client.getNickName() + " disconnected\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
             close(client.getFd());
             break;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 11:09:03 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/08 12:54:01 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ Server::Server(char *port, char *passwd)
     ch2.set_chanlName("#mochi");
     ch2.setChannelTopic("mochi topic bset!");
     _channels.push_back(ch2);
-    std::cout << "the channel size: " << _channels.size() << "\n";
-    
+    // std::cout << "the channel size: " << _channels.size() << "\n";
     createSocket();
     bindSocket();
     listeningToClients(4);
