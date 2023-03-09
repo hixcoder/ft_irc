@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 15:11:23 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:52:20 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ private:
     void handleKillCmd(Client &client, std::vector<std::string> cmds);
     void handleListCmd(Client &client, std::vector<std::string> cmds);
     void handleNamesCmd(Client &client, std::vector<std::string> cmds);
+    void handleTopicCmd(Client &client, std::vector<std::string> cmds);
+    void handleVersionCmd(Client &client, std::vector<std::string> cmds);
     void handleHelpCmd(Client &client);
     void handleTimeCmd(Client &client);
     void handleLusersCmd(Client &client);

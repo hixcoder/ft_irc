@@ -39,6 +39,10 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleListCmd(client, spl);
     else if (strcmp("NAMES", spl[0].c_str()) == 0)
         handleNamesCmd(client, spl);
+    else if (strcmp("TOPIC", spl[0].c_str()) == 0)
+        handleTopicCmd(client, spl);
+    else if (strcmp("VERSION", spl[0].c_str()) == 0)
+        handleVersionCmd(client, spl);
     else if (strcmp("HELP", spl[0].c_str()) == 0)
         handleHelpCmd(client);
     else if (strcmp("TIME", spl[0].c_str()) == 0)
@@ -286,9 +290,12 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
     {
         std::string allUsers = "";
         for (size_t i = 0; i < _channels.size(); i++)
-            allUsers += " " + _channels[i].getallUsers();
-        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
-                          client.getNickName() + " = * :" + allUsers + "\n";
+
+            allUsers += _channels[i].getallUsers(allUsers, _clients);
+
+        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
+        client.getNickName() + " = * :" + allUsers + "\n";
+
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         ft_print_error(" *", RPL_ENDOFNAMES, client);
     }
@@ -306,13 +313,66 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
                     allChanls += splChanls[j];
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
-                                      client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers() + "\n";
+                    std::string tmp = "";
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
+                    client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
+
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
         }
-        ft_print_error(allChanls, RPL_ENDOFNAMES, client);
+        ft_print_error(" " + allChanls, RPL_ENDOFNAMES, client);
+    }
+}
+
+void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() < 2)
+        ft_print_error("TOPIC", ERR_NEEDMOREPARAMS, client);
+    else 
+    {
+        for (size_t i = 0; i < _channels.size(); i++)
+        {
+            if (_channels[i].get_chanlName() == cmds[1] && cmds.size() == 2)
+            {
+                if (_channels[i].getChannelTopic() == "")
+                    ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
+                else
+                {
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " + \
+                    client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() +  "\n";
+                    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                    ft_print_error(_channels[i].get_chanlName(), ERR_NEEDMOREPARAMS, client);
+                }
+                return;
+            }
+            if (_channels[i].get_chanlName() == cmds[1] && cmds.size() > 2)
+            {
+                // check if user in channel
+                if (_channels[i].is_userInChannel(client) == false)
+                {
+                    ft_print_error(_channels[i].get_chanlName(), ERR_NOTONCHANNEL, client);
+                    return ;
+                }
+
+                // check if user is a channel operator
+                // if (user is not a channel operator)
+                // {
+                //     show the numeric reply ERR_CHANOPRIVSNEEDED
+                // }
+            
+                // change channel topic
+                std::string chnlTopic = "";
+                for (size_t i = 2; i < cmds.size(); i++)
+                    chnlTopic += " " + cmds[i];
+                _channels[i].setChannelTopic(chnlTopic);
+                std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " + \
+                client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() +  "\n";
+                send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                return ;
+            }
+        }
+        ft_print_error(cmds[1], ERR_NOSUCHCHANNEL, client);
     }
 }
 
@@ -320,14 +380,6 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
 // OPERATOR COMMANDS
 // ================================================
 
-// handle INVITE command
-// handle KICK  command
-// handle KILL command [OK]
-// handle OPER command [OK]
-// handle RESTART command
-// handle WALLOPS
-
-// handle OPER command
 void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() != 3)
@@ -349,7 +401,6 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
     }
 };
 
-// handle KILL command
 void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() < 3)
@@ -386,6 +437,28 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
 // ================================================
 // Server Informations COMMANDS
 // ================================================
+
+
+void Server::handleVersionCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() == 1)
+    {
+        ft_print_error(_serverName, RPL_VERSION, client);
+    }
+    else if (cmds.size() > 1)
+    {
+        std::string servName = "";
+        for (size_t i = 1; i < cmds.size(); i++)
+        {
+            servName += cmds[i];
+            if (i != cmds.size() - 1)
+                servName += " ";
+        }
+        if (servName == _serverName)
+            ft_print_error(servName, RPL_VERSION, client);
+        else
+            ft_print_error(servName, ERR_NOSUCHSERVER, client);
+    }
 
 void Server::handleHelpCmd(Client &client)
 {
@@ -442,6 +515,7 @@ void Server::handleLusersCmd(Client &client)
 {
     std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " LUSER :" + std::to_string(_clients.size()) + "\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+
 }
 
 // ================================================

@@ -6,7 +6,7 @@
 /*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/09 13:26:21 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/09 17:40:30 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ public:
     std::vector<Client> get_chanlUsers();
 
     // other functions
-    std::string getallUsers();
+    std::string getallUsers(std::string &existedUsers, std::vector<Client> serverClients);
     int getClientsNbr();
-    void add_user(Client user);
+    void add_user(Client &user);
     bool is_userInChannel(Client user);
     void printAllUser();
+    void updateChanlUsers(std::vector<Client> serverClients);
 };
