@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:44 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:15:31 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@
 #define RPL_NAMREPLY 353
 #define RPL_ENDOFNAMES 366
 
-     
-     
-
 // OUR
 #define JOIN_CHANNEL 55
 // used functions:
@@ -77,3 +74,4 @@ bool validMode(std::string mode);
 bool is_validChannel(std::string name);
 int is_channel_Exit(std::vector<Channel> chnls, std::string name);
 int ft_isUserExist(std::string nik, std::vector<Client> urs);
+int ft_isChannelExist(std::string nik, std::vector<Channel> chnl);

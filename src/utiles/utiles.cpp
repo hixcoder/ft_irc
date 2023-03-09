@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 16:42:19 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:46:03 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/ircserv.hpp"
 
@@ -92,7 +91,7 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
 
 bool validMode(std::string mode)
 {
-    if (mode.length() != 2 &&  (mode[0] != '+' && mode[0] != '-'))
+    if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
         return (false);
     if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r' || mode[1] == 'a')
         return (true);
@@ -133,5 +132,15 @@ int ft_isUserExist(std::string nik, std::vector<Client> urs)
         if (strcmp(nik.c_str(), urs[j].getNickName().c_str()) == 0)
             return (j);
     }
-    return (0);
+    return (-1);
+};
+
+int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
+{
+    for (size_t j = 0; j < chnl.size(); j++)
+    {
+        if (strcmp(nik.c_str(), chnl[j].get_chanlName().c_str()) == 0)
+            return (j);
+    }
+    return (-1);
 };

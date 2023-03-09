@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:23:36 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@ void Channel::setChannelTopic(std::string newTopic) { _chanlTopic = newTopic; }
 std::string Channel::getChannelTopic() const { return _chanlTopic; }
 
 // other functions
-int Channel::getClientsNbr(){return _chanlUsers.size();}
+int Channel::getClientsNbr() { return _chanlUsers.size(); }
 
+std::vector<Client> Channel::get_chanlUsers()
+{
+    return _chanlUsers;
+};
 std::string Channel::getallUsers()
 {
     std::string users = "";
