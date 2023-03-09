@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 16:17:20 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:41:16 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@
 #define RPL_NOTOPIC 331           // "<channel> :No topic is set"
 #define ERR_CHANOPRIVSNEEDED 482  // "<channel> :You're not channel operator"
 #define RPL_TOPIC 332             // "<channel> :<topic>"
+
+#define RPL_VERSION 351          
+
 
                
                                 

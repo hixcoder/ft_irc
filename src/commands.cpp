@@ -41,6 +41,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleNamesCmd(client, spl);
     else if (strcmp("TOPIC", spl[0].c_str()) == 0)
         handleTopicCmd(client, spl);
+    else if (strcmp("VERSION", spl[0].c_str()) == 0)
+        handleVersionCmd(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -403,6 +405,28 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
 // ================================================
 // Server Informations COMMANDS
 // ================================================
+
+void Server::handleVersionCmd(Client &client, std::vector<std::string> cmds)
+{
+    if (cmds.size() == 1)
+    {
+        ft_print_error(_serverName, RPL_VERSION, client);
+    }
+    else if (cmds.size() > 1)
+    {
+        std::string servName = "";
+        for (size_t i = 1; i < cmds.size(); i++)
+        {
+            servName += cmds[i];
+            if (i != cmds.size() - 1)
+                servName += " ";
+        }
+        if (servName == _serverName)
+            ft_print_error(servName, RPL_VERSION, client);
+        else
+            ft_print_error(servName, ERR_NOSUCHSERVER, client);
+    }
+}
 
 // ================================================
 // Other COMMANDS
