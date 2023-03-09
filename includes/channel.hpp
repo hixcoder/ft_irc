@@ -6,20 +6,39 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/08 13:00:43 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:40:53 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 # include "ircserv.hpp"
+
+typedef struct chanelmodes
+{
+    bool         limit;
+    bool         key;
+    bool         topic;
+    // bool    operator_;
+    // bool    private_;
+    // bool    secret;
+    // bool    inviteOnly;
+    // bool    noOutsideMsg;
+    // bool    moderated;
+    // bool    setLimit;
+    // bool    ban;
+    // bool    key;    
+    // bool    speakToOp;
+} ChanelModes;
+
 class Channel
 {
 private:
     std::string _chanlName;
     std::string _chanlTopic;
     std::string _chanlPass;
-    std::vector<Client> _chanlUsers;
-
+    // int         _limit;
+    // ChanelModes _modes;
+    std::vector <Client> _chanlUsers;
 public:
     Channel();
     ~Channel();

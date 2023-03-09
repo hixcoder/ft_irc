@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/07 16:42:19 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:41:25 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,3 +135,16 @@ int ft_isUserExist(std::string nik, std::vector<Client> urs)
     }
     return (0);
 };
+
+int Server::is_chanel(std::string name)
+{
+    size_t i = 0;
+    while(_channels.size() > i)
+    {
+        if (strcmp(_channels[i].get_chanlName().c_str(), name.c_str()) == 0)
+            return (i);
+        i++;
+    }
+    return (0);
+}
+

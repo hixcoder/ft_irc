@@ -160,7 +160,8 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
         return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
     if (cmd[1] != user.getNickName())
         return (ft_print_error("MODE", ERR_USERSDONTMATCH, user));
-
+    if (cmd.size() >= 3)
+        return (handlechanlModeCmd(user, cmd));
     if (!validMode(cmd[2]))
         return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
     if (cmd[2][0] == '+')
@@ -169,6 +170,18 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
         user.setModes(cmd[2][1], false);
     std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + user.getNickName() + " " + cmd[2] + "\n";
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+}
+
+void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds)
+{
+    int i = is_channel_Exit(_channels, cmds[1]);
+    if (i == -1)
+        ft_print_error(cmds[1], ERR_NOSUCHCHANNEL, user);
+    if (!_channels[i].is_userInChannel(user))
+        ft_print_error(cmds[1], ERR_NOTONCHANNEL, user);
+    // if (!validchanelMode(cmds[2]))
+    //     ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user);
+    
 }
 
 void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer)
@@ -406,6 +419,7 @@ void    Server::handleHelpCmd(Client &client)
 }
 void Server::handleTimeCmd(Client &client)
 {
+    //add RPL_TIME
     time_t time;
     struct timeval t;
     gettimeofday(&t, NULL);

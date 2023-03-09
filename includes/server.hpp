@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 15:11:23 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:15:18 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,7 @@ private:
     void handleHelpCmd(Client &client);
     void handleTimeCmd(Client &client);
     void handleLusersCmd(Client &client);
+    void handlechanlModeCmd(Client &client, std::vector<std::string> cmds);
+    int  is_chanel(std::string name);
 };
 

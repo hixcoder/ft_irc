@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:44 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:56:48 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 #define ERR_UMODEUNKNOWNFLAG 501
 #define RPL_UMODEIS 221
 #define ERR_BADCHANNELKEY 475
-
+#define ERR_NOTONCHANNEL 442
 #define RPL_NAMREPLY 353
 #define RPL_ENDOFNAMES 366
 

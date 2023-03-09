@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:50:51 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ std::string Channel::getallUsers()
 void Channel::add_user(Client user)
 {
     std::string msg;
-    //: AHAMMA!~FSD@26d-ac5f-603e-c171-01c.67.196.ip JOIN :#AHAMMAM
+
     msg = ":" + user.getNickName() + "!~FSD@26d-ac5f.ip JOIN :" + _chanlName + "\n";
     _chanlUsers.push_back(user);
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
