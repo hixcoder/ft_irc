@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
 /*   Updated: 2023/03/09 16:41:16 by hboumahd         ###   ########.fr       */
@@ -88,3 +88,4 @@ bool validMode(std::string mode);
 bool is_validChannel(std::string name);
 int is_channel_Exit(std::vector<Channel> chnls, std::string name);
 int ft_isUserExist(std::string nik, std::vector<Client> urs);
+int ft_isChannelExist(std::string nik, std::vector<Channel> chnl);

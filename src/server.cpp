@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
 /*   Updated: 2023/03/09 14:35:13 by hboumahd         ###   ########.fr       */
@@ -20,7 +20,8 @@ Server::Server(char *port, char *passwd)
     _endServer = 0;
     _closeCon = 0;
     _serverName = "irc_killers";
-    
+  
+  
     createSocket();
     bindSocket();
     listeningToClients(4);

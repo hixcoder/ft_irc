@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
 /*   Updated: 2023/03/09 16:33:29 by hboumahd         ###   ########.fr       */
@@ -30,7 +30,7 @@ void Channel::setChannelTopic(std::string newTopic) { _chanlTopic = newTopic; }
 std::string Channel::getChannelTopic() const { return _chanlTopic; }
 
 // other functions
-int Channel::getClientsNbr(){return _chanlUsers.size();}
+int Channel::getClientsNbr() { return _chanlUsers.size(); }
 
 std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> serverClients)
 {

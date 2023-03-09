@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
 /*   Updated: 2023/03/09 17:40:30 by hboumahd         ###   ########.fr       */
@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #pragma once
-# include "ircserv.hpp"
+#include "ircserv.hpp"
 class Channel
 {
 private:
@@ -29,10 +29,10 @@ public:
     void set_chanlPass(std::string pass);
     void setChannelTopic(std::string newTopic);
 
-    
     std::string get_chanlName();
     std::string get_chanlPass() const;
     std::string getChannelTopic() const;
+    std::vector<Client> get_chanlUsers();
 
     // other functions
     std::string getallUsers(std::string &existedUsers, std::vector<Client> serverClients);
