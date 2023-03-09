@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 12:46:53 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/09 14:35:13 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void Server::runServer()
 {
     do
     {
-        if (poll(&_pollfds[0], _pollfds.size(), -1) < 0)
+        if (poll(&_pollfds[0], _pollfds.size(), 0) < 0)
         {
             std::cout << "poll() call failed!\n";
             break;
