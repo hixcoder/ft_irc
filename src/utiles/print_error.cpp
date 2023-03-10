@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 16:57:25 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/10 12:17:20 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,7 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
     else if (type == ERR_NOTONCHANNEL)
         msg = temp + client.getNickName() + " " + cmd + " :You're not on that channel\n";
+    else if (type == ERR_KEYSET)
+        msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

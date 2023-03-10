@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
+#    By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/06 16:21:51 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/10 11:15:26 by alouzizi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
 SRCS =	src/main.cpp src/server.cpp src/client.cpp src/commands.cpp src/channel.cpp \
-		src/utiles/print_error.cpp src/utiles/utiles.cpp 
+		src/utiles/print_error.cpp src/utiles/utiles.cpp src/mode.cpp
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
 OBJS_FILES =	main.o server.o client.o commands.o \
-				print_error.o utiles.o channel.o
+				print_error.o utiles.o mode.o channel.o
 OBJS_FOLDER =	./src/output/
 SRCOBJ_OUT = $(addprefix $(OBJS_FOLDER), $(OBJS_FILES))
 

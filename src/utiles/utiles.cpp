@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 18:41:25 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/10 10:40:24 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,6 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
     return (0);
 }
 
-bool validMode(std::string mode)
-{
-    if (mode.length() != 2 &&  (mode[0] != '+' && mode[0] != '-'))
-        return (false);
-    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r' || mode[1] == 'a')
-        return (true);
-    return (false);
-}
 
 bool is_validChannel(std::string name)
 {

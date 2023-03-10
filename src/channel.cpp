@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/09 16:50:51 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/10 12:28:39 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,30 @@ void Channel::printAllUser()
     {
         std::cout << i << "-----> " << _chanlUsers[i].getNickName() << "\n";
     }
+}
+
+void Channel::setModes(char mode, bool status)
+{
+    if (mode == 'l')
+        _modes.limit = status;
+    else if (mode == 'k' && status == true)
+        _modes.key = status;
+    else if (mode == 't')
+        _modes.topic = status;
+    else if (mode == 'n')
+        _modes.noOutsideMsg = status;
+}
+void Channel::setLimit(int limit)
+{
+    _limit = limit; 
+}
+
+int Channel::getLimit() const
+{
+    return _limit;
+}
+
+ChanelModes Channel::getModes() const
+{
+    return _modes;
 }

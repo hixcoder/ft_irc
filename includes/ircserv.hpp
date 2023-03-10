@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 16:56:48 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/10 12:16:49 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 #define ERR_NOTONCHANNEL 442
 #define RPL_NAMREPLY 353
 #define RPL_ENDOFNAMES 366
+#define	ERR_KEYSET 467
 
      
      
