@@ -459,6 +459,7 @@ void Server::handleVersionCmd(Client &client, std::vector<std::string> cmds)
         else
             ft_print_error(servName, ERR_NOSUCHSERVER, client);
     }
+}
 
 void Server::handleHelpCmd(Client &client)
 {
@@ -499,6 +500,7 @@ void Server::handleHelpCmd(Client &client)
 
     send(client.getFd(), helpmsg.c_str(), helpmsg.size(), 0);
 }
+
 void Server::handleTimeCmd(Client &client)
 {
     time_t time;
@@ -535,4 +537,4 @@ void Server::handleQuitCmd(Client &client)
             break;
         }
     }
-};
+}
