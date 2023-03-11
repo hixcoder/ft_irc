@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/11 14:34:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/11 21:10:50 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
 void Channel::add_user(Client &user)
 {
     std::string msg;
-    //: AHAMMA!~FSD@26d-ac5f-603e-c171-01c.67.196.ip JOIN :#AHAMMAM
+
     msg = ":" + user.getNickName() + "!~FSD@26d-ac5f.ip JOIN :" + _chanlName + "\n";
     _chanlUsers.push_back(user);
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -99,3 +99,28 @@ std::vector<Client> Channel::get_chanlUsers()
 {
     return _chanlUsers;
 };
+void Channel::setModes(char mode, bool status)
+{
+    if (mode == 'l')
+        _modes.limit = status;
+    else if (mode == 'k' && status == true)
+        _modes.key = status;
+    else if (mode == 't')
+        _modes.topic = status;
+    else if (mode == 'n')
+        _modes.noOutsideMsg = status;
+}
+void Channel::setLimit(int limit)
+{
+    _limit = limit; 
+}
+
+int Channel::getLimit() const
+{
+    return _limit;
+}
+
+ChanelModes Channel::getModes() const
+{
+    return _modes;
+}

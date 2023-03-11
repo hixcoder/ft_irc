@@ -178,25 +178,6 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
 // Channel COMMANDS
 // ================================================
 
-void Server::modeCmd(std::vector<std::string> cmd, Client &user)
-{
-    if (!user.isRegistered())
-        return (ft_print_error("MODE", ERR_NOTREGISTERED, user));
-    if (cmd.size() < 2)
-        return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
-    if (cmd[1] != user.getNickName())
-        return (ft_print_error("MODE", ERR_USERSDONTMATCH, user));
-
-    if (!validMode(cmd[2]))
-        return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
-    if (cmd[2][0] == '+')
-        user.setModes(cmd[2][1], true);
-    else if (cmd[2][0] == '-')
-        user.setModes(cmd[2][1], false);
-    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + user.getNickName() + " " + cmd[2] + "\n";
-    send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-}
-
 void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
     if (cmds.size() == 1)
@@ -503,6 +484,7 @@ void Server::handleHelpCmd(Client &client)
 
 void Server::handleTimeCmd(Client &client)
 {
+    //add RPL_TIME
     time_t time;
     struct timeval t;
     gettimeofday(&t, NULL);

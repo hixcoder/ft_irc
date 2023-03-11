@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 13:46:03 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/11 21:16:29 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,6 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
     return (0);
 }
 
-bool validMode(std::string mode)
-{
-    if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
-        return (false);
-    if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r' || mode[1] == 'a')
-        return (true);
-    return (false);
-}
 
 bool is_validChannel(std::string name)
 {
@@ -134,6 +126,19 @@ int ft_isUserExist(std::string nik, std::vector<Client> urs)
     }
     return (-1);
 };
+
+int Server::is_chanel(std::string name)
+{
+    size_t i = 0;
+    while(_channels.size() > i)
+    {
+        if (strcmp(_channels[i].get_chanlName().c_str(), name.c_str()) == 0)
+            return (i);
+        i++;
+    }
+    return (0);
+}
+
 
 int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
 {

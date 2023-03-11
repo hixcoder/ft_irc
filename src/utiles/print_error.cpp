@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 17:13:37 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/11 21:10:07 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + cmd + " :No topic is set\n";
     else if (type == ERR_CHANOPRIVSNEEDED)
         msg = temp + client.getNickName() + cmd + " :You're not channel operator\n";
-        
     else if (type == RPL_VERSION)
        msg = temp + client.getNickName() + " VERSION" + " :V1.0.0,release mode,"+ cmd + ". [this is the first release version of ft_irc]\n";
     else if (type == ERR_NOSUCHSERVER)
        msg = temp + client.getNickName() + " VERSION" + " :No such server\n";
-
+    else if (type == ERR_KEYSET)
+        msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
