@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/10 11:15:26 by alouzizi         ###   ########.fr        #
+#    Updated: 2023/03/12 09:18:13 by hboumahd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ $(NAME): ${SRCOBJ}
 	@echo "|+| make the program [${GREEN}DONE${RESET}]"
 
 s:
-	@./ircserv 12345 00
+	@./ircserv 1234 00
 c:
 	@nc 127.0.0.1 12345 55
 

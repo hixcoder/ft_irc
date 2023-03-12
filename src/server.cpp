@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/11 21:10:19 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/12 09:18:02 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void Server::runServer()
             if (_pollfds[i].revents != POLLIN)
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
+                std::cout << "client send " << _pollfds[i].revents << " revent\n";
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
