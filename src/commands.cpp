@@ -337,10 +337,11 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 }
 
                 // check if user is a channel operator
-                // if (user is not a channel operator)
-                // {
-                //     show the numeric reply ERR_CHANOPRIVSNEEDED
-                // }
+                if (_channels[i].getModes().topic && !client.getModes('O') && !client.getModes('o'))
+                {
+                    ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
+                    return ;
+                }
             
                 // change channel topic
                 std::string chnlTopic = "";

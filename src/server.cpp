@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 09:18:02 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/12 16:08:50 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void Server::runServer()
             if (_pollfds[i].revents != POLLIN)
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
-                std::cout << "client send " << _pollfds[i].revents << " revent\n";
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
@@ -145,6 +144,7 @@ void Server::recvClientMsg(Client &client)
     char buffer[1024];
     bzero(&buffer, sizeof(buffer));
     _rc = recv(client.getFd(), buffer, sizeof(buffer), 0);
+    client.addBuff(buffer);
     if (_rc < 0)
     {
         if (errno != EWOULDBLOCK)
@@ -159,8 +159,20 @@ void Server::recvClientMsg(Client &client)
         std::cout << "Connection closed\n";
         _closeCon = 1;
     }
-    else
-        ft_hundle_cmd(client, buffer);
+    else if (ftCheckCRLF(client.getBuff()))
+    {
+        std::string tmp = client.getBuff();
+        tmp.erase(tmp.length() - 2, 2);
+        std::vector<std::string> spl = splitString(tmp, "\\r\\n");
+        for (size_t i = 0; i < spl.size(); i++)
+        {
+            char* cmds = new char[spl[i].length() + 1];
+            std::strcpy(cmds, spl[i].c_str());
+            ft_hundle_cmd(client, cmds);
+            delete[] cmds;
+        }
+        client.setBuff("");
+    }
 }
 
 // this function for handle sockets errors

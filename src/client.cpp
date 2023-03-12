@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 11:10:05 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/12 10:32:27 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ Client::Client(int fd)
 	_modes.operator_ = false;
 	_modes.localOperator = false;
 	_modes.receiveServerNotices = false;
+	
+	_buff = "";
 }
 
 Client::~Client() 
@@ -82,6 +84,7 @@ void Client::setModes(char mode, bool status)
 }
 
 void Client::setOper(bool status){ _modes.operator_ = status;}
+void Client::setBuff(std::string buffer){_buff = buffer;}
 
 int Client::getFd() const {return _fd;}
 int Client::getAuth() const {return _is_auth;}
@@ -110,3 +113,7 @@ bool Client::getModes(char mode)
 		modes = _modes.receiveServerNotices;
 	return (modes);
 }
+std::string Client::getBuff()const{return _buff;}
+
+
+void Client::addBuff(std::string buffer){_buff += buffer;}

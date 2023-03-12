@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/11 21:16:29 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/12 11:13:53 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int Server::is_chanel(std::string name)
     return (0);
 }
 
-
 int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
 {
     for (size_t j = 0; j < chnl.size(); j++)
@@ -149,3 +148,25 @@ int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
     }
     return (-1);
 };
+
+bool ftCheckCRLF(std::string buff)
+{
+    int len = buff.length();
+    if (len >= 2 && buff[len-2] == '\r' && buff[len-1] == '\n')
+        return true;
+    else 
+        return false;
+}
+
+std::vector<std::string> splitString(std::string str, std::string delimiter) {
+    std::vector<std::string> result;
+    size_t pos = 0;
+    std::string token;
+    while ((pos = str.find(delimiter)) != std::string::npos) {
+        token = str.substr(0, pos);
+        result.push_back(token);
+        str.erase(0, pos + delimiter.length());
+    }
+    result.push_back(str);
+    return result;
+}

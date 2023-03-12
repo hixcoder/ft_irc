@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 16:22:05 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/12 10:31:26 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ private:
     std::string _serverName;
     std::string _realName; 
     Modes _modes;
+    std::string _buff;
     
 public:
     Client(int fd);
@@ -55,6 +56,8 @@ public:
     void setRealName(std::string realName);
     void setModes(char mode, bool status);
     void setOper(bool status);
+    void setBuff(std::string buffer);
+    
     int getFd() const;
     int getAuth() const;
     bool getPass()const;
@@ -64,6 +67,9 @@ public:
     std::string getServerName()const;
     std::string getRealName()const;
     bool getModes(char mode);
+    std::string getBuff()const;
+    
+    void addBuff(std::string buffer);
 };
 
 
