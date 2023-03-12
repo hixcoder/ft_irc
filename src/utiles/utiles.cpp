@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/11 21:16:29 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/12 13:23:10 by ahammam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ bool ft_nosuchnick(std::string nick, std::vector<Client> clients)
     return (0);
 }
 
-
 bool is_validChannel(std::string name)
 {
     if (name.length() < 2 || name.length() > 50)
@@ -130,7 +129,7 @@ int ft_isUserExist(std::string nik, std::vector<Client> urs)
 int Server::is_chanel(std::string name)
 {
     size_t i = 0;
-    while(_channels.size() > i)
+    while (_channels.size() > i)
     {
         if (strcmp(_channels[i].get_chanlName().c_str(), name.c_str()) == 0)
             return (i);
@@ -138,7 +137,6 @@ int Server::is_chanel(std::string name)
     }
     return (0);
 }
-
 
 int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
 {
@@ -149,3 +147,12 @@ int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
     }
     return (-1);
 };
+
+// January 1, 1970
+long get_time(void)
+{
+    struct timeval tp;
+
+    gettimeofday(&tp, NULL);
+    return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
+}

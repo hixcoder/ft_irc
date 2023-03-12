@@ -12,6 +12,9 @@
 
 #include "../includes/ircserv.hpp"
 
+#include <iomanip>
+#include <sstream>
+
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
@@ -49,6 +52,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleTimeCmd(client);
     else if (strcmp("LUSER", spl[0].c_str()) == 0)
         handleLusersCmd(client);
+    else if (strcmp("/logtime", spl[0].c_str()) == 0)
+        handleLogTime(client);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -274,8 +279,8 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
 
             allUsers += _channels[i].getallUsers(allUsers, _clients);
 
-        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
-        client.getNickName() + " = * :" + allUsers + "\n";
+        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+                          client.getNickName() + " = * :" + allUsers + "\n";
 
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         ft_print_error(" *", RPL_ENDOFNAMES, client);
@@ -295,8 +300,8 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 {
                     allChanls += splChanls[j];
                     std::string tmp = "";
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " + \
-                    client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+                                      client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
 
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
@@ -310,7 +315,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() < 2)
         ft_print_error("TOPIC", ERR_NEEDMOREPARAMS, client);
-    else 
+    else
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
@@ -320,8 +325,8 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
                 else
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " + \
-                    client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() +  "\n";
+                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
+                                      client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                     ft_print_error(_channels[i].get_chanlName(), ERR_NEEDMOREPARAMS, client);
                 }
@@ -333,7 +338,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 if (_channels[i].is_userInChannel(client) == false)
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_NOTONCHANNEL, client);
-                    return ;
+                    return;
                 }
 
                 // check if user is a channel operator
@@ -341,16 +346,16 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 // {
                 //     show the numeric reply ERR_CHANOPRIVSNEEDED
                 // }
-            
+
                 // change channel topic
                 std::string chnlTopic = "";
                 for (size_t i = 2; i < cmds.size(); i++)
                     chnlTopic += " " + cmds[i];
                 _channels[i].setChannelTopic(chnlTopic);
-                std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " + \
-                client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() +  "\n";
+                std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
+                                  client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                 send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-                return ;
+                return;
             }
         }
         ft_print_error(cmds[1], ERR_NOSUCHCHANNEL, client);
@@ -419,7 +424,6 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
 // Server Informations COMMANDS
 // ================================================
 
-
 void Server::handleVersionCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
@@ -484,7 +488,7 @@ void Server::handleHelpCmd(Client &client)
 
 void Server::handleTimeCmd(Client &client)
 {
-    //add RPL_TIME
+    // add RPL_TIME
     time_t time;
     struct timeval t;
     gettimeofday(&t, NULL);
@@ -499,7 +503,6 @@ void Server::handleLusersCmd(Client &client)
 {
     std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " LUSER :" + std::to_string(_clients.size()) + "\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-
 }
 
 // ================================================
@@ -519,4 +522,21 @@ void Server::handleQuitCmd(Client &client)
             break;
         }
     }
+}
+
+void Server::handleLogTime(Client &client)
+{
+    long currentTime;
+
+    currentTime = get_time();
+
+    double minutes = (double)((currentTime - client.getStartTime())) / 60000.0;
+
+    // Set precision to 3
+    std::ostringstream oss;
+    oss << std::setprecision(2) << minutes;
+    std::string x_str = oss.str();
+
+    std::string msg = "> Logtime for " + client.getNickName() + " is: " + x_str + " minutes\n";
+    send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
