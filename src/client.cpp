@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 13:25:35 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/12 16:18:55 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ Client::Client(int fd)
 	_modes.receiveServerNotices = false;
 
 	_startTime = get_time();
+	
+	_buff = "";
 }
 
 Client::~Client()
@@ -81,7 +83,8 @@ void Client::setModes(char mode, bool status)
 		_modes.receiveServerNotices = status;
 }
 
-void Client::setOper(bool status) { _modes.operator_ = status; }
+void Client::setOper(bool status){ _modes.operator_ = status;}
+void Client::setBuff(std::string buffer){_buff = buffer;}
 
 int Client::getFd() const { return _fd; }
 long Client::getStartTime() const { return _startTime; }
@@ -111,3 +114,7 @@ bool Client::getModes(char mode)
 		modes = _modes.receiveServerNotices;
 	return (modes);
 }
+std::string Client::getBuff()const{return _buff;}
+
+
+void Client::addBuff(std::string buffer){_buff += buffer;}

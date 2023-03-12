@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 13:20:09 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/12 16:19:23 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,3 +84,5 @@ int is_channel_Exit(std::vector<Channel> chnls, std::string name);
 int ft_isUserExist(std::string nik, std::vector<Client> urs);
 int ft_isChannelExist(std::string nik, std::vector<Channel> chnl);
 long get_time(void);
+bool ftCheckCRLF(std::string buff);
+std::vector<std::string> splitString(std::string str, std::string delimiter);
