@@ -72,7 +72,7 @@ void Server::handlePassCmd(Client &client, std::vector<std::string> cmds, char *
     {
         pass = strchr(buffer, ' ');
         pass.erase(0, 1);
-        pass.erase(pass.size() - 1, 1);
+        // pass.erase(pass.size() - 1, 1);
         if (strcmp(pass.c_str(), _passwd))
             ft_print_error("PASS", ERR_PASSWDMISMATCH, client);
         else if (client.getPass())
@@ -345,9 +345,9 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 if (_channels[i].getModes().topic && !client.getModes('O') && !client.getModes('o'))
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
-                    return ;
+                    return;
                 }
-            
+
                 // change channel topic
                 std::string chnlTopic = "";
                 for (size_t i = 2; i < cmds.size(); i++)
