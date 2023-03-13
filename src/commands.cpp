@@ -241,7 +241,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+            std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
                               client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                               std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -259,7 +259,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+                    std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
                                       client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                                       std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -279,7 +279,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
 
             allUsers += _channels[i].getallUsers(allUsers, _clients);
 
-        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+        std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
                           client.getNickName() + " = * :" + allUsers + "\n";
 
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -300,7 +300,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 {
                     allChanls += splChanls[j];
                     std::string tmp = "";
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+                    std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
                                       client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
 
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
