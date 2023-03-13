@@ -164,14 +164,19 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
-                    std::string msg;
-                    if (cmds[2][0] != ':')
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == false)
+                        ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
-                    for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                     {
-                        send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        std::string msg;
+                        if (cmds[2][0] != ':')
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                        else
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
+                        for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
+                        {
+                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
                     }
                 }
             }
@@ -213,23 +218,17 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             }
             else
             {
-                if (!_channels[indx].is_userInChannel(client))
+                if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
+                    ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
+                else if (!_channels[indx].is_userInChannel(client))
                 {
                     if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
                         _channels[indx].add_user(client);
                     else
                         ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                 }
-                _channels[indx].printAllUser();
             }
         }
-
-        // for (size_t k = 0; k < chanls.size(); k++)
-        // {
-        //     // std::cout << "------> " << chanls[k] << std::endl;
-        //     // if (!chanlsPass.empty() && k < chanlsPass.size())
-        //     //     std::cout << "-> " << chanlsPass[k] << std::endl;
-        // }
     }
     buffer++;
 };

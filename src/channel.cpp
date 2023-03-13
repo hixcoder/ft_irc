@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/11 21:10:50 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:02:06 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
         //     if ((_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O')) && pos > 0 && existedUsers[pos] != '@')
         //         existedUsers.insert(pos - 1, 1, '@');
         // }
-       
     }
     return users;
 }
@@ -112,7 +111,7 @@ void Channel::setModes(char mode, bool status)
 }
 void Channel::setLimit(int limit)
 {
-    _limit = limit; 
+    _limit = limit;
 }
 
 int Channel::getLimit() const
