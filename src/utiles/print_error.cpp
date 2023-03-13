@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/11 21:10:07 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/13 15:44:16 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ircserv.hpp"
 
 void ft_print_error(std::string cmd, int type, Client client)
-{
-    std::string temp = "> " + (std::string)LOCAL_IP + " " + std::to_string(type) + " ";
+{ 
+    std::string temp = ":localhost " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + cmd + " :Not enough parameters\n";

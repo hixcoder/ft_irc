@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 10:32:27 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/12 16:18:55 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 Client::Client(int fd)
 {
-    _fd = fd;
-    _is_auth = 0;
-    _pass = false;
+	_fd = fd;
+	_is_auth = 0;
+	_pass = false;
 
-    _nickName = "";
-    _userName = "";
-    _hostName = "127.0.0.1";
-    _serverName = "";
-    _realName = "";
+	_nickName = "";
+	_userName = "";
+	_hostName = "127.0.0.1";
+	_serverName = "";
+	_realName = "";
 
 	// user modes:
 	_modes.away = false;
@@ -32,13 +32,14 @@ Client::Client(int fd)
 	_modes.operator_ = false;
 	_modes.localOperator = false;
 	_modes.receiveServerNotices = false;
+
+	_startTime = get_time();
 	
 	_buff = "";
 }
 
-Client::~Client() 
+Client::~Client()
 {
-    
 }
 
 // client's functions
@@ -51,20 +52,19 @@ bool Client::isRegistered()
 
 bool Client::operator==(Client &other) const
 {
-    if (std::strcmp(_nickName.c_str(), other.getNickName().c_str()) == 0)
-        return 1;
-    return 0;
+	if (std::strcmp(_nickName.c_str(), other.getNickName().c_str()) == 0)
+		return 1;
+	return 0;
 };
 
-
 // seters and getters
-void Client::setAuth(int auth) {_is_auth = auth;}
-void Client::setPass(bool pass){_pass = pass;}
-void Client::setNickName(std::string nickName){_nickName = nickName;}
-void Client::setUserName(std::string userName){_userName = userName;}
-void Client::setHostName(std::string hostName){_hostName = hostName;}
-void Client::setServerName(std::string serverName){_serverName = serverName;}
-void Client::setRealName(std::string realName){_realName = realName;}
+void Client::setAuth(int auth) { _is_auth = auth; }
+void Client::setPass(bool pass) { _pass = pass; }
+void Client::setNickName(std::string nickName) { _nickName = nickName; }
+void Client::setUserName(std::string userName) { _userName = userName; }
+void Client::setHostName(std::string hostName) { _hostName = hostName; }
+void Client::setServerName(std::string serverName) { _serverName = serverName; }
+void Client::setRealName(std::string realName) { _realName = realName; }
 void Client::setModes(char mode, bool status)
 {
 	if (mode == 'a')
@@ -86,14 +86,15 @@ void Client::setModes(char mode, bool status)
 void Client::setOper(bool status){ _modes.operator_ = status;}
 void Client::setBuff(std::string buffer){_buff = buffer;}
 
-int Client::getFd() const {return _fd;}
-int Client::getAuth() const {return _is_auth;}
-bool Client::getPass()const{return _pass;}
-std::string Client::getNickName()const{return _nickName;}
-std::string Client::getUserName()const{return _userName;}
-std::string Client::getHostName()const{return _hostName;}
-std::string Client::getServerName()const{return _serverName;}
-std::string Client::getRealName()const{return _realName;}
+int Client::getFd() const { return _fd; }
+long Client::getStartTime() const { return _startTime; }
+int Client::getAuth() const { return _is_auth; }
+bool Client::getPass() const { return _pass; }
+std::string Client::getNickName() const { return _nickName; }
+std::string Client::getUserName() const { return _userName; }
+std::string Client::getHostName() const { return _hostName; }
+std::string Client::getServerName() const { return _serverName; }
+std::string Client::getRealName() const { return _realName; }
 bool Client::getModes(char mode)
 {
 	bool modes = false;
