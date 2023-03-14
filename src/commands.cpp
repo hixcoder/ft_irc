@@ -108,11 +108,24 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         ft_print_error("USER", ERR_NEEDMOREPARAMS, client);
     else if (!client.getUserName().empty())
         ft_print_error("USER", ERR_ALREADYREGISTRED, client);
+    else if (isNickUserDuplicate(cmds[1]))
+        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, client);
     else
     {
+
         client.setUserName(cmds[1]);
-        client.setHostName(cmds[2]);
-        client.setServerName(cmds[3]);
+        if (strcmp("*", cmds[2].c_str()) == 0)
+        {
+            char hostname[256];
+            gethostname(hostname, sizeof(hostname));
+            client.setHostName(hostname);
+        }
+        else
+            client.setHostName(cmds[2]);
+        if (strcmp("*", cmds[3].c_str()) == 0)
+            client.setServerName(inet_ntoa(client.getClientAddr().sin_addr));
+        else
+            client.setServerName(cmds[3]);
         if (cmds[4][0] == ':')
         {
             std::string realnm = buffer + std::strlen((cmds[1] + cmds[2] + cmds[3]).c_str()) + 9;
@@ -121,6 +134,8 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         }
         else
             client.setRealName(cmds[4]);
+
+        std::cout << "USER " << client.getUserName() << " " << client.getHostName() << " " << client.getServerName() << " " << client.getRealName() << "\n";
     }
 };
 
@@ -540,3 +555,18 @@ void Server::handleLogTime(Client &client)
     std::string msg = "> Logtime for " + client.getNickName() + " is: " + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
+
+bool Server::isNickUserDuplicate(std::string nickUser)
+{
+    size_t i = 0;
+    while (i < _clients.size())
+    {
+        if (!_clients[i].getUserName().empty())
+        {
+            if (strcmp(nickUser.c_str(), _clients[i].getUserName().c_str()) == 0)
+                return 1;
+        }
+        i++;
+    }
+    return 0;
+};
