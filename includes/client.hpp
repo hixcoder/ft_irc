@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/09 16:22:05 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/12 16:19:40 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-# include "ircserv.hpp"
+#include "ircserv.hpp"
 
 typedef struct modes
 {
-	bool away;
-	bool invisible;
-	bool wallops;
-	bool restricted;
-	bool operator_;
-	bool localOperator;
-	bool receiveServerNotices;
+    bool away;
+    bool invisible;
+    bool wallops;
+    bool restricted;
+    bool operator_;
+    bool localOperator;
+    bool receiveServerNotices;
 } Modes;
 
 class Client
@@ -34,13 +34,16 @@ private:
     std::string _userName;
     std::string _hostName;
     std::string _serverName;
-    std::string _realName; 
+    std::string _realName;
     Modes _modes;
+    long _startTime;
+
+    std::string _buff;
     
 public:
     Client(int fd);
     ~Client();
-    
+
     // client's functions
     bool isRegistered();
     bool operator==(Client &other) const;
@@ -55,16 +58,19 @@ public:
     void setRealName(std::string realName);
     void setModes(char mode, bool status);
     void setOper(bool status);
+    void setBuff(std::string buffer);
+    
     int getFd() const;
     int getAuth() const;
-    bool getPass()const;
-    std::string getNickName()const;
-    std::string getUserName()const;
-    std::string getHostName()const;
-    std::string getServerName()const;
-    std::string getRealName()const;
+    bool getPass() const;
+    std::string getNickName() const;
+    std::string getUserName() const;
+    std::string getHostName() const;
+    std::string getServerName() const;
+    std::string getRealName() const;
+    long getStartTime() const;
     bool getModes(char mode);
+    std::string getBuff()const;
+    
+    void addBuff(std::string buffer);
 };
-
-
-

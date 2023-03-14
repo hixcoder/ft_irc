@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/10 12:20:16 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/11 21:11:59 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,15 @@ public:
     std::string get_chanlName();
     std::string get_chanlPass() const;
     std::string getChannelTopic() const;
+    std::vector<Client> get_chanlUsers();
     int getLimit() const;
     ChanelModes getModes() const;
 
     // other functions
-    std::string getallUsers();
+    std::string getallUsers(std::string &existedUsers, std::vector<Client> serverClients);
     int getClientsNbr();
-    void add_user(Client user);
+    void add_user(Client &user);
     bool is_userInChannel(Client user);
     void printAllUser();
+    void updateChanlUsers(std::vector<Client> serverClients);
 };

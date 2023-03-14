@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/08 16:46:05 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:46:31 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,8 @@ Server::Server(char *port, char *passwd)
     _endServer = 0;
     _closeCon = 0;
     _serverName = "irc_killers";
-
-    // create some channels for test:
-    Channel ch1;
-    ch1.set_chanlName("#yankiisChannel");
-    ch1.setChannelTopic("yankiis topic is the best");
-    Channel ch2;
-    ch2.set_chanlName("#l3zawaChannel");
-    ch2.setChannelTopic("l3zawa topic is the greatest");
-    _channels.push_back(ch1);
-    _channels.push_back(ch2);
-    _channels.push_back(ch1);
-    ch2.set_chanlName("#miga");
-    ch2.setChannelTopic("migan topic is the here");
-    _channels.push_back(ch2);
-    ch2.set_chanlName("#mochi");
-    ch2.setChannelTopic("mochi topic bset!");
-    _channels.push_back(ch2);
-    // std::cout << "the channel size: " << _channels.size() << "\n";
+  
+  
     createSocket();
     bindSocket();
     listeningToClients(4);
@@ -92,7 +76,7 @@ void Server::runServer()
 {
     do
     {
-        if (poll(_pollfds.data(), _pollfds.size(), -1) < 0)
+        if (poll(&_pollfds[0], _pollfds.size(), 0) < 0)
         {
             std::cout << "poll() call failed!\n";
             break;
@@ -160,6 +144,7 @@ void Server::recvClientMsg(Client &client)
     char buffer[1024];
     bzero(&buffer, sizeof(buffer));
     _rc = recv(client.getFd(), buffer, sizeof(buffer), 0);
+    client.addBuff(buffer);
     if (_rc < 0)
     {
         if (errno != EWOULDBLOCK)
@@ -174,8 +159,20 @@ void Server::recvClientMsg(Client &client)
         std::cout << "Connection closed\n";
         _closeCon = 1;
     }
-    else
-        ft_hundle_cmd(client, buffer);
+    else if (ftCheckCRLF(client.getBuff()))
+    {
+        std::string tmp = client.getBuff();
+        tmp.erase(tmp.length() - 2, 2);
+        std::vector<std::string> spl = splitString(tmp, "\\r\\n");
+        for (size_t i = 0; i < spl.size(); i++)
+        {
+            char* cmds = new char[spl[i].length() + 1];
+            std::strcpy(cmds, spl[i].c_str());
+            ft_hundle_cmd(client, cmds);
+            delete[] cmds;
+        }
+        client.setBuff("");
+    }
 }
 
 // this function for handle sockets errors
@@ -196,3 +193,4 @@ void Server::clean()
             close(_pollfds[i].fd);
     }
 }
+
