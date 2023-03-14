@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/13 13:59:04 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/14 10:03:41 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ void ft_print_error(std::string cmd, int type, Client client)
     std::string temp = ":@localhost  " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
-        msg = temp + cmd + " :Not enough parameters\n";
+        msg = temp + " :Not enough parameters\n";
     else if (type == ERR_PASSWDMISMATCH)
-        msg = temp + cmd + " :Password incorrect\n";
+        msg = temp + " :Password incorrect\n";
     else if (type == ERR_ALREADYREGISTRED)
         msg = temp + ":You may not reregister\n";
     else if (type == ERR_NONICKNAMEGIVEN)
         msg = temp + client.getNickName() + " :No nickname given\n";
     else if (type == ERR_ERRONEUSNICKNAME)
-        msg = temp + cmd + " :Erroneus nickname\n";
+        msg = temp + " :Erroneus nickname\n";
     else if (type == ERR_NICKNAMEINUSE)
-        msg = temp + cmd + " :Nickname is already in use\n";
+        msg = temp + " :Nickname is already in use\n";
     else if (type == ERR_NORECIPIENT)
         msg = temp + client.getNickName() + " :No recipient given (" + cmd + ")\n";
     else if (type == ERR_NOTEXTTOSEND)
