@@ -179,7 +179,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
-                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == false)
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
                         ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
                     {
@@ -235,7 +235,7 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             {
                 if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
                     ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
-                else if (!_channels[indx].is_userInChannel(client))
+                else if (_channels[indx].is_userInChannel(client) != -1)
                 {
                     if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
                         _channels[indx].add_user(client);
@@ -349,7 +349,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
             if (_channels[i].get_chanlName() == cmds[1] && cmds.size() > 2)
             {
                 // check if user in channel
-                if (_channels[i].is_userInChannel(client) == false)
+                if (_channels[i].is_userInChannel(client) == -1)
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_NOTONCHANNEL, client);
                     return;

@@ -6,13 +6,14 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:37 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:06:08 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "ircserv.hpp"
 
+class Channel;
 typedef struct modes
 {
     bool away;
@@ -74,6 +75,6 @@ public:
     bool getModes(char mode);
     std::string getBuff() const;
     struct sockaddr_in getClientAddr() const;
-
+    void exitChannles(std::vector<Channel> channles);
     void addBuff(std::string buffer);
 };

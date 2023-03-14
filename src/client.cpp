@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:30 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:08:43 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,3 +117,13 @@ bool Client::getModes(char mode)
 std::string Client::getBuff() const { return _buff; };
 struct sockaddr_in Client::getClientAddr() const { return _client_addr; };
 void Client::addBuff(std::string buffer) { _buff += buffer; }
+
+void Client::exitChannles(std::vector<Channel> channles)
+{
+	for (size_t i = 0; i < channles.size(); i++)
+	{
+		int index = channles[i].is_userInChannel(*this);
+		if (index != -1)
+			channles[i].get_chanlUsers().erase(channles[i].get_chanlUsers().begin() + index);
+	}
+};

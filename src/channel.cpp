@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/13 14:02:06 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:04:21 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ void Channel::add_user(Client &user)
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
 
-bool Channel::is_userInChannel(Client user)
+int Channel::is_userInChannel(Client user)
 {
     for (size_t i = 0; i < _chanlUsers.size(); i++)
     {
         if (user == _chanlUsers[i])
-            return (1);
+            return (i);
     }
-    return 0;
+    return -1;
 };
 
 void Channel::printAllUser()

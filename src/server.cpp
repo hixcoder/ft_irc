@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 10:17:35 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:11:15 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ void Server::runServer()
         {
             if (_pollfds[i].revents == 0)
                 continue;
-            if (_pollfds[i].revents != POLLIN)
+            if (_pollfds[i].revents != POLLIN && i != 0)
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
+                _clients[i - 1].exitChannles(_channels);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
                 break;
