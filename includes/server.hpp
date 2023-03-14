@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 12:07:49 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 13:48:24 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ private:
     void modeCmd(std::vector<std::string> cmd, Client &user);
     void ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, char *buffer);
+    void handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handleKillCmd(Client &client, std::vector<std::string> cmds);
     void handleListCmd(Client &client, std::vector<std::string> cmds);
     void handleNamesCmd(Client &client, std::vector<std::string> cmds);

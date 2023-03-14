@@ -28,6 +28,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleNickCmd(client, spl);
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
+    else if (strcmp("NOTICE", spl[0].c_str()) == 0)
+        handleNoticeCmd(client, spl, buffer);
     else if (strcmp("QUIT", spl[0].c_str()) == 0)
         handleQuitCmd(client);
     else if (strcmp("OPER", spl[0].c_str()) == 0)
@@ -168,7 +170,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     if (cmds[2][0] != ':')
                         msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':');
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -187,7 +189,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                         if (cmds[2][0] != ':')
                             msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
                         else
-                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
                         for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                         {
                             send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -199,6 +201,60 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
     }
 };
 
+// NOTICE
+void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer)
+{
+    if (cmds.size() == 1)
+        ;
+    else if (cmds.size() == 2)
+        ;
+    else if (cmds.size() >= 3)
+    {
+        std::vector<std::string> clts = ft_split(cmds[1], ',');
+        for (size_t k = 0; k < clts.size(); k++)
+        {
+            if (clts[k][0] != '#')
+            {
+
+                int fd = ft_isUserExist(clts[k], _clients);
+                if (fd == -1)
+                    ;
+                else
+                {
+                    std::string msg;
+                    if (cmds[2][0] != ':')
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
+                    else
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
+                    send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                }
+            }
+            else
+            {
+                int fd = ft_isChannelExist(clts[k], _channels);
+                if (fd == -1)
+                    ;
+                else
+                {
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                        ;
+                    else
+                    {
+                        std::string msg;
+                        if (cmds[2][0] != ':')
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                        else
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
+                        for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
+                        {
+                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
 // ================================================
 // Channel COMMANDS
 // ================================================
@@ -235,7 +291,7 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             {
                 if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
                     ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
-                else if (_channels[indx].is_userInChannel(client) != -1)
+                else if (_channels[indx].is_userInChannel(client) == -1)
                 {
                     if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
                         _channels[indx].add_user(client);
@@ -370,8 +426,8 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     chnlTopic += cmds[i];
                 }
                 _channels[i].setChannelTopic(chnlTopic);
-                std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " TOPIC " + 
-                                    _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
+                std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " TOPIC " +
+                                  _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                 send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 return;
             }
