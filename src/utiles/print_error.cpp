@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/13 15:44:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:45:46 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     std::string temp = ":localhost " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
-        msg = temp + cmd + " :Not enough parameters\n";
+        msg = temp + client.getNickName() + " " + cmd + " :Not enough parameters\n";
     else if (type == ERR_PASSWDMISMATCH)
         msg = temp + cmd + " :Password incorrect\n";
     else if (type == ERR_ALREADYREGISTRED)
@@ -63,7 +63,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == ERR_NOTONCHANNEL)
         msg = temp + client.getNickName() + cmd + " :You're not on that channel\n";
     else if (type == RPL_NOTOPIC)
-        msg = temp + client.getNickName() + cmd + " :No topic is set\n";
+        msg = temp + client.getNickName() + " " + cmd + " :No topic is set\n";
     else if (type == ERR_CHANOPRIVSNEEDED)
         msg = temp + client.getNickName() + cmd + " :You're not channel operator\n";
     else if (type == RPL_VERSION)

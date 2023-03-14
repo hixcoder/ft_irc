@@ -325,10 +325,9 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
                 else
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
-                                      client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
+                    std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " " +
+                                      client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-                    ft_print_error(_channels[i].get_chanlName(), ERR_NEEDMOREPARAMS, client);
                 }
                 return;
             }
@@ -351,10 +350,14 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 // change channel topic
                 std::string chnlTopic = "";
                 for (size_t i = 2; i < cmds.size(); i++)
-                    chnlTopic += " " + cmds[i];
+                {
+                    if (i > 2)
+                        chnlTopic += " ";
+                    chnlTopic += cmds[i];
+                }
                 _channels[i].setChannelTopic(chnlTopic);
-                std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
-                                  client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
+                std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " TOPIC " + 
+                                    _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                 send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 return;
             }
