@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:19:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:06:08 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "ircserv.hpp"
 
+class Channel;
 typedef struct modes
 {
     bool away;
@@ -37,9 +38,10 @@ private:
     std::string _realName;
     Modes _modes;
     long _startTime;
+    struct sockaddr_in _client_addr;
 
     std::string _buff;
-    
+
 public:
     Client(int fd);
     ~Client();
@@ -59,7 +61,8 @@ public:
     void setModes(char mode, bool status);
     void setOper(bool status);
     void setBuff(std::string buffer);
-    
+    void setClientAddr(struct sockaddr_in client_addr);
+
     int getFd() const;
     int getAuth() const;
     bool getPass() const;
@@ -70,7 +73,8 @@ public:
     std::string getRealName() const;
     long getStartTime() const;
     bool getModes(char mode);
-    std::string getBuff()const;
-    
+    std::string getBuff() const;
+    struct sockaddr_in getClientAddr() const;
+    void exitChannles(std::vector<Channel> channles);
     void addBuff(std::string buffer);
 };

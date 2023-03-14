@@ -72,7 +72,7 @@ void Server::handlePassCmd(Client &client, std::vector<std::string> cmds, char *
     {
         pass = strchr(buffer, ' ');
         pass.erase(0, 1);
-        pass.erase(pass.size() - 1, 1);
+        // pass.erase(pass.size() - 1, 1);
         if (strcmp(pass.c_str(), _passwd))
             ft_print_error("PASS", ERR_PASSWDMISMATCH, client);
         else if (client.getPass())
@@ -108,11 +108,24 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         ft_print_error("USER", ERR_NEEDMOREPARAMS, client);
     else if (!client.getUserName().empty())
         ft_print_error("USER", ERR_ALREADYREGISTRED, client);
+    else if (isNickUserDuplicate(cmds[1]))
+        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, client);
     else
     {
+
         client.setUserName(cmds[1]);
-        client.setHostName(cmds[2]);
-        client.setServerName(cmds[3]);
+        if (strcmp("*", cmds[2].c_str()) == 0)
+        {
+            char hostname[256];
+            gethostname(hostname, sizeof(hostname));
+            client.setHostName(hostname);
+        }
+        else
+            client.setHostName(cmds[2]);
+        if (strcmp("*", cmds[3].c_str()) == 0)
+            client.setServerName(inet_ntoa(client.getClientAddr().sin_addr));
+        else
+            client.setServerName(cmds[3]);
         if (cmds[4][0] == ':')
         {
             std::string realnm = buffer + std::strlen((cmds[1] + cmds[2] + cmds[3]).c_str()) + 9;
@@ -121,6 +134,8 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         }
         else
             client.setRealName(cmds[4]);
+
+        std::cout << "USER " << client.getUserName() << " " << client.getHostName() << " " << client.getServerName() << " " << client.getRealName() << "\n";
     }
 };
 
@@ -164,14 +179,19 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
-                    std::string msg;
-                    if (cmds[2][0] != ':')
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                        ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
-                    for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                     {
-                        send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        std::string msg;
+                        if (cmds[2][0] != ':')
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                        else
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
+                        for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
+                        {
+                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
                     }
                 }
             }
@@ -213,23 +233,17 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             }
             else
             {
-                if (!_channels[indx].is_userInChannel(client))
+                if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
+                    ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
+                else if (_channels[indx].is_userInChannel(client) != -1)
                 {
                     if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
                         _channels[indx].add_user(client);
                     else
                         ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                 }
-                _channels[indx].printAllUser();
             }
         }
-
-        // for (size_t k = 0; k < chanls.size(); k++)
-        // {
-        //     // std::cout << "------> " << chanls[k] << std::endl;
-        //     // if (!chanlsPass.empty() && k < chanlsPass.size())
-        //     //     std::cout << "-> " << chanlsPass[k] << std::endl;
-        // }
     }
     buffer++;
 };
@@ -335,7 +349,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
             if (_channels[i].get_chanlName() == cmds[1] && cmds.size() > 2)
             {
                 // check if user in channel
-                if (_channels[i].is_userInChannel(client) == false)
+                if (_channels[i].is_userInChannel(client) == -1)
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_NOTONCHANNEL, client);
                     return;
@@ -345,9 +359,9 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 if (_channels[i].getModes().topic && !client.getModes('O') && !client.getModes('o'))
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
-                    return ;
+                    return;
                 }
-            
+
                 // change channel topic
                 std::string chnlTopic = "";
                 for (size_t i = 2; i < cmds.size(); i++)
@@ -541,3 +555,18 @@ void Server::handleLogTime(Client &client)
     std::string msg = "> Logtime for " + client.getNickName() + " is: " + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
+
+bool Server::isNickUserDuplicate(std::string nickUser)
+{
+    size_t i = 0;
+    while (i < _clients.size())
+    {
+        if (!_clients[i].getUserName().empty())
+        {
+            if (strcmp(nickUser.c_str(), _clients[i].getUserName().c_str()) == 0)
+                return 1;
+        }
+        i++;
+    }
+    return 0;
+};

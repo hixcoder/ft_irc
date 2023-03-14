@@ -6,15 +6,15 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/13 15:44:16 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 12:02:08 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ircserv.hpp"
 
 void ft_print_error(std::string cmd, int type, Client client)
-{ 
-    std::string temp = ":localhost " + std::to_string(type) + " ";
+{
+    std::string temp = ":@localhost  " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + cmd + " :Not enough parameters\n";
@@ -61,16 +61,18 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == RPL_ENDOFNAMES)
         msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
     else if (type == ERR_NOTONCHANNEL)
-        msg = temp + client.getNickName() + cmd + " :You're not on that channel\n";
+        msg = temp + cmd + " :You're not on that channel\n";
     else if (type == RPL_NOTOPIC)
         msg = temp + client.getNickName() + cmd + " :No topic is set\n";
     else if (type == ERR_CHANOPRIVSNEEDED)
         msg = temp + client.getNickName() + cmd + " :You're not channel operator\n";
     else if (type == RPL_VERSION)
-       msg = temp + client.getNickName() + " VERSION" + " :V1.0.0,release mode,"+ cmd + ". [this is the first release version of ft_irc]\n";
+        msg = temp + client.getNickName() + " VERSION" + " :V1.0.0,release mode," + cmd + ". [this is the first release version of ft_irc]\n";
     else if (type == ERR_NOSUCHSERVER)
-       msg = temp + client.getNickName() + " VERSION" + " :No such server\n";
+        msg = temp + client.getNickName() + " VERSION" + " :No such server\n";
     else if (type == ERR_KEYSET)
         msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
+    else if (type == ERR_CHANNELISFULL)
+        msg = temp + " " + cmd + " :Cannot join channel (+l)\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

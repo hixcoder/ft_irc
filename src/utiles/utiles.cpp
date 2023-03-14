@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:17:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:48:53 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ int ft_isChannelExist(std::string nik, std::vector<Channel> chnl)
     return (-1);
 };
 
-// January 1, 1970
 long get_time(void)
 {
     struct timeval tp;
@@ -156,20 +155,23 @@ long get_time(void)
     gettimeofday(&tp, NULL);
     return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
 }
+
 bool ftCheckCRLF(std::string buff)
 {
     int len = buff.length();
-    if (len >= 2 && buff[len-2] == '\r' && buff[len-1] == '\n')
+    if (len >= 2 && buff[len - 2] == '\r' && buff[len - 1] == '\n')
         return true;
-    else 
+    else
         return false;
 }
 
-std::vector<std::string> splitString(std::string str, std::string delimiter) {
+std::vector<std::string> splitString(std::string str, std::string delimiter)
+{
     std::vector<std::string> result;
     size_t pos = 0;
     std::string token;
-    while ((pos = str.find(delimiter)) != std::string::npos) {
+    while ((pos = str.find(delimiter)) != std::string::npos)
+    {
         token = str.substr(0, pos);
         result.push_back(token);
         str.erase(0, pos + delimiter.length());

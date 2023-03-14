@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/13 13:37:56 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 12:01:34 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ Server::Server(char *port, char *passwd)
     _endServer = 0;
     _closeCon = 0;
     _serverName = "irc_killers";
-  
-  
+
     createSocket();
     bindSocket();
     listeningToClients(4);
@@ -87,10 +86,11 @@ void Server::runServer()
         {
             if (_pollfds[i].revents == 0)
                 continue;
-            if (_pollfds[i].revents != POLLIN)
+            if (_pollfds[i].revents != POLLIN && i != 0)
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
+                _clients[i - 1].exitChannles(_channels);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
                 break;
@@ -118,7 +118,12 @@ void Server::addClient()
     // here we loop and accept incoming connections
     while (true)
     {
-        _newSocket = accept(_serverSocket, NULL, NULL);
+        struct sockaddr_in clt_addr;
+        bzero((char *)&clt_addr, sizeof(clt_addr));
+        int addrlen = sizeof(clt_addr);
+        _newSocket = accept(_serverSocket, (struct sockaddr *)&clt_addr, (socklen_t *)&addrlen);
+        // std::cout << "porr clinet " << clt_addr.sin_port << "\n";
+        // std::cout << "adress clinet " << clt_addr.sin_addr.s_addr << "\n";
         if (_newSocket < 0)
         {
             if (errno != EWOULDBLOCK)
@@ -134,6 +139,7 @@ void Server::addClient()
         _pollfds.push_back(cliSocket);
         // add client
         Client newclient(cliSocket.fd);
+        newclient.setClientAddr(clt_addr);
         _clients.push_back(newclient);
     }
 }
@@ -166,7 +172,7 @@ void Server::recvClientMsg(Client &client)
         std::vector<std::string> spl = splitString(tmp, "\\r\\n");
         for (size_t i = 0; i < spl.size(); i++)
         {
-            char* cmds = new char[spl[i].length() + 1];
+            char *cmds = new char[spl[i].length() + 1];
             std::strcpy(cmds, spl[i].c_str());
             ft_hundle_cmd(client, cmds);
             delete[] cmds;

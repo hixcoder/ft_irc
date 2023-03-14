@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/11 21:10:50 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:04:21 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
         //     if ((_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O')) && pos > 0 && existedUsers[pos] != '@')
         //         existedUsers.insert(pos - 1, 1, '@');
         // }
-       
     }
     return users;
 }
@@ -65,14 +64,14 @@ void Channel::add_user(Client &user)
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
 
-bool Channel::is_userInChannel(Client user)
+int Channel::is_userInChannel(Client user)
 {
     for (size_t i = 0; i < _chanlUsers.size(); i++)
     {
         if (user == _chanlUsers[i])
-            return (1);
+            return (i);
     }
-    return 0;
+    return -1;
 };
 
 void Channel::printAllUser()
@@ -112,7 +111,7 @@ void Channel::setModes(char mode, bool status)
 }
 void Channel::setLimit(int limit)
 {
-    _limit = limit; 
+    _limit = limit;
 }
 
 int Channel::getLimit() const

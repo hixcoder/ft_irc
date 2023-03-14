@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:19:05 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:09:34 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ private:
     void handleLusersCmd(Client &client);
     void handlechanlModeCmd(Client &client, std::vector<std::string> cmds, int index);
     int is_chanel(std::string name);
-
     void handleLogTime(Client &client);
+
+    bool isNickUserDuplicate(std::string nickUser);
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:18:55 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:08:43 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Client::Client(int fd)
 	_modes.receiveServerNotices = false;
 
 	_startTime = get_time();
-	
+
 	_buff = "";
 }
 
@@ -83,9 +83,9 @@ void Client::setModes(char mode, bool status)
 		_modes.receiveServerNotices = status;
 }
 
-void Client::setOper(bool status){ _modes.operator_ = status;}
-void Client::setBuff(std::string buffer){_buff = buffer;}
-
+void Client::setOper(bool status) { _modes.operator_ = status; }
+void Client::setBuff(std::string buffer) { _buff = buffer; }
+void Client::setClientAddr(struct sockaddr_in client_addr) { _client_addr = client_addr; };
 int Client::getFd() const { return _fd; }
 long Client::getStartTime() const { return _startTime; }
 int Client::getAuth() const { return _is_auth; }
@@ -114,7 +114,16 @@ bool Client::getModes(char mode)
 		modes = _modes.receiveServerNotices;
 	return (modes);
 }
-std::string Client::getBuff()const{return _buff;}
+std::string Client::getBuff() const { return _buff; };
+struct sockaddr_in Client::getClientAddr() const { return _client_addr; };
+void Client::addBuff(std::string buffer) { _buff += buffer; }
 
-
-void Client::addBuff(std::string buffer){_buff += buffer;}
+void Client::exitChannles(std::vector<Channel> channles)
+{
+	for (size_t i = 0; i < channles.size(); i++)
+	{
+		int index = channles[i].is_userInChannel(*this);
+		if (index != -1)
+			channles[i].get_chanlUsers().erase(channles[i].get_chanlUsers().begin() + index);
+	}
+};

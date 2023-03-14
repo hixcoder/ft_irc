@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:19:23 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 11:05:28 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 #define RPL_NAMREPLY 353
 #define RPL_ENDOFNAMES 366
 #define ERR_KEYSET 467
+#define ERR_CHANNELISFULL 471
 
 #define ERR_NOTONCHANNEL 442     // "<channel> :You're not on that channel"
 #define RPL_NOTOPIC 331          // "<channel> :No topic is set"
