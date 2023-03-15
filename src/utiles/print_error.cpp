@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 12:05:35 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 11:31:45 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + client.getNickName() + " " + cmd + " :Not enough parameters\n";
     else if (type == ERR_PASSWDMISMATCH)
-        msg = temp + cmd + " :Password incorrect\n";
+        msg = temp + cmd + " :Password incorrect\n"; 
     else if (type == ERR_ALREADYREGISTRED)
         msg = temp + ":You may not reregister\n";
     else if (type == ERR_NONICKNAMEGIVEN)

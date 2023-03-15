@@ -204,11 +204,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
 // NOTICE
 void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
-    if (cmds.size() == 1)
-        ;
-    else if (cmds.size() == 2)
-        ;
-    else if (cmds.size() >= 3)
+ if (cmds.size() >= 3)
     {
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
@@ -217,9 +213,7 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
             {
 
                 int fd = ft_isUserExist(clts[k], _clients);
-                if (fd == -1)
-                    ;
-                else
+                if (fd != -1)
                 {
                     std::string msg;
                     if (cmds[2][0] != ':')
