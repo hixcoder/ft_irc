@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 13:32:45 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 13:01:53 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,4 @@ private:
     bool isCmdExit(std::string cmd);
     bool isNickUserDuplicate(std::string nickUser);
     void ft_updateNickInChanls(Client clt);
-    void eraseUserFromChannels(Client clt);
 };

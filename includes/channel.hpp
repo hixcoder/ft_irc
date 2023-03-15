@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/15 14:24:43 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:47:57 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,6 @@ typedef struct chanelmodes
     bool key;
     bool topic;
     bool noOutsideMsg;
-    // bool    operator_;
-    // bool    private_;
-    // bool    secret;
-    // bool    inviteOnly;
-    // bool    moderated;
-    // bool    setLimit;
-    // bool    ban;
-    // bool    key;
-    // bool    speakToOp;
 } ChanelModes;
 
 class Channel
@@ -65,6 +56,4 @@ public:
     int is_userInChannel(Client user);
     void printAllUser();
     void updateChanlUsers(std::vector<Client> serverClients);
-    void eraseUser(int i);
-    void updateNickUser(int i, std::string nk);
 };
