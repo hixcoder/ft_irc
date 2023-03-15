@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 10:30:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/13 15:28:34 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@
 #define RPL_ENDOFNAMES 366
 #define ERR_KEYSET 467
 #define ERR_CHANNELISFULL 471
-// #define ERR_NOTREGISTERED 451
 
 #define ERR_NOTONCHANNEL 442     // "<channel> :You're not on that channel"
 #define RPL_NOTOPIC 331          // "<channel> :No topic is set"
@@ -72,6 +71,7 @@
 
 // OUR
 #define JOIN_CHANNEL 55
+
 // used functions:
 
 std::vector<std::string> ft_split(std::string str, char separator);

@@ -61,6 +61,12 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "vector": "cpp",
+        "deque": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "stack": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
         "__bits": "cpp",
         "clocale": "cpp",
         "compare": "cpp",
@@ -68,4 +74,3 @@
         "variant": "cpp",
         "iomanip": "cpp"
     }
-}

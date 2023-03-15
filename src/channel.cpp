@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/15 11:31:35 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/11 21:10:50 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Channel::Channel()
     _chanlTopic = "";
 };
 
-Channel::~Channel(){}; 
+Channel::~Channel(){};
 
 // setters and getters
 void Channel::set_chanlName(std::string name) { _chanlName = name; };

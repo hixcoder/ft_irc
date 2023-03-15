@@ -156,7 +156,6 @@ long get_time(void)
     gettimeofday(&tp, NULL);
     return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
 }
-
 bool ftCheckCRLF(std::string buff)
 {
     int len = buff.length();

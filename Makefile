@@ -6,7 +6,7 @@
 #    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/15 11:30:32 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/14 11:58:24 by alouzizi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
 SRCS =	src/main.cpp src/server.cpp src/client.cpp src/commands.cpp src/channel.cpp \
-		src/utiles/print_error.cpp src/utiles/utiles.cpp src/mode.cpp
+		src/utiles/print_error.cpp src/utiles/utiles.cpp src/mode.cpp src/fileTransfer.cpp
 
 SRCOBJ = ${SRCS:.cpp=.o}
 
@@ -33,7 +33,7 @@ $(NAME): ${SRCOBJ}
 all: ${NAME}
 
 s:
-	@./ircserv 12345 00
+	@./ircserv 6666 00
 c:
 	@nc -c 127.0.0.1 12345
 

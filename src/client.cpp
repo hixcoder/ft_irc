@@ -32,9 +32,7 @@ Client::Client(int fd)
 	_modes.operator_ = false;
 	_modes.localOperator = false;
 	_modes.receiveServerNotices = false;
-
 	_startTime = get_time();
-
 	_buff = "";
 	_msgTemp = "";
 }
@@ -108,6 +106,7 @@ std::string Client::getHostName() const { return _hostName; }
 std::string Client::getServerName() const { return _serverName; }
 std::string Client::getRealName() const { return _realName; }
 std::string Client::getMsgTemp() const { return _msgTemp; };
+
 bool Client::getModes(char mode)
 {
 	bool modes = false;
@@ -127,6 +126,7 @@ bool Client::getModes(char mode)
 		modes = _modes.receiveServerNotices;
 	return (modes);
 }
+
 std::string Client::getBuff() const { return _buff; };
 struct sockaddr_in Client::getClientAddr() const { return _client_addr; };
 void Client::addBuff(std::string buffer) { _buff += buffer; }

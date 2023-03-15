@@ -40,7 +40,6 @@ private:
     long _startTime;
     struct sockaddr_in _client_addr;
     std::string _buff;
-
     std::string _msgTemp;
 
 public:
@@ -65,7 +64,6 @@ public:
     void setBuff(std::string buffer);
     void setClientAddr(struct sockaddr_in client_addr);
     void setMsgTemp(std::string msg);
-
     int getFd() const;
     int getAuth() const;
     bool getPass() const;
@@ -76,7 +74,7 @@ public:
     std::string getRealName() const;
     long getStartTime() const;
     bool getModes(char mode);
-    std::string getBuff() const;
+    std::string getBuff()const;
     std::string getMsgTemp() const;
     struct sockaddr_in getClientAddr() const;
     void exitChannles(std::vector<Channel> channles);

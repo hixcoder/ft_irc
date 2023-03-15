@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 10:38:06 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:46:31 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ Server::Server(char *port, char *passwd)
     _endServer = 0;
     _closeCon = 0;
     _serverName = "irc_killers";
-
     createSocket();
     bindSocket();
     listeningToClients(4);
@@ -188,6 +187,7 @@ void Server::recvClientMsg(Client &client)
         std::vector<std::string> spl = splitString(tmp, "\\r\\n");
         for (size_t i = 0; i < spl.size(); i++)
         {
+            char* cmds = new char[spl[i].length() + 1];
             char *cmds = new char[spl[i].length() + 1];
             std::strcpy(cmds, spl[i].c_str());
             ft_hundle_cmd(client, cmds);
@@ -224,3 +224,4 @@ void Server::clean()
             close(_pollfds[i].fd);
     }
 }
+

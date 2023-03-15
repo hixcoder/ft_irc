@@ -14,7 +14,9 @@
 
 #include <iomanip>
 #include <sstream>
+
 // :punch.wa.us.dal.net 451 * PRIVMSG :You must finish connecting with another nickname first.
+
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
@@ -70,6 +72,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLusersCmd(client);
     else if (strcmp("/logtime", spl[0].c_str()) == 0)
         handleLogTime(client);
+    else if (strcmp("SEND",spl[0].c_str()) == 0)
+        sendFile(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -362,7 +366,6 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
         for (size_t i = 0; i < _channels.size(); i++)
 
             allUsers += _channels[i].getallUsers(allUsers, _clients);
-
         std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
                           client.getNickName() + " = * :" + allUsers + "\n";
 
