@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/11 21:10:50 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/15 13:04:17 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
-Channel::Channel() 
+Channel::Channel()
 {
     _chanlTopic = "";
 };

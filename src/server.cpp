@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 11:57:23 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/15 13:05:03 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,18 @@ bool Server::isCmdExit(std::string cmd)
     }
     return 0;
 };
+
+void Server::ft_updateNickInChanls(Client clt)
+{
+    for (size_t i = 0; i < _channels.size(); i++)
+    {
+        for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
+        {
+            if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
+                _channels[i].get_chanlUsers()[j].setNickName(clt.getNickName());
+        }
+    }
+};
 // clean up all the sockets that are open
 void Server::clean()
 {
@@ -223,4 +235,3 @@ void Server::clean()
             close(_pollfds[i].fd);
     }
 }
-

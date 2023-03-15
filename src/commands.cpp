@@ -72,7 +72,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLusersCmd(client);
     else if (strcmp("/logtime", spl[0].c_str()) == 0)
         handleLogTime(client);
-    else if (strcmp("SEND",spl[0].c_str()) == 0)
+    else if (strcmp("SEND", spl[0].c_str()) == 0)
         sendFile(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
@@ -119,6 +119,7 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
         client.setNickName(cmds[1]);
+        ft_updateNickInChanls(client);
     }
 };
 
@@ -224,7 +225,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
 // NOTICE
 void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
- if (cmds.size() >= 3)
+    if (cmds.size() >= 3)
     {
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
