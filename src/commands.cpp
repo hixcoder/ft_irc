@@ -178,6 +178,8 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                 int fd = ft_isUserExist(clts[k], _clients);
                 if (fd == -1)
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
+                else if (_clients[fd].isRegistered() == false)
+                    ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
                     std::string msg;
@@ -232,6 +234,8 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
 
                 int fd = ft_isUserExist(clts[k], _clients);
                 if (fd == -1)
+                    ;
+                else if (_clients[fd].isRegistered() == false)
                     ;
                 else
                 {
