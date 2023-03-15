@@ -72,7 +72,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLusersCmd(client);
     else if (strcmp("/logtime", spl[0].c_str()) == 0)
         handleLogTime(client);
-    else if (strcmp("SEND", spl[0].c_str()) == 0)
+    else if (strcmp("DOWNLOAD", spl[0].c_str()) == 0)
         sendFile(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
@@ -286,22 +286,11 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
         ft_print_error("JOIN", ERR_NOSUCHCHANNEL, client);
     else
     {
-        for (size_t i = 0; i < cmds.size(); i++)
-        {
-            std::cout << i << " " << cmds[i] << "\n";
-        }
-
         std::vector<std::string> chanls;
         std::vector<std::string> chanlsPass;
         chanls = ft_split(cmds[1], ',');
-        if (cmds.size() >= 3)
-        {
+        if (!cmds[2].empty())
             chanlsPass = ft_split(cmds[2], ',');
-            std::cout << "-----> passs:"
-                      << "|"
-                      << chanlsPass[0]
-                      << "|\n";
-        }
         for (size_t l = 0; l < chanls.size(); l++)
         {
             int indx = is_channel_Exit(_channels, chanls[l]);
