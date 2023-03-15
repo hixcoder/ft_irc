@@ -67,4 +67,10 @@
         "stack": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
-}
+        "__bits": "cpp",
+        "clocale": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "variant": "cpp",
+        "iomanip": "cpp"
+    }

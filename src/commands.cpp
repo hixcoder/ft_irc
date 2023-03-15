@@ -15,19 +15,37 @@
 #include <iomanip>
 #include <sstream>
 
+// :punch.wa.us.dal.net 451 * PRIVMSG :You must finish connecting with another nickname first.
+
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
     if (spl.size() < 1)
         return;
+
     if (strcmp("PASS", spl[0].c_str()) == 0)
         handlePassCmd(client, spl, buffer);
     else if (strcmp("USER", spl[0].c_str()) == 0)
         handleUserCmd(client, spl, buffer);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         handleNickCmd(client, spl);
+    else if (!client.isRegistered())
+    {
+        if (isCmdExit(spl[0].c_str()))
+        {
+            if (client.isUserFinishRegistered() == 1)
+                client.setMsgTemp(" (Please Enter Password) ");
+            if (client.isUserFinishRegistered() == 2)
+                client.setMsgTemp(" (Please Enter NICKNAME) ");
+            if (client.isUserFinishRegistered() == 3)
+                client.setMsgTemp(" (Please Enter USERNAME) ");
+            ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+        }
+    }
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
+    else if (strcmp("NOTICE", spl[0].c_str()) == 0)
+        handleNoticeCmd(client, spl, buffer);
     else if (strcmp("QUIT", spl[0].c_str()) == 0)
         handleQuitCmd(client);
     else if (strcmp("OPER", spl[0].c_str()) == 0)
@@ -56,8 +74,6 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLogTime(client);
     else if (strcmp("SEND",spl[0].c_str()) == 0)
         sendFile(client, spl);
-    // else if (strcmp("RECV",spl[0].c_str()) == 0)
-    //     recvFile(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -112,11 +128,24 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         ft_print_error("USER", ERR_NEEDMOREPARAMS, client);
     else if (!client.getUserName().empty())
         ft_print_error("USER", ERR_ALREADYREGISTRED, client);
+    else if (isNickUserDuplicate(cmds[1]))
+        ft_print_error(cmds[1], ERR_NICKNAMEINUSE, client);
     else
     {
+
         client.setUserName(cmds[1]);
-        client.setHostName(cmds[2]);
-        client.setServerName(cmds[3]);
+        if (strcmp("*", cmds[2].c_str()) == 0)
+        {
+            char hostname[256];
+            gethostname(hostname, sizeof(hostname));
+            client.setHostName(hostname);
+        }
+        else
+            client.setHostName(cmds[2]);
+        if (strcmp("*", cmds[3].c_str()) == 0)
+            client.setServerName(inet_ntoa(client.getClientAddr().sin_addr));
+        else
+            client.setServerName(cmds[3]);
         if (cmds[4][0] == ':')
         {
             std::string realnm = buffer + std::strlen((cmds[1] + cmds[2] + cmds[3]).c_str()) + 9;
@@ -125,6 +154,8 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         }
         else
             client.setRealName(cmds[4]);
+
+        std::cout << "USER " << client.getUserName() << " " << client.getHostName() << " " << client.getServerName() << " " << client.getRealName() << "\n";
     }
 };
 
@@ -151,13 +182,15 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                 int fd = ft_isUserExist(clts[k], _clients);
                 if (fd == -1)
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
+                else if (_clients[fd].isRegistered() == false)
+                    ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
                     std::string msg;
                     if (cmds[2][0] != ':')
                         msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':');
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -168,14 +201,19 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
-                    std::string msg;
-                    if (cmds[2][0] != ':')
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                        ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':');
-                    for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                     {
-                        send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        std::string msg;
+                        if (cmds[2][0] != ':')
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                        else
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
+                        for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
+                        {
+                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
                     }
                 }
             }
@@ -183,6 +221,58 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
     }
 };
 
+// NOTICE
+void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer)
+{
+ if (cmds.size() >= 3)
+    {
+        std::vector<std::string> clts = ft_split(cmds[1], ',');
+        for (size_t k = 0; k < clts.size(); k++)
+        {
+            if (clts[k][0] != '#')
+            {
+
+                int fd = ft_isUserExist(clts[k], _clients);
+                if (fd == -1)
+                    ;
+                else if (_clients[fd].isRegistered() == false)
+                    ;
+                else
+                {
+                    std::string msg;
+                    if (cmds[2][0] != ':')
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
+                    else
+                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
+                    send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                }
+            }
+            else
+            {
+                int fd = ft_isChannelExist(clts[k], _channels);
+                if (fd == -1)
+                    ;
+                else
+                {
+                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                        ;
+                    else
+                    {
+                        std::string msg;
+                        if (cmds[2][0] != ':')
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                        else
+                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
+                        for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
+                        {
+                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
 // ================================================
 // Channel COMMANDS
 // ================================================
@@ -217,23 +307,17 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             }
             else
             {
-                if (!_channels[indx].is_userInChannel(client))
+                if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
+                    ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
+                else if (_channels[indx].is_userInChannel(client) == -1)
                 {
                     if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
                         _channels[indx].add_user(client);
                     else
                         ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                 }
-                _channels[indx].printAllUser();
             }
         }
-
-        // for (size_t k = 0; k < chanls.size(); k++)
-        // {
-        //     // std::cout << "------> " << chanls[k] << std::endl;
-        //     // if (!chanlsPass.empty() && k < chanlsPass.size())
-        //     //     std::cout << "-> " << chanlsPass[k] << std::endl;
-        // }
     }
     buffer++;
 };
@@ -245,7 +329,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+            std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
                               client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                               std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -263,7 +347,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_LIST) + " " +
+                    std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
                                       client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                                       std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -282,8 +366,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
         for (size_t i = 0; i < _channels.size(); i++)
 
             allUsers += _channels[i].getallUsers(allUsers, _clients);
-
-        std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+        std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
                           client.getNickName() + " = * :" + allUsers + "\n";
 
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -304,7 +387,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 {
                     allChanls += splChanls[j];
                     std::string tmp = "";
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_NAMREPLY) + " " +
+                    std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
                                       client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
 
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -329,17 +412,16 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
                 else
                 {
-                    std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
-                                      client.getNickName() + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
+                    std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " " +
+                                      client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-                    ft_print_error(_channels[i].get_chanlName(), ERR_NEEDMOREPARAMS, client);
                 }
                 return;
             }
             if (_channels[i].get_chanlName() == cmds[1] && cmds.size() > 2)
             {
                 // check if user in channel
-                if (_channels[i].is_userInChannel(client) == false)
+                if (_channels[i].is_userInChannel(client) == -1)
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_NOTONCHANNEL, client);
                     return;
@@ -355,10 +437,14 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 // change channel topic
                 std::string chnlTopic = "";
                 for (size_t i = 2; i < cmds.size(); i++)
-                    chnlTopic += " " + cmds[i];
+                {
+                    if (i > 2)
+                        chnlTopic += " ";
+                    chnlTopic += cmds[i];
+                }
                 _channels[i].setChannelTopic(chnlTopic);
-                std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(RPL_TOPIC) + " " +
-                                  client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
+                std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " TOPIC " +
+                                  _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                 send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 return;
             }
@@ -545,3 +631,18 @@ void Server::handleLogTime(Client &client)
     std::string msg = "> Logtime for " + client.getNickName() + " is: " + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
+
+bool Server::isNickUserDuplicate(std::string nickUser)
+{
+    size_t i = 0;
+    while (i < _clients.size())
+    {
+        if (!_clients[i].getUserName().empty())
+        {
+            if (strcmp(nickUser.c_str(), _clients[i].getUserName().c_str()) == 0)
+                return 1;
+        }
+        i++;
+    }
+    return 0;
+};

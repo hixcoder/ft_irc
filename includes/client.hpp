@@ -6,13 +6,14 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:19:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 11:34:22 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "ircserv.hpp"
 
+class Channel;
 typedef struct modes
 {
     bool away;
@@ -37,15 +38,17 @@ private:
     std::string _realName;
     Modes _modes;
     long _startTime;
-
+    struct sockaddr_in _client_addr;
     std::string _buff;
-    
+    std::string _msgTemp;
+
 public:
     Client(int fd);
     ~Client();
 
     // client's functions
     bool isRegistered();
+    int isUserFinishRegistered();
     bool operator==(Client &other) const;
 
     // seters and getters
@@ -59,7 +62,8 @@ public:
     void setModes(char mode, bool status);
     void setOper(bool status);
     void setBuff(std::string buffer);
-    
+    void setClientAddr(struct sockaddr_in client_addr);
+    void setMsgTemp(std::string msg);
     int getFd() const;
     int getAuth() const;
     bool getPass() const;
@@ -71,6 +75,8 @@ public:
     long getStartTime() const;
     bool getModes(char mode);
     std::string getBuff()const;
-    
+    std::string getMsgTemp() const;
+    struct sockaddr_in getClientAddr() const;
+    void exitChannles(std::vector<Channel> channles);
     void addBuff(std::string buffer);
 };

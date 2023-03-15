@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/12 16:17:40 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/14 12:05:14 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,17 +159,19 @@ long get_time(void)
 bool ftCheckCRLF(std::string buff)
 {
     int len = buff.length();
-    if (len >= 2 && buff[len-2] == '\r' && buff[len-1] == '\n')
+    if (len >= 2 && buff[len - 2] == '\r' && buff[len - 1] == '\n')
         return true;
-    else 
+    else
         return false;
 }
 
-std::vector<std::string> splitString(std::string str, std::string delimiter) {
+std::vector<std::string> splitString(std::string str, std::string delimiter)
+{
     std::vector<std::string> result;
     size_t pos = 0;
     std::string token;
-    while ((pos = str.find(delimiter)) != std::string::npos) {
+    while ((pos = str.find(delimiter)) != std::string::npos)
+    {
         token = str.substr(0, pos);
         result.push_back(token);
         str.erase(0, pos + delimiter.length());

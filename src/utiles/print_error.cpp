@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
 /*   Updated: 2023/03/14 10:03:41 by alouzizi         ###   ########.fr       */
@@ -14,12 +14,12 @@
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
-    std::string temp = ":@localhost  " + std::to_string(type) + " ";
+    std::string temp = ":@localhost " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
-        msg = temp + " :Not enough parameters\n";
+        msg = temp + client.getNickName() + " " + cmd + " :Not enough parametersss\n";
     else if (type == ERR_PASSWDMISMATCH)
-        msg = temp + " :Password incorrect\n";
+        msg = temp + cmd + " :Password incorrect\n"; 
     else if (type == ERR_ALREADYREGISTRED)
         msg = temp + ":You may not reregister\n";
     else if (type == ERR_NONICKNAMEGIVEN)
@@ -53,7 +53,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == RPL_LISTEND)
         msg = temp + client.getNickName() + " :End of /LIST\n";
     else if (type == ERR_NOTREGISTERED)
-        msg = temp + cmd + " :You have not registered\n";
+        msg = temp + cmd + " :You have not registered" + client.getMsgTemp() + "\n";
     else if (type == ERR_USERSDONTMATCH)
         msg = temp + cmd + " :Cannot change mode for other users\n";
     else if (type == ERR_UMODEUNKNOWNFLAG)
@@ -61,9 +61,9 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == RPL_ENDOFNAMES)
         msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
     else if (type == ERR_NOTONCHANNEL)
-        msg = temp + client.getNickName() + cmd + " :You're not on that channel\n";
+        msg = temp + cmd + " :You're not on that channel\n";
     else if (type == RPL_NOTOPIC)
-        msg = temp + client.getNickName() + cmd + " :No topic is set\n";
+        msg = temp + client.getNickName() + " " + cmd + " :No topic is set\n";
     else if (type == ERR_CHANOPRIVSNEEDED)
         msg = temp + client.getNickName() + cmd + " :You're not channel operator\n";
     else if (type == RPL_VERSION)
@@ -72,5 +72,7 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + client.getNickName() + " VERSION" + " :No such server\n";
     else if (type == ERR_KEYSET)
         msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
+    else if (type == ERR_CHANNELISFULL)
+        msg = temp + " " + cmd + " :Cannot join channel (+l)\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

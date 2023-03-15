@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
 /*   Updated: 2023/03/13 14:53:32 by alouzizi         ###   ########.fr       */
@@ -34,6 +34,7 @@ private:
     std::vector<pollfd> _pollfds;
     std::vector<Client> _clients;
     std::vector<Channel> _channels;
+    std::vector<std::string> _listCmds;
     std::string _serverName;
 
 public:
@@ -63,6 +64,7 @@ private:
     void modeCmd(std::vector<std::string> cmd, Client &user);
     void ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, char *buffer);
+    void handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handleKillCmd(Client &client, std::vector<std::string> cmds);
     void handleListCmd(Client &client, std::vector<std::string> cmds);
     void handleNamesCmd(Client &client, std::vector<std::string> cmds);
@@ -77,4 +79,6 @@ private:
     void handleLogTime(Client &client);
     void sendFile(Client &client, std::vector<std::string> cmds);
     void recvFile(Client &client, std::vector<std::string> cmds);
+    bool isCmdExit(std::string cmd);
+    bool isNickUserDuplicate(std::string nickUser);
 };

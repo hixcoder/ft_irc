@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
 /*   Updated: 2023/03/13 14:46:31 by alouzizi         ###   ########.fr       */
@@ -20,14 +20,28 @@ Server::Server(char *port, char *passwd)
     _endServer = 0;
     _closeCon = 0;
     _serverName = "irc_killers";
-  
-  
     createSocket();
     bindSocket();
     listeningToClients(4);
 
     pollfd servSocket = {_serverSocket, POLLIN, 0};
     _pollfds.push_back(servSocket);
+
+    _listCmds.push_back("PRIVMSG");
+    _listCmds.push_back("NOTICE");
+    _listCmds.push_back("QUIT");
+    _listCmds.push_back("OPER");
+    _listCmds.push_back("JOIN");
+    _listCmds.push_back("MODE");
+    _listCmds.push_back("KILL");
+    _listCmds.push_back("LIST");
+    _listCmds.push_back("NAMES");
+    _listCmds.push_back("TOPIC");
+    _listCmds.push_back("VERSION");
+    _listCmds.push_back("HELP");
+    _listCmds.push_back("TIME");
+    _listCmds.push_back("LUSER");
+    _listCmds.push_back("/logtime");
 }
 
 Server::~Server()
@@ -87,10 +101,11 @@ void Server::runServer()
         {
             if (_pollfds[i].revents == 0)
                 continue;
-            if (_pollfds[i].revents != POLLIN)
+            if (_pollfds[i].revents != POLLIN && i != 0)
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
+                _clients[i - 1].exitChannles(_channels);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
                 break;
@@ -118,7 +133,12 @@ void Server::addClient()
     // here we loop and accept incoming connections
     while (true)
     {
-        _newSocket = accept(_serverSocket, NULL, NULL);
+        struct sockaddr_in clt_addr;
+        bzero((char *)&clt_addr, sizeof(clt_addr));
+        int addrlen = sizeof(clt_addr);
+        _newSocket = accept(_serverSocket, (struct sockaddr *)&clt_addr, (socklen_t *)&addrlen);
+        // std::cout << "porr clinet " << clt_addr.sin_port << "\n";
+        // std::cout << "adress clinet " << clt_addr.sin_addr.s_addr << "\n";
         if (_newSocket < 0)
         {
             if (errno != EWOULDBLOCK)
@@ -134,6 +154,7 @@ void Server::addClient()
         _pollfds.push_back(cliSocket);
         // add client
         Client newclient(cliSocket.fd);
+        newclient.setClientAddr(clt_addr);
         _clients.push_back(newclient);
     }
 }
@@ -167,6 +188,7 @@ void Server::recvClientMsg(Client &client)
         for (size_t i = 0; i < spl.size(); i++)
         {
             char* cmds = new char[spl[i].length() + 1];
+            char *cmds = new char[spl[i].length() + 1];
             std::strcpy(cmds, spl[i].c_str());
             ft_hundle_cmd(client, cmds);
             delete[] cmds;
@@ -184,6 +206,15 @@ void Server::error(std::string errorMsg, int exitStatus, int fd)
     exit(exitStatus);
 }
 
+bool Server::isCmdExit(std::string cmd)
+{
+    for (size_t i = 0; i < _listCmds.size(); i++)
+    {
+        if (strcmp(cmd.c_str(), _listCmds[i].c_str()) == 0)
+            return 1;
+    }
+    return 0;
+};
 // clean up all the sockets that are open
 void Server::clean()
 {
