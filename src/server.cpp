@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/13 14:46:31 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/15 11:57:23 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,6 @@ void Server::recvClientMsg(Client &client)
         std::vector<std::string> spl = splitString(tmp, "\\r\\n");
         for (size_t i = 0; i < spl.size(); i++)
         {
-            char* cmds = new char[spl[i].length() + 1];
             char *cmds = new char[spl[i].length() + 1];
             std::strcpy(cmds, spl[i].c_str());
             ft_hundle_cmd(client, cmds);
