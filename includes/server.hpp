@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 13:48:24 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 10:36:21 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ private:
     std::vector<pollfd> _pollfds;
     std::vector<Client> _clients;
     std::vector<Channel> _channels;
+    std::vector<std::string> _listCmds;
     std::string _serverName;
 
 public:
@@ -76,5 +77,6 @@ private:
     int is_chanel(std::string name);
     void handleLogTime(Client &client);
 
+    bool isCmdExit(std::string cmd);
     bool isNickUserDuplicate(std::string nickUser);
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 12:07:01 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 10:38:06 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ Server::Server(char *port, char *passwd)
 
     pollfd servSocket = {_serverSocket, POLLIN, 0};
     _pollfds.push_back(servSocket);
+
+    _listCmds.push_back("PRIVMSG");
+    _listCmds.push_back("NOTICE");
+    _listCmds.push_back("QUIT");
+    _listCmds.push_back("OPER");
+    _listCmds.push_back("JOIN");
+    _listCmds.push_back("MODE");
+    _listCmds.push_back("KILL");
+    _listCmds.push_back("LIST");
+    _listCmds.push_back("NAMES");
+    _listCmds.push_back("TOPIC");
+    _listCmds.push_back("VERSION");
+    _listCmds.push_back("HELP");
+    _listCmds.push_back("TIME");
+    _listCmds.push_back("LUSER");
+    _listCmds.push_back("/logtime");
 }
 
 Server::~Server()
@@ -190,6 +206,15 @@ void Server::error(std::string errorMsg, int exitStatus, int fd)
     exit(exitStatus);
 }
 
+bool Server::isCmdExit(std::string cmd)
+{
+    for (size_t i = 0; i < _listCmds.size(); i++)
+    {
+        if (strcmp(cmd.c_str(), _listCmds[i].c_str()) == 0)
+            return 1;
+    }
+    return 0;
+};
 // clean up all the sockets that are open
 void Server::clean()
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 12:05:35 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 10:24:59 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
-    std::string temp = ":@localhost  " + std::to_string(type) + " ";
+    std::string temp = ":@localhost " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
-        msg = temp + client.getNickName() + " " + cmd + " :Not enough parameters\n";
+        msg = temp + client.getNickName() + " " + cmd + " :Not enough parametersss\n";
     else if (type == ERR_PASSWDMISMATCH)
         msg = temp + cmd + " :Password incorrect\n";
     else if (type == ERR_ALREADYREGISTRED)
@@ -53,7 +53,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == RPL_LISTEND)
         msg = temp + client.getNickName() + " :End of /LIST\n";
     else if (type == ERR_NOTREGISTERED)
-        msg = temp + cmd + " :You have not registered\n";
+        msg = temp + cmd + " :You have not registered" + client.getMsgTemp() + "\n";
     else if (type == ERR_USERSDONTMATCH)
         msg = temp + cmd + " :Cannot change mode for other users\n";
     else if (type == ERR_UMODEUNKNOWNFLAG)

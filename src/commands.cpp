@@ -14,18 +14,32 @@
 
 #include <iomanip>
 #include <sstream>
-
+// :punch.wa.us.dal.net 451 * PRIVMSG :You must finish connecting with another nickname first.
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
     if (spl.size() < 1)
         return;
+
     if (strcmp("PASS", spl[0].c_str()) == 0)
         handlePassCmd(client, spl, buffer);
     else if (strcmp("USER", spl[0].c_str()) == 0)
         handleUserCmd(client, spl, buffer);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         handleNickCmd(client, spl);
+    else if (!client.isRegistered())
+    {
+        if (isCmdExit(spl[0].c_str()))
+        {
+            if (client.isUserFinishRegistered() == 1)
+                client.setMsgTemp(" (Please Enter Password) ");
+            if (client.isUserFinishRegistered() == 2)
+                client.setMsgTemp(" (Please Enter NICKNAME) ");
+            if (client.isUserFinishRegistered() == 3)
+                client.setMsgTemp(" (Please Enter USERNAME) ");
+            ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+        }
+    }
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
     else if (strcmp("NOTICE", spl[0].c_str()) == 0)

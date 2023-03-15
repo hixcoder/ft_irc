@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/14 12:06:03 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 10:23:04 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ Client::Client(int fd)
 	_modes.receiveServerNotices = false;
 
 	_startTime = get_time();
-	
+
 	_buff = "";
+	_msgTemp = "";
 }
 
 Client::~Client()
@@ -50,6 +51,16 @@ bool Client::isRegistered()
 	return (false);
 }
 
+int Client::isUserFinishRegistered()
+{
+	if (_pass == false)
+		return 1;
+	if (_nickName == "")
+		return 2;
+	if (_userName == "")
+		return 3;
+	return 0;
+};
 bool Client::operator==(Client &other) const
 {
 	if (std::strcmp(_nickName.c_str(), other.getNickName().c_str()) == 0)
@@ -65,6 +76,7 @@ void Client::setUserName(std::string userName) { _userName = userName; }
 void Client::setHostName(std::string hostName) { _hostName = hostName; }
 void Client::setServerName(std::string serverName) { _serverName = serverName; }
 void Client::setRealName(std::string realName) { _realName = realName; }
+void Client::setMsgTemp(std::string msg) { _msgTemp = msg; };
 void Client::setModes(char mode, bool status)
 {
 	if (mode == 'a')
@@ -95,6 +107,7 @@ std::string Client::getUserName() const { return _userName; }
 std::string Client::getHostName() const { return _hostName; }
 std::string Client::getServerName() const { return _serverName; }
 std::string Client::getRealName() const { return _realName; }
+std::string Client::getMsgTemp() const { return _msgTemp; };
 bool Client::getModes(char mode)
 {
 	bool modes = false;
