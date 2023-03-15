@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 13:38:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:32:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,8 @@ void Server::ft_updateNickInChanls(Client clt)
         for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
         {
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
-                _channels[i].get_chanlUsers()[j].setNickName(clt.getNickName());
+                _channels[i].updateNickUser(i, clt.getNickName());
+            // _channels[i].get_chanlUsers()[j].setNickName(clt.getNickName());
         }
     }
 };
@@ -235,7 +236,8 @@ void Server::eraseUserFromChannels(Client clt)
         for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
         {
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
-                _channels[i].get_chanlUsers().erase(_channels[i].get_chanlUsers().begin() + j);
+                _channels[i].eraseUser(j);
+            //_channels[i].get_chanlUsers().erase(_channels[i].get_chanlUsers().begin() + j);
         }
     }
 };

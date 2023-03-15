@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/14 10:58:21 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:24:43 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,6 @@ public:
     int is_userInChannel(Client user);
     void printAllUser();
     void updateChanlUsers(std::vector<Client> serverClients);
+    void eraseUser(int i);
+    void updateNickUser(int i, std::string nk);
 };
