@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 11:34:22 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/15 13:23:11 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,8 @@ public:
     std::string getRealName() const;
     long getStartTime() const;
     bool getModes(char mode);
-    std::string getBuff()const;
+    std::string getBuff() const;
     std::string getMsgTemp() const;
     struct sockaddr_in getClientAddr() const;
-    void exitChannles(std::vector<Channel> channles);
     void addBuff(std::string buffer);
 };

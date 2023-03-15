@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 13:05:03 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/15 13:38:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ void Server::runServer()
             {
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
-                _clients[i - 1].exitChannles(_channels);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
+                eraseUserFromChannels(_clients[i - 1]);
                 break;
             }
 
@@ -121,6 +121,7 @@ void Server::runServer()
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
                 _clients.erase(_clients.begin() + i - 1);
+                eraseUserFromChannels(_clients[i - 1]);
                 _closeCon = 0;
             }
         }
@@ -223,6 +224,18 @@ void Server::ft_updateNickInChanls(Client clt)
         {
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
                 _channels[i].get_chanlUsers()[j].setNickName(clt.getNickName());
+        }
+    }
+};
+
+void Server::eraseUserFromChannels(Client clt)
+{
+    for (size_t i = 0; i < _channels.size(); i++)
+    {
+        for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
+        {
+            if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
+                _channels[i].get_chanlUsers().erase(_channels[i].get_chanlUsers().begin() + j);
         }
     }
 };
