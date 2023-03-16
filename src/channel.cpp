@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 09:25:41 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 12:56:10 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 Channel::Channel()
 {
     _chanlTopic = "";
+    _modes.invitOnly = false;
 };
 
 Channel::~Channel(){};
@@ -31,6 +32,13 @@ std::string Channel::getChannelTopic() const { return _chanlTopic; }
 
 // other functions
 int Channel::getClientsNbr() { return _chanlUsers.size(); }
+
+void Channel::setCreator(std::string ctr)
+{
+    _creator = ctr;
+};
+
+std::string Channel::getCreator() { return _creator; };
 
 std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> serverClients)
 {
@@ -59,8 +67,37 @@ void Channel::add_user(Client &user)
 {
     std::string msg;
 
-    msg = ":" + user.getNickName() + "!~FSD@26d-ac5f.ip JOIN :" + _chanlName + "\n";
+    msg = ":" + user.getNickName() + "!~:@localhost  JOIN :" + _chanlName + "\n";
     _chanlUsers.push_back(user);
+    send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+};
+
+void Channel::add_Operator(Client clr)
+{
+    _chanOperator.push_back(clr);
+};
+
+bool Channel::ft_isOperator(Client clt)
+{
+    for (size_t i = 0; i < _chanlUsers.size(); i++)
+    {
+        if (clt == _chanlUsers[i])
+            return true;
+    }
+    return false;
+};
+
+std::vector<Client> Channel::getOperChannel()
+{
+    return _chanOperator;
+};
+// :punch.wa.us.dal.net NOTICE @#OOOOO :LKOOOLKO invited LKOOO into channel #OOOOO
+void Channel::add_userbyInveted(Client &user, Client &geust)
+{
+    std::string msg;
+
+    msg = ":" + user.getNickName() + "!~:@localhost  NOTICE @" + _chanlName + " :" + user.getNickName() + " invited " + geust.getNickName() + "into channel " + _chanlName + "\n";
+    _chanlUsers.push_back(geust);
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
 
@@ -94,6 +131,14 @@ void Channel::updateChanlUsers(std::vector<Client> serverClients)
     }
 }
 
+void Channel::setInvitOnly(bool invt)
+{
+    _modes.invitOnly = invt;
+};
+bool Channel::getInvitOnly()
+{
+    return _modes.invitOnly;
+};
 std::vector<Client> Channel::get_chanlUsers()
 {
     return _chanlUsers;

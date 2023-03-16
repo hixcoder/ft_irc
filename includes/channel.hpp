@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 09:25:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:43:12 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct chanelmodes
     bool key;
     bool topic;
     bool noOutsideMsg;
+    bool invitOnly;
 } ChanelModes;
 
 class Channel
@@ -27,9 +28,11 @@ private:
     std::string _chanlName;
     std::string _chanlTopic;
     std::string _chanlPass;
+    std::string _creator;
     int _limit;
     ChanelModes _modes;
     std::vector<Client> _chanlUsers;
+    std::vector<Client> _chanOperator;
 
 public:
     Channel();
@@ -41,6 +44,8 @@ public:
     void setChannelTopic(std::string newTopic);
     void setModes(char mode, bool status);
     void setLimit(int limit);
+    void setInvitOnly(bool invt);
+    void setCreator(std::string ctr);
 
     std::string get_chanlName();
     std::string get_chanlPass() const;
@@ -48,6 +53,12 @@ public:
     std::vector<Client> get_chanlUsers();
     int getLimit() const;
     ChanelModes getModes() const;
+    bool getInvitOnly();
+    std::string getCreator();
+
+    void add_Operator(Client clr);
+    std::vector<Client> getOperChannel();
+    bool ft_isOperator(Client clt);
 
     // other functions
     std::string getallUsers(std::string &existedUsers, std::vector<Client> serverClients);
@@ -58,4 +69,5 @@ public:
     void updateChanlUsers(std::vector<Client> serverClients);
     void eraseUser(int i);
     void updateNickUser(int i, std::string nk);
+    void add_userbyInveted(Client &user, Client &geust);
 };

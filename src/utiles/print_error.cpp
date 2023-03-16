@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 08:44:11 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 12:38:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + cmd + " :Unknown MODE flag\n";
     else if (type == RPL_ENDOFNAMES)
         msg = temp + client.getNickName() + cmd + " :End of /NAMES list\n";
-    else if (type == ERR_NOTONCHANNEL)
-        msg = temp + cmd + " :You're not on that channel\n";
     else if (type == RPL_NOTOPIC)
         msg = temp + client.getNickName() + " " + cmd + " :No topic is set\n";
     else if (type == ERR_CHANOPRIVSNEEDED)
@@ -73,8 +71,16 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == ERR_KEYSET)
         msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
     else if (type == ERR_CHANNELISFULL)
-        msg = temp + " " + cmd + " :Cannot join channel (+l)\n";
+        msg = temp + cmd + " :Cannot join channel (+l)\n";
     else if (type == ERR_NOTONCHANNEL)
-        msg = temp + " " + cmd + " :You're not on that channel\n";
+        msg = temp + cmd + " :You're not on that channel\n";
+    else if (type == ERR_USERONCHANNEL)
+        msg = temp + client.getNickName() + " " + cmd + " :is already on channel\n";
+    else if (type == RPL_INVITING) // :punch.wa.us.dal.net 341 LKOOOLKO LKOOO #OOOOO
+        msg = temp + client.getNickName() + " " + client.getMsgTemp() + cmd + "\n";
+    else if (type == ERR_INVITEONLYCHAN)
+        msg = temp + cmd + " :Cannot join channel (+i)\n";
+    else if (type == ERR_USERNOTINCHANNEL)
+        msg = temp + client.getNickName() + " " + cmd + " :They aren't on that channel\n"; //
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

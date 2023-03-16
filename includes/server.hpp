@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 09:39:01 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:06:00 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,12 @@ private:
     void handlechanlModeCmd(Client &client, std::vector<std::string> cmds, int index);
     int is_chanel(std::string name);
 
+    int is_userExist(std::string nk);
     // channel operator
     void ft_joinCmd(Client &client, std::vector<std::string> cmds);
     void ft_partCmd(Client &client, std::vector<std::string> cmds);
     void ft_inviteCmd(Client &client, std::vector<std::string> cmds);
+    void ft_kickCmd(Client &client, std::vector<std::string> cmds, char *buffer);
 
     // bonus part
     void handleLogTime(Client &client);

@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/14 11:00:41 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:41:26 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 	std::string msg;
 	int index;
 
-	if (!user.isRegistered())
-		return (ft_print_error("MODE", ERR_NOTREGISTERED, user));
 	if (cmd.size() < 2)
 		return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
 	index = is_channel_Exit(_channels, cmd[1]);

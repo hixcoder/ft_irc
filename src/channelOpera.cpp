@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 09:39:54 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:39:53 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,119 @@ void Server::ft_partCmd(Client &client, std::vector<std::string> cmds)
     }
 };
 
+int Server::is_userExist(std::string nk)
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        if (strcmp(nk.c_str(), _clients[i].getNickName().c_str()) == 0)
+            return i;
+    }
+    return -1;
+};
+
+// :punch.wa.us.dal.net 341 LKOOOLKO LKOOO #OOOOO
+// :punch.wa.us.dal.net NOTICE @#OOOOO :LKOOOLKO invited LKOOO into channel #OOOOO
+
+// :LKOOOLKO!~FASHGJFSA@d2a6-9017-cfb7-6374-1329.iam.net.ma INVITE LKOOO :#OOOOO
+
 void Server::ft_inviteCmd(Client &client, std::vector<std::string> cmds)
 {
-    if (cmds.size() < 4)
+    if (cmds.size() < 3)
         ft_print_error("INVITE", ERR_NEEDMOREPARAMS, client);
     else
     {
-        int index = is_channel_Exit(_channels, cmds[2]);
-        if (index == -1)
-            ft_print_error(cmds[2], ERR_NOSUCHCHANNEL, client);
-        // else
-        // {
-        //     if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
-        //         ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
-        //     else if (_channels[indx].is_userInChannel(client) == -1)
-        //     {
-        //         if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
-        //             _channels[indx].add_user(client);
-        //         else
-        //             ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
-        //     }
-        // }
+        int userIndex = is_userExist(cmds[1]);
+        if (userIndex == -1)
+            ft_print_error(cmds[1], ERR_NOSUCHNICK, client);
+        else
+        {
+            int indexCha = is_channel_Exit(_channels, cmds[2]);
+            if (indexCha == -1)
+                ft_print_error(cmds[2], ERR_NOSUCHCHANNEL, client);
+            else
+            {
+                int temp = _channels[indexCha].is_userInChannel(client);
+                if (temp == -1)
+                    ft_print_error(cmds[2], ERR_NOTONCHANNEL, client);
+                else
+                {
+                    int userInChannel = _channels[indexCha].is_userInChannel(_clients[userIndex]);
+                    if (userInChannel != -1)
+                        ft_print_error(_channels[indexCha].get_chanlName(), ERR_USERONCHANNEL, client);
+                    else
+                    {
+                        if (_channels[indexCha].ft_isOperator(client) == false)
+                            ft_print_error(_channels[indexCha].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
+                        else
+                        {
+                            client.setMsgTemp(_clients[userIndex].getNickName());
+                            ft_print_error(_channels[indexCha].get_chanlName(), RPL_INVITING, client);
+                            client.setMsgTemp("");
+                            _channels[indexCha].add_userbyInveted(client, _clients[userIndex]);
+                            // send msg to geust
+                            std::string msg;
+                            msg = ":" + client.getNickName() + "!@localhost  INVITE " + _clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName() + "\n";
+                            send(_clients[userIndex].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
+void Server::ft_kickCmd(Client &client, std::vector<std::string> cmds, char *buffer)
+{
+    if (cmds.size() < 3)
+        ft_print_error("KICK", ERR_NEEDMOREPARAMS, client);
+    else
+    {
+        int userIndex = is_userExist(cmds[1]);
+        if (userIndex == -1)
+            ft_print_error(cmds[1], ERR_NOSUCHNICK, client);
+        else
+        {
+            int indexCha = is_channel_Exit(_channels, cmds[2]);
+            if (indexCha == -1)
+                ft_print_error(cmds[2], ERR_NOSUCHCHANNEL, client);
+            else
+            {
+                int temp = _channels[indexCha].is_userInChannel(client);
+                if (temp == -1)
+                    ft_print_error(cmds[2], ERR_NOTONCHANNEL, client);
+                else
+                {
+                    int userInChannel = _channels[indexCha].is_userInChannel(_clients[userIndex]);
+                    if (userInChannel == -1)
+                        ft_print_error(_channels[indexCha].get_chanlName(), ERR_USERNOTINCHANNEL, client);
+                    else
+                    {
+                        if (_channels[indexCha].ft_isOperator(client) == false)
+                            ft_print_error(_channels[indexCha].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
+                        else
+                        {
+                            // :USER2222!~KJHGAkj@d2a6-9017-cfb7-6374-1329.iam.net.ma KICK #AHAMMAM USER0000 :USER2222
+                            // :USER2222!~KJHGAkj@d2a6-9017-cfb7-6374-1329.iam.net.ma KICK #AHAMMAM USER6666 :BLABLABAL
+                            std::string msg;
+                            msg = ":" + client.getNickName() + "!@localhost  KICK " + _channels[indexCha].get_chanlName() + " " + _clients[userIndex].getNickName() + " :";
+                            if (cmds.size() == 3)
+                                msg = msg + client.getNickName() + "\n";
+                            else
+                            {
+                                if (cmds[3][0] != ':')
+                                    msg = msg + cmd[3] + "\n";
+                                else
+                                    msg = msg + strchr(buffer, ':') + "\n";
+                            }
+                            for (size_t i = 0; i < _channels[indexCha].get_chanlUsers().size(); i++)
+                            {
+                                send(_channels[indexCha].get_chanlUsers()[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                            }
+                            _channels[indexCha].eraseUser(userInChannel);
+                        }
+                    }
+                }
+            }
+        }
     }
 };

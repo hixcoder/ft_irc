@@ -62,6 +62,10 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleListCmd(client, spl);
     else if (strcmp("NAMES", spl[0].c_str()) == 0)
         handleNamesCmd(client, spl);
+    else if (strcmp("INVITE", spl[0].c_str()) == 0)
+        ft_inviteCmd(client, spl);
+    else if (strcmp("KICK", spl[0].c_str()) == 0)
+        ft_kickCmd(client, spl, buffer);
     else if (strcmp("TOPIC", spl[0].c_str()) == 0)
         handleTopicCmd(client, spl);
     else if (strcmp("VERSION", spl[0].c_str()) == 0)
@@ -116,7 +120,6 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
     {
         if (ft_isregister(client))
         {
-            // std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
             std::string msg = "> " + client.getNickName() + "!~" + (std::string)LOCAL_IP + " NICK :" + cmds[1] + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
@@ -305,19 +308,27 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                 channel.set_chanlName(chanls[l]);
                 if (!cmds[2].empty() && l < chanlsPass.size())
                     channel.set_chanlPass(key);
+                if (cmds[2][0] == '&')
+                    channel.setInvitOnly(true);
                 channel.add_user(client);
+                channel.setCreator(client.getNickName());
                 _channels.push_back(channel);
             }
             else
             {
-                if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
-                    ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
-                else if (_channels[indx].is_userInChannel(client) == -1)
+                if (_channels[indx].getInvitOnly() == true)
+                    ft_print_error(_channels[indx].get_chanlName(), ERR_INVITEONLYCHAN, client);
+                else
                 {
-                    if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
-                        _channels[indx].add_user(client);
-                    else
-                        ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
+                    if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
+                        ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
+                    else if (_channels[indx].is_userInChannel(client) == -1)
+                    {
+                        if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
+                            _channels[indx].add_user(client);
+                        else
+                            ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
+                    }
                 }
             }
         }
