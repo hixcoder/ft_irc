@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 14:32:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 08:50:50 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ Server::Server(char *port, char *passwd)
     _listCmds.push_back("HELP");
     _listCmds.push_back("TIME");
     _listCmds.push_back("LUSER");
+    _listCmds.push_back("PART");
     _listCmds.push_back("/logtime");
 }
 

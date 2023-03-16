@@ -52,7 +52,9 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
     else if (strcmp("OPER", spl[0].c_str()) == 0)
         handleOperCmd(client, spl);
     else if (strcmp("JOIN", spl[0].c_str()) == 0)
-        ft_joinCmd(client, spl, buffer);
+        ft_joinCmd(client, spl);
+    else if (strcmp("PART", spl[0].c_str()) == 0)
+        ft_partCmd(client, spl);
     else if (strcmp("MODE", spl[0].c_str()) == 0)
         modeCmd(spl, client);
     else if (strcmp("KILL", spl[0].c_str()) == 0)
@@ -279,7 +281,7 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
 // Channel COMMANDS
 // ================================================
 
-void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer)
+void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
         ft_print_error("JOIN", ERR_NEEDMOREPARAMS, client);
@@ -287,22 +289,11 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
         ft_print_error("JOIN", ERR_NOSUCHCHANNEL, client);
     else
     {
-        for (size_t i = 0; i < cmds.size(); i++)
-        {
-            std::cout << i << " " << cmds[i] << "\n";
-        }
-
         std::vector<std::string> chanls;
         std::vector<std::string> chanlsPass;
         chanls = ft_split(cmds[1], ',');
         if (cmds.size() >= 3)
-        {
             chanlsPass = ft_split(cmds[2], ',');
-            std::cout << "-----> passs:"
-                      << "|"
-                      << chanlsPass[0]
-                      << "|\n";
-        }
         for (size_t l = 0; l < chanls.size(); l++)
         {
             int indx = is_channel_Exit(_channels, chanls[l]);
@@ -332,7 +323,6 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buf
             }
         }
     }
-    buffer++;
 };
 
 void Server::handleListCmd(Client &client, std::vector<std::string> cmds)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+         #
+#    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/15 11:57:55 by alouzizi         ###   ########.fr        #
+#    Updated: 2023/03/16 08:47:22 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = ircserv
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
-SRCS =	src/main.cpp src/server.cpp src/client.cpp src/commands.cpp src/channel.cpp \
+SRCS =	src/main.cpp src/server.cpp src/client.cpp src/commands.cpp src/channelOpera.cpp src/channel.cpp \
 		src/utiles/print_error.cpp src/utiles/utiles.cpp src/mode.cpp src/fileTransfer.cpp
 
 SRCOBJ = ${SRCS:.cpp=.o}

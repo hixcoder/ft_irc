@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/15 13:32:45 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:03:22 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ private:
     void handleQuitCmd(Client &client);
     void handleOperCmd(Client &client, std::vector<std::string> cmds);
     void modeCmd(std::vector<std::string> cmd, Client &user);
-    void ft_joinCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer);
     void handleKillCmd(Client &client, std::vector<std::string> cmds);
@@ -75,6 +74,12 @@ private:
     void handleLusersCmd(Client &client);
     void handlechanlModeCmd(Client &client, std::vector<std::string> cmds, int index);
     int is_chanel(std::string name);
+
+    // channel operator
+    void ft_joinCmd(Client &client, std::vector<std::string> cmds);
+    void ft_partCmd(Client &client, std::vector<std::string> cmds);
+    void ft_inviteCmd(Client &client, std::vector<std::string> cmds);
+
     // bonus part
     void handleLogTime(Client &client);
     void sendFile(Client &client, std::vector<std::string> cmds);
