@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 13:52:28 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 17:13:09 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void Server::createSocket()
 
     bzero((char *)&_server_addr, sizeof(_server_addr));
 
-    _server_addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
+    _server_addr.sin_addr.s_addr = INADDR_ANY;
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(_port);
 }
@@ -109,8 +109,8 @@ void Server::runServer()
                 std::cout << "client " << _pollfds[i].fd << " disconnected\n";
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
-                _clients.erase(_clients.begin() + i - 1);
                 eraseUserFromChannels(_clients[i - 1]);
+                _clients.erase(_clients.begin() + i - 1);
                 break;
             }
 
@@ -123,8 +123,9 @@ void Server::runServer()
             {
                 close(_pollfds[i].fd);
                 _pollfds.erase(_pollfds.begin() + i);
-                _clients.erase(_clients.begin() + i - 1);
                 eraseUserFromChannels(_clients[i - 1]);
+                _clients.erase(_clients.begin() + i - 1);
+
                 _closeCon = 0;
             }
         }

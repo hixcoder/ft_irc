@@ -6,7 +6,7 @@
 #    By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/16 09:11:23 by lahammam         ###   ########.fr        #
+#    Updated: 2023/03/16 17:11:50 by lahammam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,9 @@ $(NAME): ${SRCOBJ}
 all: ${NAME}
 
 s:
-	@./ircserv 3333 00
+	@./ircserv 6666 00
 c:
-	@nc -c 127.0.0.1 3333
+	@nc -c 127.0.0.1 6666
 
 clean:
 	@rm -f ${SRCOBJ}

@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 13:52:55 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:30:05 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == ERR_KEYSET)
         msg = temp + client.getNickName() + " " + cmd + " :Channel key already set\n";
     else if (type == ERR_CHANNELISFULL)
-        msg = temp + cmd + " :Cannot join channel (+l)\n";
+        msg = temp + cmd + " :Channel is full (l)\n";
     else if (type == ERR_NOTONCHANNEL)
         msg = temp + cmd + " :You're not on that channel\n";
     else if (type == ERR_USERONCHANNEL)

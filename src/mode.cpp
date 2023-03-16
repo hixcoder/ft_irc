@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/16 11:41:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:58:22 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,18 @@ bool validchanelMode(std::string mode)
 {
 	if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
 		return (false);
-	if (mode[1] == 'o' || mode[1] == 'v' || mode[1] == 'l' || mode[1] == 't')
+	if (mode[1] == 'o' || mode[1] == 'n' || mode[1] == 'l' || mode[1] == 't' || mode[1] == 'k')
 		return (true);
 	return (false);
 }
 
 void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int i)
 {
+
 	if (_channels[i].is_userInChannel(user) == -1)
 		return (ft_print_error(cmds[1], ERR_NOTONCHANNEL, user));
+	if (_channels[i].ft_isOperator(user) == false)
+		return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, user));
 	if (!validchanelMode(cmds[2]))
 		return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
 	if ((cmds[2][1] == 'l' || cmds[2][1] == 'k') && cmds.size() < 4)
@@ -58,7 +61,11 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 	else
 	{
 		if (cmds[2][1] == 'l' && cmds[2][0] == '+')
+		{
+			if (atoi(cmds[3].c_str()) <= 0 || _channels[i].get_chanlUsers().size() > (size_t)atoi(cmds[3].c_str()))
+				return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANNELISFULL, user));
 			_channels[i].setLimit(atoi(cmds[3].c_str()));
+		}
 		else if (cmds[2][1] == 'k' && cmds[2][0] == '+')
 		{
 			if (_channels[i].getModes().key)

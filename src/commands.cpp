@@ -207,7 +207,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                     ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
-                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                    if (_channels[fd].getModes().noOutsideMsg == true && _channels[fd].is_userInChannel(client) == -1)
                         ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
                     {
@@ -215,7 +215,10 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                         if (cmds[2][0] != ':')
                             msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
                         else
+                        {
                             msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
+                            std::cout << strchr(buffer, ':') << "\n";
+                        }
                         for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                         {
                             send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -307,11 +310,15 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                 Channel channel;
                 channel.set_chanlName(chanls[l]);
                 if (!cmds[2].empty() && l < chanlsPass.size())
+                {
+                    channel.setModes('k', true);
                     channel.set_chanlPass(key);
+                }
                 if (cmds[2][0] == '&')
                     channel.setInvitOnly(true);
                 channel.add_user(client);
                 channel.setCreator(client.getNickName());
+                channel.add_Operator(client);
                 _channels.push_back(channel);
             }
             else
@@ -320,7 +327,7 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[indx].get_chanlName(), ERR_INVITEONLYCHAN, client);
                 else
                 {
-                    if (_channels[indx].getModes().limit && _channels[indx].getLimit() == (int)_channels[indx].get_chanlUsers().size())
+                    if (_channels[indx].getModes().limit && _channels[indx].getLimit() < (int)_channels[indx].get_chanlUsers().size())
                         ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
                     else if (_channels[indx].is_userInChannel(client) == -1)
                     {
@@ -329,6 +336,10 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                         else
                             ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                     }
+                }
+                for (size_t h = 0; h < _channels[indx].get_chanlUsers().size(); h++)
+                {
+                    std::cout << h << "- " << _channels[indx].get_chanlUsers()[h].getNickName() << "\n";
                 }
             }
         }
@@ -441,7 +452,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                 }
 
                 // check if user is a channel operator
-                if (_channels[i].getModes().topic && !client.getModes('O') && !client.getModes('o'))
+                if (_channels[i].getModes().topic && (_channels[i].ft_isOperator(client) == false))
                 {
                     ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
                     return;
@@ -455,6 +466,8 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                         chnlTopic += " ";
                     chnlTopic += cmds[i];
                 }
+                if (cmds.size() > 2 && chnlTopic[0] == ':')
+                    chnlTopic.erase(0, 1);
                 _channels[i].setChannelTopic(chnlTopic);
                 std::string msg = ":@localhost " + std::to_string(RPL_TOPIC) + " TOPIC " +
                                   _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";

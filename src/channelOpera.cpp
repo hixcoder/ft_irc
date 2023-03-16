@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 13:53:24 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 15:35:51 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,6 @@ int Server::is_userExist(std::string nk)
     return -1;
 };
 
-// :punch.wa.us.dal.net 341 LKOOOLKO LKOOO #OOOOO
-// :punch.wa.us.dal.net NOTICE @#OOOOO :LKOOOLKO invited LKOOO into channel #OOOOO
-
-// :LKOOOLKO!~FASHGJFSA@d2a6-9017-cfb7-6374-1329.iam.net.ma INVITE LKOOO :#OOOOO
-
 void Server::ft_inviteCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() < 3)
@@ -86,7 +81,7 @@ void Server::ft_inviteCmd(Client &client, std::vector<std::string> cmds)
                             ft_print_error(_channels[indexCha].get_chanlName(), RPL_INVITING, client);
                             client.setMsgTemp("");
                             _channels[indexCha].add_userbyInveted(client, _clients[userIndex]);
-                            // send msg to geust
+
                             std::string msg;
                             msg = ":" + client.getNickName() + "!@localhost  INVITE " + _clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName() + "\n";
                             send(_clients[userIndex].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -128,8 +123,6 @@ void Server::ft_kickCmd(Client &client, std::vector<std::string> cmds, char *buf
                             ft_print_error(_channels[indexCha].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
                         else
                         {
-                            // :USER2222!~KJHGAkj@d2a6-9017-cfb7-6374-1329.iam.net.ma KICK #AHAMMAM USER0000 :USER2222
-                            // :USER2222!~KJHGAkj@d2a6-9017-cfb7-6374-1329.iam.net.ma KICK #AHAMMAM USER6666 :BLABLABAL
                             std::string msg;
                             msg = ":" + client.getNickName() + "!@localhost  KICK " + _channels[indexCha].get_chanlName() + " " + _clients[userIndex].getNickName() + " :";
                             if (cmds.size() == 3)

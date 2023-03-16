@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 12:56:10 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:15:27 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ Channel::Channel()
 {
     _chanlTopic = "";
     _modes.invitOnly = false;
+    _modes.key = false;
+    _modes.limit = false;
+    _modes.noOutsideMsg = false;
+    _modes.topic = false;
 };
 
 Channel::~Channel(){};
@@ -79,9 +83,9 @@ void Channel::add_Operator(Client clr)
 
 bool Channel::ft_isOperator(Client clt)
 {
-    for (size_t i = 0; i < _chanlUsers.size(); i++)
+    for (size_t i = 0; i < _chanOperator.size(); i++)
     {
-        if (clt == _chanlUsers[i])
+        if (clt == _chanOperator[i])
             return true;
     }
     return false;
