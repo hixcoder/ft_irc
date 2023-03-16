@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 08:55:12 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:11:34 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ public:
     std::string getBuff() const;
     std::string getMsgTemp() const;
     struct sockaddr_in getClientAddr() const;
+    void exitChannles(std::vector<Channel> channles);
     void addBuff(std::string buffer);
 };

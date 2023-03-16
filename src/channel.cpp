@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 08:40:25 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:11:43 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,6 @@ void Channel::updateChanlUsers(std::vector<Client> serverClients)
 std::vector<Client> Channel::get_chanlUsers()
 {
     return _chanlUsers;
-};
-
-void Channel::eraseUser(int i)
-{
-    _chanlUsers.erase(_chanlUsers.begin() + i);
-};
-
-void Channel::updateNickUser(int i, std::string nk)
-{
-    _chanlUsers[i].setNickName(nk);
 };
 void Channel::setModes(char mode, bool status)
 {

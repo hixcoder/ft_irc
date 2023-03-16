@@ -75,7 +75,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLusersCmd(client);
     else if (strcmp("/logtime", spl[0].c_str()) == 0)
         handleLogTime(client);
-    else if (strcmp("SEND", spl[0].c_str()) == 0)
+    else if (strcmp("DOWNLOAD", spl[0].c_str()) == 0)
         sendFile(client, spl);
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);

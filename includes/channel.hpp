@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 08:38:58 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:11:27 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,6 @@ typedef struct chanelmodes
     bool key;
     bool topic;
     bool noOutsideMsg;
-    // bool    operator_;
-    // bool    private_;
-    // bool    secret;
-    // bool    inviteOnly;
-    // bool    moderated;
-    // bool    setLimit;
-    // bool    ban;
-    // bool    key;
-    // bool    speakToOp;
 } ChanelModes;
 
 class Channel
@@ -65,6 +56,4 @@ public:
     int is_userInChannel(Client user);
     void printAllUser();
     void updateChanlUsers(std::vector<Client> serverClients);
-    void eraseUser(int i);
-    void updateNickUser(int i, std::string nk);
 };
