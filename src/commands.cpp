@@ -40,6 +40,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
             if (client.isUserFinishRegistered() == 3)
                 client.setMsgTemp(" (Please Enter USERNAME) ");
             ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+            client.setMsgTemp("");
         }
     }
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
