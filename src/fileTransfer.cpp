@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   fileTransfer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 14:49:46 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/15 14:45:45 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:48:00 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
+#include "../includes/ircserv.hpp"
 
 void Server::sendFile(Client &client, std::vector<std::string> cmds)
 {
@@ -23,11 +24,11 @@ void Server::sendFile(Client &client, std::vector<std::string> cmds)
 	char buffer[1024];
 	std::string file;
 	FILE *fd = fopen(cmds[1].c_str(), "rb");
-	while(!feof(fd))
+	while (!feof(fd))
 	{
 		int size = fread(&buffer, 1, 1024, fd);
 		if (size < 0)
-			break ;
+			break;
 		file.append(buffer, size);
 	}
 	fclose(fd);
@@ -38,13 +39,13 @@ void Server::sendFile(Client &client, std::vector<std::string> cmds)
 		if (send_fd < 0)
 		{
 			std::cout << "Error creating socket" << std::endl;
-			return ;
+			return;
 		}
 		int opt = 1;
 		if (setsockopt(send_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
 		{
 			std::cout << "Error setting socket options" << std::endl;
-			return ;
+			return;
 		}
 		struct sockaddr_in addr;
 		int addrlen = sizeof(addr);
@@ -52,29 +53,29 @@ void Server::sendFile(Client &client, std::vector<std::string> cmds)
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(1000);
 		addr.sin_addr.s_addr = INADDR_ANY;
-		
-		if(bind(send_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+
+		if (bind(send_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 		{
 			std::cout << "Error binding socket hire" << std::endl;
-			return ;
+			return;
 		}
 		if (listen(send_fd, 1) < 0)
 		{
 			std::cout << "Error listening on socket" << std::endl;
-			return ;
+			return;
 		}
-		int new_socket = accept(send_fd, (struct sockaddr *)&addr, (socklen_t*)&addrlen);
+		int new_socket = accept(send_fd, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
 		if (new_socket < 0)
 		{
 			std::cout << "Error accepting connection" << std::endl;
-			return ;
+			return;
 		}
 		send(new_socket, file.c_str(), file.size(), 0);
 		close(new_socket);
 		close(send_fd);
 		exit(1);
 	}
-	msg = "PRIVMSG " + client.getNickName() +  " :" + '\x01' + "DCC SEND " + cmds[1] + " 0 1000 " + std::to_string(file.size()) + '\x01';
+	msg = "PRIVMSG " + client.getNickName() + " :" + '\x01' + "DCC SEND " + cmds[1] + " 0 1000 " + std::to_string(file.size()) + '\x01';
 	msg += "\r\n";
 	send(client.getFd(), msg.c_str(), msg.size(), 0);
 }

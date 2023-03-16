@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 09:11:43 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:25:41 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,15 @@ int Channel::getLimit() const
 {
     return _limit;
 }
+void Channel::eraseUser(int i)
+{
+    _chanlUsers.erase(_chanlUsers.begin() + i);
+};
 
+void Channel::updateNickUser(int i, std::string nk)
+{
+    _chanlUsers[i].setNickName(nk);
+};
 ChanelModes Channel::getModes() const
 {
     return _modes;
