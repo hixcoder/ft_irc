@@ -72,7 +72,7 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleTimeCmd(client);
     else if (strcmp("LUSER", spl[0].c_str()) == 0)
         handleLusersCmd(client);
-    else if (strcmp("/logtime", spl[0].c_str()) == 0)
+    else if (strcmp("LOGTIME", spl[0].c_str()) == 0)
         handleLogTime(client);
     else if (strcmp("DOWNLOAD", spl[0].c_str()) == 0)
         sendFile(client, spl);
@@ -116,8 +116,7 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
     {
         if (ft_isregister(client))
         {
-            // std::string msg = "::punch.wa.us.dal.net NICK : " + cmds[1] + "\n";
-            std::string msg = "> " + client.getNickName() + "!~" + (std::string)LOCAL_IP + " NICK :" + cmds[1] + "\n";
+            std::string msg = ":" + client.getNickName() + "!~@localhost NICK :" + cmds[1] + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
         }
         client.setNickName(cmds[1]);
@@ -550,12 +549,20 @@ void Server::handleHelpCmd(Client &client)
     helpmsg.append(GREEN);
     helpmsg.append("IRC Server Help: \n");
     helpmsg.append(RESET);
+    
     helpmsg.append(YELLOW);
     helpmsg.append("-Registration Commands:\n");
     helpmsg.append(RESET);
     helpmsg.append("\tPASS <password> : set your password\n");
     helpmsg.append("\tNICK <nickname> : set your nickname\n");
     helpmsg.append("\tUSER <username> <hostname> <servername> <realname> : set your username\n");
+    
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Send message Commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tPRIVMSG <receiver>{,<receiver>} <text to be sent> : send a message to a user or a channel\n");
+    helpmsg.append("\tNOTICE <nickname> <text> : send a notice to a user\n");
+    
     helpmsg.append(YELLOW);
     helpmsg.append("-Channel Commands:\n");
     helpmsg.append(RESET);
@@ -567,18 +574,25 @@ void Server::handleHelpCmd(Client &client)
     helpmsg.append("\tTOPIC <channel> [<topic>] : set or get channel topic\n");
     helpmsg.append("\tINVITE <nickname> <channel> : invite a user to a channel\n");
     helpmsg.append("\tKICK <channel> <user> [<comment>] : kick a user from a channel\n");
+  
     helpmsg.append(YELLOW);
     helpmsg.append("-Operator Commands:\n");
     helpmsg.append(RESET);
     helpmsg.append("\tKILL <nickname> <comment> : kill a user\n");
     helpmsg.append("\tOPER <username> <password> : become an IRC operator\n");
-    helpmsg.append("\tServer Informations Commands:\n");
-    helpmsg.append("\tLUSERS [<mask> [<target>]] : get the number of users\n");
+  
     helpmsg.append(YELLOW);
-    helpmsg.append("-Send message Commands:\n");
+    helpmsg.append("-Server Informations Commands:\n");
     helpmsg.append(RESET);
-    helpmsg.append("\tPRIVMSG <receiver>{,<receiver>} <text to be sent> : send a message to a user or a channel\n");
-    helpmsg.append("\tNOTICE <nickname> <text> : send a notice to a user\n");
+    helpmsg.append("\tLUSERS [<mask> [<target>]] : get the number of users\n");
+    helpmsg.append("\tHELP : to get infos about commands used in the server.\n");
+    helpmsg.append("\tVERSION [<server>]: is used  to  query  the  version  of  the  server program.\n");
+    helpmsg.append("\tTIME : is used to query local time from the specified server.\n");
+
+    helpmsg.append(YELLOW);
+    helpmsg.append("-Other commands:\n");
+    helpmsg.append(RESET);
+    helpmsg.append("\tQUIT [<Quit message>] : A client session is ended with a quit message.\n");
 
     send(client.getFd(), helpmsg.c_str(), helpmsg.size(), 0);
 }
@@ -591,14 +605,14 @@ void Server::handleTimeCmd(Client &client)
     gettimeofday(&t, NULL);
     time = t.tv_sec;
     struct tm *tm = localtime(&time);
-    std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " Time is :";
+    std::string msg = ":@localhost " + std::to_string(RPL_TIME) + " Time is :";
     msg.append(asctime(tm));
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
 void Server::handleLusersCmd(Client &client)
 {
-    std::string msg = "> " + client.getNickName() + " " + (std::string)LOCAL_IP + " LUSER :" + std::to_string(_clients.size()) + "\n";
+    std::string msg = ":@localhost " + client.getNickName() + " LUSER :" + std::to_string(_clients.size()) + "\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
@@ -613,7 +627,7 @@ void Server::handleQuitCmd(Client &client)
     {
         if (_clients[i].getFd() == client.getFd())
         {
-            std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " QUIT :" + "client " + client.getNickName() + " disconnected\n";
+            std::string msg = "ERROR :Closing Link: " + client.getHostName() + " (Quit: " + client.getNickName() + ")\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
             close(client.getFd());
             break;
@@ -626,7 +640,6 @@ void Server::handleLogTime(Client &client)
     long currentTime;
 
     currentTime = get_time();
-
     double minutes = (double)((currentTime - client.getStartTime())) / 60000.0;
 
     // Set precision to 3
@@ -634,21 +647,7 @@ void Server::handleLogTime(Client &client)
     oss << std::setprecision(2) << minutes;
     std::string x_str = oss.str();
 
-    std::string msg = "> Logtime for " + client.getNickName() + " is: " + x_str + " minutes\n";
+    std::string msg = ":@localhost " + client.getNickName() + " LOGTIME :" + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
-bool Server::isNickUserDuplicate(std::string nickUser)
-{
-    size_t i = 0;
-    while (i < _clients.size())
-    {
-        if (!_clients[i].getUserName().empty())
-        {
-            if (strcmp(nickUser.c_str(), _clients[i].getUserName().c_str()) == 0)
-                return 1;
-        }
-        i++;
-    }
-    return 0;
-};
