@@ -331,7 +331,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
     {
         for (size_t i = 0; i < _channels.size(); i++)
         {
-            std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
+            std::string msg = ":@localhost " + std::to_string(RPL_LIST) + " " +
                               client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                               std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -349,7 +349,7 @@ void Server::handleListCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (splChanls[j] == _channels[i].get_chanlName())
                 {
-                    std::string msg = ":localhost " + std::to_string(RPL_LIST) + " " +
+                    std::string msg = ":@localhost " + std::to_string(RPL_LIST) + " " +
                                       client.getNickName() + " " + _channels[i].get_chanlName() + " " +
                                       std::to_string(_channels[i].getClientsNbr()) + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -368,7 +368,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
         for (size_t i = 0; i < _channels.size(); i++)
 
             allUsers += _channels[i].getallUsers(allUsers, _clients);
-        std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
+        std::string msg = ":@localhost " + std::to_string(RPL_NAMREPLY) + " " +
                           client.getNickName() + " = * :" + allUsers + "\n";
 
         send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -389,7 +389,7 @@ void Server::handleNamesCmd(Client &client, std::vector<std::string> cmds)
                 {
                     allChanls += splChanls[j];
                     std::string tmp = "";
-                    std::string msg = ":localhost " + std::to_string(RPL_NAMREPLY) + " " +
+                    std::string msg = ":@localhost " + std::to_string(RPL_NAMREPLY) + " " +
                                       client.getNickName() + " = " + _channels[i].get_chanlName() + " :" + _channels[i].getallUsers(tmp, _clients) + "\n";
 
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -414,7 +414,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[i].get_chanlName(), RPL_NOTOPIC, client);
                 else
                 {
-                    std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " " +
+                    std::string msg = ":@localhost " + std::to_string(RPL_TOPIC) + " " +
                                       client.getNickName() + " " + _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
@@ -445,7 +445,7 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
                     chnlTopic += cmds[i];
                 }
                 _channels[i].setChannelTopic(chnlTopic);
-                std::string msg = ":localhost " + std::to_string(RPL_TOPIC) + " TOPIC " +
+                std::string msg = ":@localhost " + std::to_string(RPL_TOPIC) + " TOPIC " +
                                   _channels[i].get_chanlName() + " :" + _channels[i].getChannelTopic() + "\n";
                 send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 return;
@@ -497,10 +497,14 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
             {
                 if (_clients[i].getNickName() == cmds[1])
                 {
-                    std::string reason = cmds[2];
+                    std::string reason = "";
                     for (size_t i = 2; i < cmds.size(); i++)
-                        reason += " " + cmds[i];
-                    std::string msg = "> " + client.getNickName() + "~" + (std::string)LOCAL_IP + " KILL " + cmds[1] + ": " + reason + "\n";
+                    {
+                        if (i > 2)
+                            reason += " ";
+                        reason += cmds[i];
+                    }
+                    std::string msg = ":@localhost " + client.getNickName() + " KILL " + cmds[1] + " :" + reason + "\n";
                     send(_clients[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                     close(_clients[i].getFd());
                     return;
