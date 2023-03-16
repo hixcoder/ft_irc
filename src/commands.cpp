@@ -29,20 +29,19 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleUserCmd(client, spl, buffer);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         handleNickCmd(client, spl);
-    else if (!client.isRegistered())
-    {
-        if (isCmdExit(spl[0].c_str()))
-        {
-            if (client.isUserFinishRegistered() == 1)
-                client.setMsgTemp(" (Please Enter Password) ");
-            if (client.isUserFinishRegistered() == 2)
-                client.setMsgTemp(" (Please Enter NICKNAME) ");
-            if (client.isUserFinishRegistered() == 3)
-                client.setMsgTemp(" (Please Enter USERNAME) ");
-            ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
-            client.setMsgTemp("");
-        }
-    }
+    // else if (!client.isRegistered())
+    // {
+    //     if (isCmdExit(spl[0].c_str()))
+    //     {
+    //         if (client.isUserFinishRegistered() == 1)
+    //             client.setMsgTemp(" (Please Enter Password) ");
+    //         if (client.isUserFinishRegistered() == 2)
+    //             client.setMsgTemp(" (Please Enter NICKNAME) ");
+    //         if (client.isUserFinishRegistered() == 3)
+    //             client.setMsgTemp(" (Please Enter USERNAME) ");
+    //         ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+    //     }
+    // }
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
     else if (strcmp("NOTICE", spl[0].c_str()) == 0)
@@ -470,7 +469,7 @@ void Server::handleOperCmd(Client &client, std::vector<std::string> cmds)
             ft_print_error("OPER", ERR_PASSWDMISMATCH, client);
         else
         {
-            if (client.getHostName() == (std::string)LOCAL_IP)
+            if (client.getHostName() != "")
             {
                 client.setOper(true);
                 ft_print_error("OPER", RPL_YOUREOPER, client);
