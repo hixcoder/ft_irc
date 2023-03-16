@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 11:15:04 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:52:28 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,3 +251,18 @@ void Server::clean()
             close(_pollfds[i].fd);
     }
 }
+
+bool Server::isNickUserDuplicate(std::string nickUser)
+{
+    size_t i = 0;
+    while (i < _clients.size())
+    {
+        if (!_clients[i].getUserName().empty())
+        {
+            if (strcmp(nickUser.c_str(), _clients[i].getUserName().c_str()) == 0)
+                return 1;
+        }
+        i++;
+    }
+    return 0;
+};

@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:46:10 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 11:21:46 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:50:46 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@
 #define RPL_TOPIC 332            // "<channel> :<topic>"
 
 #define RPL_VERSION 351
+#define RPL_TIME 391
 
 // OUR
 #define JOIN_CHANNEL 55

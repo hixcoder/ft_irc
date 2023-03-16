@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 12:38:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:52:55 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void ft_print_error(std::string cmd, int type, Client client)
     else if (type == ERR_PASSWDMISMATCH)
         msg = temp + cmd + " :Password incorrect\n";
     else if (type == ERR_ALREADYREGISTRED)
-        msg = temp + ":You may not reregister\n";
+        msg = temp + cmd + " :You may not reregister\n";
     else if (type == ERR_NONICKNAMEGIVEN)
         msg = temp + client.getNickName() + " :No nickname given\n";
     else if (type == ERR_ERRONEUSNICKNAME)
-        msg = temp + " :Erroneus nickname\n";
+        msg = temp + client.getNickName() + " :Erroneus nickname\n";
     else if (type == ERR_NICKNAMEINUSE)
         msg = temp + " :Nickname is already in use\n";
     else if (type == ERR_NORECIPIENT)

@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 13:39:53 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:53:24 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void Server::ft_kickCmd(Client &client, std::vector<std::string> cmds, char *buf
                             else
                             {
                                 if (cmds[3][0] != ':')
-                                    msg = msg + cmd[3] + "\n";
+                                    msg = msg + cmds[3] + "\n";
                                 else
                                     msg = msg + strchr(buffer, ':') + "\n";
                             }
