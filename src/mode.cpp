@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/16 16:58:22 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:43:12 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 	index = is_channel_Exit(_channels, cmd[1]);
 	if (cmd[1] != user.getNickName() && index == -1)
 	{
-		msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(401) + ", " + std::to_string(403) + " MODE: can't find " + cmd[1] + " in channels or users\n";
+		msg = ":@localhos " + std::to_string(401) + " "  + " MODE: can't find " + cmd[1] + " in channels or users\n";
 		send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 		return;
 	}
@@ -34,7 +34,7 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 		user.setModes(cmd[2][1], true);
 	else if (cmd[2][0] == '-')
 		user.setModes(cmd[2][1], false);
-	msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + user.getNickName() + " " + cmd[2] + "\n";
+	msg = ":@localhost MODE " + cmd[1] + " " + cmd[2] + "\n";
 	send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
@@ -77,7 +77,7 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 		_channels[i].setModes(cmds[2][1], true);
 	else if (cmds[2][0] == '-')
 		_channels[i].setModes(cmds[2][1], false);
-	std::string msg = "> " + (std::string)LOCAL_IP + " " + std::to_string(221) + " MODE: " + cmds[1] + " " + cmds[2] + "\n";
+	std::string msg = ":@localhost MODE " + cmds[1] + " " + cmds[2] + "\n";
 	send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
