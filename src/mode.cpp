@@ -6,7 +6,7 @@
 /*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/17 09:43:12 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/17 10:37:09 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool validchanelMode(std::string mode)
 {
 	if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
 		return (false);
-	if (mode[1] == 'o' || mode[1] == 'n' || mode[1] == 'l' || mode[1] == 't' || mode[1] == 'k')
+	if (mode[1] == 'o' || mode[1] == 'n' || mode[1] == 'l' || mode[1] == 't' || mode[1] == 'k' || mode[1] == 'i')
 		return (true);
 	return (false);
 }

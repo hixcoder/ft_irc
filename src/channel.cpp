@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 09:23:32 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 10:37:35 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,8 @@ void Channel::setModes(char mode, bool status)
         _modes.topic = status;
     else if (mode == 'n')
         _modes.noOutsideMsg = status;
+    else if (mode == 'i')
+        _modes.invitOnly = status;
 }
 void Channel::setLimit(int limit)
 {
