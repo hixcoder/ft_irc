@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 15:35:51 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 10:50:51 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void Server::ft_partCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
         ft_print_error("PART", ERR_NEEDMOREPARAMS, client);
+    else if (cmds[1][0] == '0' && atoi(cmds[1].c_str()) == 0)
+        eraseUserFromChannels(client);
     else
     {
         std::vector<std::string> chanls;

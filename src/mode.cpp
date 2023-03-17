@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/17 10:37:09 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/17 10:48:14 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 	index = is_channel_Exit(_channels, cmd[1]);
 	if (cmd[1] != user.getNickName() && index == -1)
 	{
-		msg = ":@localhos " + std::to_string(401) + " "  + " MODE: can't find " + cmd[1] + " in channels or users\n";
+		msg = ":@localhos " + std::to_string(401) + " " + " MODE: can't find " + cmd[1] + " in channels or users\n";
 		send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 		return;
 	}

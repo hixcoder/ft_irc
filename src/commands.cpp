@@ -242,7 +242,7 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
         {
-            if (clts[k][0] != '#')
+            if (clts[k][0] != '#' && clts[k][0] != '&')
             {
 
                 int fd = ft_isUserExist(clts[k], _clients);
@@ -297,8 +297,8 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
         ft_print_error("JOIN", ERR_NEEDMOREPARAMS, client);
-    else if (!is_validChannel(cmds[1]))
-        ft_print_error("JOIN", ERR_NOSUCHCHANNEL, client);
+    else if (cmds[1][0] == '0' && atoi(cmds[1].c_str()) == 0)
+        eraseUserFromChannels(client);
     else
     {
         std::vector<std::string> chanls;
@@ -308,6 +308,11 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
             chanlsPass = ft_split(cmds[2], ',');
         for (size_t l = 0; l < chanls.size(); l++)
         {
+            if (!is_validChannel(chanls[l]))
+            {
+                ft_print_error(chanls[l], ERR_NOSUCHCHANNEL, client);
+                continue;
+            }
             int indx = is_channel_Exit(_channels, chanls[l]);
             std::string key;
             if (!cmds[2].empty() && l < chanlsPass.size())
@@ -535,7 +540,7 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
                             reason += " ";
                         reason += cmds[i];
                     }
-                    std::string msg = ":@localhost " + std::to_string(001) + " KILL :you have been killed by @"+ client.getNickName() + " because: " + reason + "\n";
+                    std::string msg = ":@localhost " + std::to_string(001) + " KILL :you have been killed by @" + client.getNickName() + " because: " + reason + "\n";
                     send(_clients[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                     close(_clients[i].getFd());
                     return;
@@ -679,6 +684,6 @@ void Server::handleLogTime(Client &client)
     oss << std::setprecision(2) << minutes;
     std::string x_str = oss.str();
 
-    std::string msg = ":@localhost "+ std::to_string(001)+ " " + client.getNickName() + " LOGTIME :" + x_str + " minutes\n";
+    std::string msg = ":@localhost " + std::to_string(001) + " " + client.getNickName() + " LOGTIME :" + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }

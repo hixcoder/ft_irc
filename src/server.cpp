@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 09:29:10 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 11:08:39 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,21 +235,39 @@ void Server::ft_updateNickInChanls(Client clt)
 
 void Server::eraseUserFromChannels(Client clt)
 {
-    for (size_t i = 0; i < _channels.size(); i++)
+    size_t i = 0;
+    while (i < _channels.size())
     {
         for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
         {
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
             {
                 _channels[i].eraseUser(j);
-                if (clt.getFd() == _channels[i].getCreator())
+                if (_channels[i].get_chanlUsers().size() > 0)
                 {
-                    _channels[i].remove_Operator();
-                    if (_channels[i].get_chanlUsers().size() > 0)
+                    if (clt.getFd() == _channels[i].getCreator())
+                    {
+                        _channels[i].remove_Operator();
                         _channels[i].add_Operator(_channels[i].get_chanlUsers()[0]);
+                    }
+                }
+                else
+                {
+                    delete_Channel(_channels[i]);
+                    i--;
                 }
             }
         }
+        i++;
+    }
+};
+
+void Server::delete_Channel(Channel cnl)
+{
+    for (size_t i = 0; i < _channels.size(); i++)
+    {
+        if (_channels[i].get_chanlName() == cnl.get_chanlName())
+            _channels.erase(_channels.begin() + i);
     }
 };
 // clean up all the sockets that are open
