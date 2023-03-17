@@ -182,7 +182,7 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
         {
-            if (clts[k][0] != '#')
+            if (clts[k][0] != '#' && clts[k][0] != '&')
             {
 
                 int fd = ft_isUserExist(clts[k], _clients);
@@ -193,10 +193,11 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                 else
                 {
                     std::string msg;
+                    msg = ":" + client.getUserName() + "!" + client.getNickName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName() + " :";
                     if (cmds[2][0] != ':')
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
+                        msg = msg + cmds[2] + "\n";
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
+                        msg = msg + strchr(buffer, ':') + "\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -253,10 +254,11 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
                 else
                 {
                     std::string msg;
+                    msg = ":" + client.getUserName() + "!" + client.getNickName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName() + " :";
                     if (cmds[2][0] != ':')
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " :" + cmds[2] + "\n";
+                        msg = msg + cmds[2] + "\n";
                     else
-                        msg = ":" + client.getNickName() + " PRIVMSG " + _clients[fd].getNickName() + " " + strchr(buffer, ':') + "\n";
+                        msg = msg + strchr(buffer, ':') + "\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -264,11 +266,11 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
             {
                 int fd = ft_isChannelExist(clts[k], _channels);
                 if (fd == -1)
-                    ;
+                    ft_print_error(cmds[k], ERR_NOSUCHNICK, client);
                 else
                 {
                     if (_channels[fd].getModes().noOutsideMsg == true && _channels[fd].is_userInChannel(client) == -1)
-                        ;
+                        ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
                     {
                         std::string msg;
