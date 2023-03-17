@@ -233,7 +233,11 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
 // NOTICE
 void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char *buffer)
 {
-    if (cmds.size() >= 3)
+    if (cmds.size() == 1)
+        ;
+    else if (cmds.size() == 2)
+        ;
+    else
     {
         std::vector<std::string> clts = ft_split(cmds[1], ',');
         for (size_t k = 0; k < clts.size(); k++)
@@ -263,7 +267,7 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
                     ;
                 else
                 {
-                    if (_channels[fd].getModes().noOutsideMsg == false && _channels[fd].is_userInChannel(client) == -1)
+                    if (_channels[fd].getModes().noOutsideMsg == true && _channels[fd].is_userInChannel(client) == -1)
                         ;
                     else
                     {
@@ -271,7 +275,10 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
                         if (cmds[2][0] != ':')
                             msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
                         else
+                        {
                             msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
+                            std::cout << strchr(buffer, ':') << "\n";
+                        }
                         for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                         {
                             send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
@@ -317,8 +324,8 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                 if (cmds[2][0] == '&')
                     channel.setInvitOnly(true);
                 channel.add_user(client);
-                channel.setCreator(client.getNickName());
                 channel.add_Operator(client);
+                channel.setCreator(client.getFd());
                 _channels.push_back(channel);
             }
             else

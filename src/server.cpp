@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 09:01:59 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:29:10 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,15 @@ void Server::eraseUserFromChannels(Client clt)
         for (size_t j = 0; j < _channels[i].get_chanlUsers().size(); j++)
         {
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
+            {
                 _channels[i].eraseUser(j);
+                if (clt.getFd() == _channels[i].getCreator())
+                {
+                    _channels[i].remove_Operator();
+                    if (_channels[i].get_chanlUsers().size() > 0)
+                        _channels[i].add_Operator(_channels[i].get_chanlUsers()[0]);
+                }
+            }
         }
     }
 };

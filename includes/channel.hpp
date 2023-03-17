@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 16:01:38 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:29:30 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ private:
     std::string _chanlName;
     std::string _chanlTopic;
     std::string _chanlPass;
-    std::string _creator;
+    int _fdCreator;
     int _limit;
     ChanelModes _modes;
     std::vector<Client> _chanlUsers;
@@ -45,7 +45,7 @@ public:
     void setModes(char mode, bool status);
     void setLimit(int limit);
     void setInvitOnly(bool invt);
-    void setCreator(std::string ctr);
+    void setCreator(int ctr);
 
     std::string get_chanlName();
     std::string get_chanlPass() const;
@@ -54,9 +54,10 @@ public:
     int getLimit() const;
     ChanelModes getModes() const;
     bool getInvitOnly();
-    std::string getCreator();
+    int getCreator();
 
     void add_Operator(Client clr);
+    void remove_Operator();
     std::vector<Client> getOperChannel();
     bool ft_isOperator(Client clt);
 

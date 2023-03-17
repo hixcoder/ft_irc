@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/16 16:15:27 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:23:32 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ std::string Channel::getChannelTopic() const { return _chanlTopic; }
 // other functions
 int Channel::getClientsNbr() { return _chanlUsers.size(); }
 
-void Channel::setCreator(std::string ctr)
+void Channel::setCreator(int ctr)
 {
-    _creator = ctr;
+    _fdCreator = ctr;
 };
 
-std::string Channel::getCreator() { return _creator; };
+int Channel::getCreator() { return _fdCreator; };
 
 std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> serverClients)
 {
@@ -79,6 +79,11 @@ void Channel::add_user(Client &user)
 void Channel::add_Operator(Client clr)
 {
     _chanOperator.push_back(clr);
+};
+
+void Channel::remove_Operator()
+{
+    _chanOperator.pop_back();
 };
 
 bool Channel::ft_isOperator(Client clt)
