@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:49 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 12:19:50 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 14:34:45 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ private:
     int _limit;
     ChanelModes _modes;
     std::vector<Client> _chanlUsers;
-    std::vector<Client> _chanOperator;
+    std::vector<Client> _chanOperators;
 
 public:
     Channel();

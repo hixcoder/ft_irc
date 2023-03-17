@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 12:23:23 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:26:07 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ void Server::ft_updateNickInChanls(Client clt)
             if (clt.getFd() == _channels[i].get_chanlUsers()[j].getFd())
             {
                 _channels[i].updateNickUser(i, clt.getNickName());
-                if (_channels[i].is_userInChannel(clt))
+                if (_channels[i].ft_isOperator(clt))
                 {
                     _channels[i].remove_Operator();
                     _channels[i].add_Operator(clt);

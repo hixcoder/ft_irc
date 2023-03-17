@@ -6,7 +6,7 @@
 /*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 12:21:32 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/17 14:34:59 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ void Channel::add_user(Client &user)
 
 void Channel::add_Operator(Client clr)
 {
-    _chanOperator.push_back(clr);
+    _chanOperators.push_back(clr);
 };
 
 void Channel::remove_Operator()
 {
-    _chanOperator.pop_back();
+    _chanOperators.pop_back();
 };
 
 bool Channel::ft_isOperator(Client clt)
 {
-    for (size_t i = 0; i < _chanOperator.size(); i++)
+    for (size_t i = 0; i < _chanOperators.size(); i++)
     {
-        if (clt == _chanOperator[i])
+        if (clt == _chanOperators[i])
             return true;
     }
     return false;
@@ -98,7 +98,7 @@ bool Channel::ft_isOperator(Client clt)
 
 std::vector<Client> Channel::getOperChannel()
 {
-    return _chanOperator;
+    return _chanOperators;
 };
 // :punch.wa.us.dal.net NOTICE @#OOOOO :LKOOOLKO invited LKOOO into channel #OOOOO
 void Channel::add_userbyInveted(Client &user, Client &geust)
@@ -136,6 +136,15 @@ void Channel::updateChanlUsers(std::vector<Client> serverClients)
         {
             if (_chanlUsers[i].getFd() == serverClients[j].getFd())
                 _chanlUsers[i] = serverClients[j];
+        }
+    }
+
+    for (size_t i = 0; i < _chanOperators.size(); i++)
+    {
+        for (size_t j = 0; j < serverClients.size(); j++)
+        {
+            if (_chanOperators[i].getFd() == serverClients[j].getFd())
+                _chanOperators[i] = serverClients[j];
         }
     }
 }
