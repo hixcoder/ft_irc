@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 11:42:56 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:01:28 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void Server::ft_kickCmd(Client &client, std::vector<std::string> cmds, char *buf
                         ft_print_error(_channels[indexCha].get_chanlName(), ERR_USERNOTINCHANNEL, client);
                     else
                     {
-                        if (_channels[indexCha].ft_isOperator(client) == false)
+                        if (_channels[indexCha].ft_isOperator(client) == false && (!client.getModes('O') || !client.getModes('o')))
                             ft_print_error(_channels[indexCha].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
                         else
                         {
