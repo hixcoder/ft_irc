@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 11:08:39 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 11:41:53 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,8 +253,9 @@ void Server::eraseUserFromChannels(Client clt)
                 }
                 else
                 {
-                    delete_Channel(_channels[i]);
+                    delete_Channel(i);
                     i--;
+                    break;
                 }
             }
         }
@@ -262,13 +263,9 @@ void Server::eraseUserFromChannels(Client clt)
     }
 };
 
-void Server::delete_Channel(Channel cnl)
+void Server::delete_Channel(int i)
 {
-    for (size_t i = 0; i < _channels.size(); i++)
-    {
-        if (_channels[i].get_chanlName() == cnl.get_chanlName())
-            _channels.erase(_channels.begin() + i);
-    }
+    _channels.erase(_channels.begin() + i);
 };
 // clean up all the sockets that are open
 void Server::clean()
