@@ -339,7 +339,8 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                     ft_print_error(_channels[indx].get_chanlName(), ERR_INVITEONLYCHAN, client);
                 else
                 {
-                    if (_channels[indx].getModes().limit && _channels[indx].getLimit() < (int)_channels[indx].get_chanlUsers().size())
+                    std::cout << _channels[indx].getLimit() << " - " << (int)_channels[indx].get_chanlUsers().size() << "\n";
+                    if (_channels[indx].getModes().limit && _channels[indx].getLimit() <= (int)_channels[indx].get_chanlUsers().size())
                         ft_print_error(_channels[indx].get_chanlName(), ERR_CHANNELISFULL, client);
                     else if (_channels[indx].is_userInChannel(client) == -1)
                     {
@@ -348,10 +349,6 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                         else
                             ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                     }
-                }
-                for (size_t h = 0; h < _channels[indx].get_chanlUsers().size(); h++)
-                {
-                    std::cout << h << "- " << _channels[indx].get_chanlUsers()[h].getNickName() << "\n";
                 }
             }
         }

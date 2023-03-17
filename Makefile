@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+         #
+#    By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:41:24 by hboumahd          #+#    #+#              #
-#    Updated: 2023/03/17 11:39:59 by hboumahd         ###   ########.fr        #
+#    Updated: 2023/03/17 16:59:25 by ahammam          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,9 @@ $(NAME): ${SRCOBJ}
 all: ${NAME}
 
 s:
-	@./ircserv 5555 00
+	@./ircserv 5553 00
 c:
-	@nc -c 127.0.0.1 5555
+	@nc -c 127.0.0.1 5553
 
 clean:
 	@rm -f ${SRCOBJ}
