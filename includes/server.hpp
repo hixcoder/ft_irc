@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 11:34:30 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:23:47 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ private:
     std::string _serverName;
 
 public:
-    Server(char *port, char *passwd);
+    Server(int port, char *passwd);
     ~Server();
 
     void runServer();

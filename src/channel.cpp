@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 10:37:35 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:21:32 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
         size_t pos = existedUsers.find(_chanlUsers[i].getNickName());
         if (pos == std::string::npos)
         {
-            if (_chanlUsers[i].getModes('o') || _chanlUsers[i].getModes('O'))
+            if (ft_isOperator(_chanlUsers[i]))
                 users += " @" + _chanlUsers[i].getNickName();
             else
                 users += " " + _chanlUsers[i].getNickName();
@@ -144,14 +144,17 @@ void Channel::setInvitOnly(bool invt)
 {
     _modes.invitOnly = invt;
 };
+
 bool Channel::getInvitOnly()
 {
     return _modes.invitOnly;
 };
+
 std::vector<Client> Channel::get_chanlUsers()
 {
     return _chanlUsers;
 };
+
 void Channel::setModes(char mode, bool status)
 {
     if (mode == 'l')
@@ -165,6 +168,7 @@ void Channel::setModes(char mode, bool status)
     else if (mode == 'i')
         _modes.invitOnly = status;
 }
+
 void Channel::setLimit(int limit)
 {
     _limit = limit;
@@ -174,6 +178,7 @@ int Channel::getLimit() const
 {
     return _limit;
 }
+
 void Channel::eraseUser(int i)
 {
     _chanlUsers.erase(_chanlUsers.begin() + i);
@@ -183,6 +188,7 @@ void Channel::updateNickUser(int i, std::string nk)
 {
     _chanlUsers[i].setNickName(nk);
 };
+
 ChanelModes Channel::getModes() const
 {
     return _modes;
