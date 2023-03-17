@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 09:29:10 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 11:41:13 by hboumahd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ircserv.hpp"
 
-Server::Server(char *port, char *passwd)
+Server::Server(int port, char *passwd)
 {
     _passwd = passwd;
-    _port = atoi(port);
+    _port = port;
     _timeout = 0;
     _endServer = 0;
     _closeCon = 0;

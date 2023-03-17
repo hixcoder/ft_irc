@@ -467,11 +467,20 @@ void Server::handleTopicCmd(Client &client, std::vector<std::string> cmds)
 
                 // change channel topic
                 std::string chnlTopic = "";
-                for (size_t i = 2; i < cmds.size(); i++)
+                if (cmds.size() == 2 || (cmds.size() > 2 && cmds[2][0] != ':'))
                 {
-                    if (i > 2)
-                        chnlTopic += " ";
-                    chnlTopic += cmds[i];
+                    chnlTopic = cmds[2];
+                }
+                else if (cmds.size() > 2 && cmds[2][0] == ':')
+                {
+                    for (size_t i = 2; i < cmds.size(); i++)
+                    {
+                        if (i == 2 && cmds[2][0] == ':')
+                            cmds[2].erase(0, 1);
+                        if (i > 2)
+                            chnlTopic += " ";
+                        chnlTopic += cmds[i];
+                    }
                 }
                 if (cmds.size() > 2 && chnlTopic[0] == ':')
                     chnlTopic.erase(0, 1);
