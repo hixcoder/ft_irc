@@ -528,7 +528,7 @@ void Server::handleKillCmd(Client &client, std::vector<std::string> cmds)
                             reason += " ";
                         reason += cmds[i];
                     }
-                    std::string msg = ":@localhost " + client.getNickName() + " KILL " + cmds[1] + " :" + reason + "\n";
+                    std::string msg = ":@localhost " + std::to_string(001) + " KILL :you have been killed by @"+ client.getNickName() + " because: " + reason + "\n";
                     send(_clients[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                     close(_clients[i].getFd());
                     return;
@@ -637,7 +637,7 @@ void Server::handleTimeCmd(Client &client)
 
 void Server::handleLusersCmd(Client &client)
 {
-    std::string msg = ":@localhost " + client.getNickName() + " LUSER :" + std::to_string(_clients.size()) + "\n";
+    std::string msg = ":@localhost " + std::to_string(001) + client.getNickName() + " LUSER :server contain " + std::to_string(_clients.size()) + " users.\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
@@ -652,7 +652,7 @@ void Server::handleQuitCmd(Client &client)
     {
         if (_clients[i].getFd() == client.getFd())
         {
-            std::string msg = "ERROR :Closing Link: " + client.getHostName() + " (Quit: " + client.getNickName() + ")\n";
+            std::string msg = ":@localhost " + std::to_string(001) + " " + client.getNickName() + " :you quit the server.\n";
             send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
             close(client.getFd());
             break;
@@ -672,6 +672,6 @@ void Server::handleLogTime(Client &client)
     oss << std::setprecision(2) << minutes;
     std::string x_str = oss.str();
 
-    std::string msg = ":@localhost " + client.getNickName() + " LOGTIME :" + x_str + " minutes\n";
+    std::string msg = ":@localhost "+ std::to_string(001)+ " " + client.getNickName() + " LOGTIME :" + x_str + " minutes\n";
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
