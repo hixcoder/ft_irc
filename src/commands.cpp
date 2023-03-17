@@ -636,12 +636,9 @@ void Server::handleHelpCmd(Client &client)
 
 void Server::handleTimeCmd(Client &client)
 {
-    // add RPL_TIME
-    time_t time;
     struct timeval t;
     gettimeofday(&t, NULL);
-    time = t.tv_sec;
-    struct tm *tm = localtime(&time);
+    struct tm *tm = localtime(&t.tv_sec);
     std::string msg = ":@localhost " + std::to_string(RPL_TIME) + " Time is :";
     msg.append(asctime(tm));
     send(client.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
