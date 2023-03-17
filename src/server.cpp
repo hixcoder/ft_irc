@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 17:13:09 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:01:59 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,6 @@ void Server::addClient()
         bzero((char *)&clt_addr, sizeof(clt_addr));
         int addrlen = sizeof(clt_addr);
         _newSocket = accept(_serverSocket, (struct sockaddr *)&clt_addr, (socklen_t *)&addrlen);
-        // std::cout << "porr clinet " << clt_addr.sin_port << "\n";
-        // std::cout << "adress clinet " << clt_addr.sin_addr.s_addr << "\n";
         if (_newSocket < 0)
         {
             if (errno != EWOULDBLOCK)
@@ -161,6 +159,9 @@ void Server::addClient()
         Client newclient(cliSocket.fd);
         newclient.setClientAddr(clt_addr);
         _clients.push_back(newclient);
+        // :punch.wa.us.dal.net NOTICE AUTH :*** Looking up your hostname...
+        std::string welcomeMsg = ":@localhost " + std::to_string(RPL_WELCOME) + " NOTICE AUTH  :Welcome to the IRC server!\n";
+        send(newclient.getFd(), welcomeMsg.c_str(), strlen(welcomeMsg.c_str()), 0);
     }
 }
 
