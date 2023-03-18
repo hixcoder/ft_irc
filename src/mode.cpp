@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/17 10:48:14 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 13:22:18 by alouzizi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,48 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 		return (handlechanlModeCmd(user, cmd, index));
 	if (!validMode(cmd[2]))
 		return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
-	if (cmd[2][0] == '+')
-		user.setModes(cmd[2][1], true);
-	else if (cmd[2][0] == '-')
-		user.setModes(cmd[2][1], false);
+	size_t l = 1;
+	while(l < cmd[1].length())
+	{
+		if (cmd[2][0] == '+')
+			user.setModes(cmd[2][l], true);
+		else if (cmd[2][0] == '-')
+			user.setModes(cmd[2][l], false);
+		l++;
+	}
 	msg = ":@localhost MODE " + cmd[1] + " " + cmd[2] + "\n";
 	send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
 
+bool validMode(std::string mode)
+{
+	size_t i = 1;
+
+	if ((mode[0] != '+' && mode[0] != '-'))
+		return (false);
+	while (i < mode.length())
+	{
+		if (mode[i] != 'i' && mode[i] != 'w' && mode[i] != 's' && mode[i] != 'o' && mode[i] != 'O' && mode[i] != 'r' && mode[i] != 'a')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 bool validchanelMode(std::string mode)
 {
-	if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
+	size_t i = 1;
+	if ((mode[0] != '+' && mode[0] != '-'))
 		return (false);
-	if (mode[1] == 'o' || mode[1] == 'n' || mode[1] == 'l' || mode[1] == 't' || mode[1] == 'k' || mode[1] == 'i')
-		return (true);
-	return (false);
+	while(i < mode.length())
+	{
+		if (mode[1] != 'o' && mode[1] != 'n' && mode[1] != 'l' && mode[1] != 't' && mode[1] != 'k' && mode[1] != 'i')
+			return (false);
+		i++;
+	}
+	return (true);
 }
+
 
 void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int i)
 {
@@ -56,36 +82,39 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 		return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, user));
 	if (!validchanelMode(cmds[2]))
 		return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
-	if ((cmds[2][1] == 'l' || cmds[2][1] == 'k') && cmds.size() < 4)
-		return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
-	else
+	size_t l = 1;
+	size_t index = 2;
+	while(l < cmds[2].length())
 	{
-		if (cmds[2][1] == 'l' && cmds[2][0] == '+')
-		{
-			if (atoi(cmds[3].c_str()) <= 0 || _channels[i].get_chanlUsers().size() > (size_t)atoi(cmds[3].c_str()))
-				return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANNELISFULL, user));
-			_channels[i].setLimit(atoi(cmds[3].c_str()));
-		}
-		else if (cmds[2][1] == 'k' && cmds[2][0] == '+')
-		{
-			if (_channels[i].getModes().key)
-				return (ft_print_error("MODE", ERR_KEYSET, user));
-			_channels[i].set_chanlPass(cmds[3]);
-		}
+		//if ((cmds[2][l] == 'l' || cmds[2][l] == 'k') && cmds.size() < 4)
+		// else
+		// {
+			if (index + 1 < cmds.size())
+			{
+				index++;
+				if (cmds[2][l] == 'l' && cmds[2][0] == '+')
+				{
+					if (atoi(cmds[index].c_str()) <= 0 || _channels[i].get_chanlUsers().size() > (size_t)atoi(cmds[index].c_str()))
+						return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANNELISFULL, user));
+					_channels[i].setLimit(atoi(cmds[index].c_str()));
+				}
+				else if (cmds[2][l] == 'k' && cmds[2][0] == '+')
+				{
+					if (_channels[i].getModes().key)
+						return (ft_print_error("MODE", ERR_KEYSET, user));
+					_channels[i].set_chanlPass(cmds[index]);
+				}
+			}
+			else
+				return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
+				
+		// }
+		if (cmds[2][0] == '+')
+			_channels[i].setModes(cmds[2][l], true);
+		else if (cmds[2][0] == '-')
+			_channels[i].setModes(cmds[2][l], false);
+		l++;
 	}
-	if (cmds[2][0] == '+')
-		_channels[i].setModes(cmds[2][1], true);
-	else if (cmds[2][0] == '-')
-		_channels[i].setModes(cmds[2][1], false);
 	std::string msg = ":@localhost MODE " + cmds[1] + " " + cmds[2] + "\n";
 	send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-}
-
-bool validMode(std::string mode)
-{
-	if (mode.length() != 2 && (mode[0] != '+' && mode[0] != '-'))
-		return (false);
-	if (mode[1] == 'i' || mode[1] == 'w' || mode[1] == 's' || mode[1] == 'o' || mode[1] == 'O' || mode[1] == 'r' || mode[1] == 'a')
-		return (true);
-	return (false);
 }
