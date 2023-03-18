@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:00:48 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/18 12:15:26 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:19:56 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void ft_print_error(std::string cmd, int type, Client client)
 {
-    std::string temp = ":@localhost " + std::to_string(type) + " ";
+    std::string temp = ":IRC-1337 " + std::to_string(type) + " ";
     std::string msg;
     if (type == ERR_NEEDMOREPARAMS)
         msg = temp + client.getNickName() + " " + cmd + " :Not enough parametersss\n";
@@ -76,8 +76,8 @@ void ft_print_error(std::string cmd, int type, Client client)
         msg = temp + cmd + " :You're not on that channel\n";
     else if (type == ERR_USERONCHANNEL)
         msg = temp + client.getNickName() + " " + cmd + " :is already on channel\n";
-    else if (type == RPL_INVITING) // :punch.wa.us.dal.net 341 LKOOOLKO LKOOO #OOOOO
-        msg = temp + client.getNickName() + " " + client.getMsgTemp() + cmd + "\n";
+    else if (type == RPL_INVITING) // IRC-1337 341 U1 U2 #CH
+        msg = temp + client.getNickName() + " " + cmd + "\n";
     else if (type == ERR_INVITEONLYCHAN)
         msg = temp + cmd + " :Cannot join channel (+i)\n";
     else if (type == ERR_USERNOTINCHANNEL)

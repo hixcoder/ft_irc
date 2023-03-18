@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/18 13:37:34 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:24:52 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
 
 void Channel::add_user(Client &user)
 {
-    //  :lho!ahammam@127.0.0.1 JOIN #ll
-    //  :IRC-1337 353 fas = #ll :hel @lho fas
-    // :IRC-1337 366 fas #ll :End of /NAMES list
     std::string msg;
     msg = ":" + user.getNickName() + "!" + user.getUserName() + "@127.0.0.1 JOIN " + _chanlName + "\n";
     _chanlUsers.push_back(user);
@@ -109,8 +106,7 @@ std::vector<Client> Channel::getOperChannel()
 void Channel::add_userbyInveted(Client &user, Client &geust)
 {
     std::string msg;
-
-    msg = ":" + user.getNickName() + "!~:@localhost  NOTICE @" + _chanlName + " :" + user.getNickName() + " invited " + geust.getNickName() + "into channel " + _chanlName + "\n";
+    msg = ":IRC-1337 NOTICE @" + _chanlName + " :" + user.getNickName() + " invited " + geust.getNickName() + " into channel " + _chanlName + "\n";
     _chanlUsers.push_back(geust);
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
@@ -124,14 +120,6 @@ int Channel::is_userInChannel(Client user)
     }
     return -1;
 };
-
-void Channel::printAllUser()
-{
-    for (size_t i = 0; i < _chanlUsers.size(); i++)
-    {
-        std::cout << i << "-----> " << _chanlUsers[i].getNickName() << "\n";
-    }
-}
 
 void Channel::updateChanlUsers(std::vector<Client> serverClients)
 {
@@ -195,7 +183,10 @@ int Channel::getLimit() const
 
 void Channel::eraseUser(int i)
 {
+    std::string msg;
+    msg = ":" + _chanlUsers[i].getNickName() + "!" + _chanlUsers[i].getUserName() + "@127.0.0.1 PART " + _chanlName + "\n";
     _chanlUsers.erase(_chanlUsers.begin() + i);
+    send(_chanlUsers[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };
 
 void Channel::updateNickUser(int i, std::string nk)

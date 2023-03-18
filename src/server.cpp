@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/18 11:01:45 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:37:50 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,28 @@ Server::Server(int port, char *passwd)
     pollfd servSocket = {_serverSocket, POLLIN, 0};
     _pollfds.push_back(servSocket);
 
-    _listCmds.push_back("PRIVMSG");
-    _listCmds.push_back("NOTICE");
-    _listCmds.push_back("QUIT");
-    _listCmds.push_back("OPER");
-    _listCmds.push_back("JOIN");
-    _listCmds.push_back("MODE");
-    _listCmds.push_back("KILL");
-    _listCmds.push_back("LIST");
-    _listCmds.push_back("NAMES");
-    _listCmds.push_back("TOPIC");
-    _listCmds.push_back("VERSION");
-    _listCmds.push_back("HELP");
-    _listCmds.push_back("TIME");
-    _listCmds.push_back("LUSER");
-    _listCmds.push_back("PART");
-    _listCmds.push_back("INVITE");
-    _listCmds.push_back("KICK");
+    _listCmds.push_back("pass");
+    _listCmds.push_back("user");
+    _listCmds.push_back("nick");
+    _listCmds.push_back("privmsg");
+    _listCmds.push_back("notice");
+    _listCmds.push_back("quit");
+    _listCmds.push_back("oper");
+    _listCmds.push_back("join");
+    _listCmds.push_back("part");
+    _listCmds.push_back("mode");
+    _listCmds.push_back("kill");
+    _listCmds.push_back("list");
+    _listCmds.push_back("names");
+    _listCmds.push_back("invite");
+    _listCmds.push_back("kick");
+    _listCmds.push_back("topic");
+    _listCmds.push_back("version");
+    _listCmds.push_back("help");
+    _listCmds.push_back("time");
+    _listCmds.push_back("luser");
+    _listCmds.push_back("download");
+    _listCmds.push_back("pong");
     _listCmds.push_back("/logtime");
 }
 

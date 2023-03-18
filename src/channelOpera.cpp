@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/17 12:01:28 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:24:29 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ void Server::ft_inviteCmd(Client &client, std::vector<std::string> cmds)
                             ft_print_error(_channels[indexCha].get_chanlName(), ERR_CHANOPRIVSNEEDED, client);
                         else
                         {
-                            client.setMsgTemp(_clients[userIndex].getNickName());
-                            ft_print_error(_channels[indexCha].get_chanlName(), RPL_INVITING, client);
-                            client.setMsgTemp("");
+                            ft_print_error(_clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName(), RPL_INVITING, client);
                             _channels[indexCha].add_userbyInveted(client, _clients[userIndex]);
 
                             std::string msg;
-                            msg = ":" + client.getNickName() + "!@localhost  INVITE " + _clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName() + "\n";
+                            msg = ":" + client.getNickName() + "!@127.0.0.1 INVITE " + _clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName() + "\n";
                             send(_clients[userIndex].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+
+                            // :U1!AFKS@127.0.0.1 INVITE U2 :#CH
                         }
                     }
                 }

@@ -17,21 +17,30 @@
 
 // :punch.wa.us.dal.net 451 * PRIVMSG :You must finish connecting with another nickname first.
 
+std::string toLowerCaser(std::string str)
+{
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if (std::isalpha(str[i]))
+            str[i] = std::tolower(str[i]);
+    }
+    return str;
+}
 void Server::ft_hundle_cmd(Client &client, char *buffer)
 {
     std::vector<std::string> spl = ft_split(buffer, ' ');
     if (spl.size() < 1)
         return;
-
-    if (strcmp("PASS", spl[0].c_str()) == 0)
+    std::string temp = toLowerCaser(spl[0]);
+    if (strcmp("pass", temp.c_str()) == 0)
         handlePassCmd(client, spl, buffer);
-    else if (strcmp("USER", spl[0].c_str()) == 0)
+    else if (strcmp("user", temp.c_str()) == 0)
         handleUserCmd(client, spl, buffer);
-    else if (strcmp("NICK", spl[0].c_str()) == 0)
+    else if (strcmp("nick", temp.c_str()) == 0)
         handleNickCmd(client, spl);
     else if (!client.isRegistered())
     {
-        if (isCmdExit(spl[0].c_str()))
+        if (isCmdExit(temp.c_str()))
         {
             if (client.isUserFinishRegistered() == 1)
                 client.setMsgTemp(" (Please Enter Password) ");
@@ -39,52 +48,52 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
                 client.setMsgTemp(" (Please Enter NICKNAME) ");
             if (client.isUserFinishRegistered() == 3)
                 client.setMsgTemp(" (Please Enter USERNAME) ");
-            ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+            ft_print_error(temp.c_str(), ERR_NOTREGISTERED, client);
             client.setMsgTemp("");
         }
     }
-    else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
+    else if (strcmp("privmsg", temp.c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
-    else if (strcmp("NOTICE", spl[0].c_str()) == 0)
+    else if (strcmp("notice", temp.c_str()) == 0)
         handleNoticeCmd(client, spl, buffer);
-    else if (strcmp("QUIT", spl[0].c_str()) == 0)
+    else if (strcmp("quit", temp.c_str()) == 0)
         handleQuitCmd(client);
-    else if (strcmp("OPER", spl[0].c_str()) == 0)
+    else if (strcmp("oper", temp.c_str()) == 0)
         handleOperCmd(client, spl);
-    else if (strcmp("JOIN", spl[0].c_str()) == 0)
+    else if (strcmp("join", temp.c_str()) == 0)
         ft_joinCmd(client, spl);
-    else if (strcmp("PART", spl[0].c_str()) == 0)
+    else if (strcmp("part", temp.c_str()) == 0)
         ft_partCmd(client, spl);
-    else if (strcmp("MODE", spl[0].c_str()) == 0)
+    else if (strcmp("mode", temp.c_str()) == 0)
         modeCmd(spl, client);
-    else if (strcmp("KILL", spl[0].c_str()) == 0)
+    else if (strcmp("kill", temp.c_str()) == 0)
         handleKillCmd(client, spl);
-    else if (strcmp("LIST", spl[0].c_str()) == 0)
+    else if (strcmp("list", temp.c_str()) == 0)
         handleListCmd(client, spl);
-    else if (strcmp("NAMES", spl[0].c_str()) == 0)
+    else if (strcmp("names", temp.c_str()) == 0)
         handleNamesCmd(client, spl);
-    else if (strcmp("INVITE", spl[0].c_str()) == 0)
+    else if (strcmp("invite", temp.c_str()) == 0)
         ft_inviteCmd(client, spl);
-    else if (strcmp("KICK", spl[0].c_str()) == 0)
+    else if (strcmp("kick", temp.c_str()) == 0)
         ft_kickCmd(client, spl, buffer);
-    else if (strcmp("TOPIC", spl[0].c_str()) == 0)
+    else if (strcmp("topic", temp.c_str()) == 0)
         handleTopicCmd(client, spl);
-    else if (strcmp("VERSION", spl[0].c_str()) == 0)
+    else if (strcmp("version", temp.c_str()) == 0)
         handleVersionCmd(client, spl);
-    else if (strcmp("HELP", spl[0].c_str()) == 0)
+    else if (strcmp("help", temp.c_str()) == 0)
         handleHelpCmd(client);
-    else if (strcmp("TIME", spl[0].c_str()) == 0)
+    else if (strcmp("time", temp.c_str()) == 0)
         handleTimeCmd(client);
-    else if (strcmp("LUSER", spl[0].c_str()) == 0)
+    else if (strcmp("luser", temp.c_str()) == 0)
         handleLusersCmd(client);
-    else if (strcmp("LOGTIME", spl[0].c_str()) == 0)
+    else if (strcmp("/logtime", temp.c_str()) == 0)
         handleLogTime(client);
-    else if (strcmp("DOWNLOAD", spl[0].c_str()) == 0)
+    else if (strcmp("download", temp.c_str()) == 0)
         sendFile(client, spl);
-    else if (strcmp("PONG", spl[0].c_str()) == 0)
+    else if (strcmp("pong", temp.c_str()) == 0)
         ;
     else
-        ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
+        ft_print_error(temp.c_str(), ERR_UNKNOWNCOMMAND, client);
 }
 
 // ================================================
@@ -305,8 +314,6 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
 {
     if (cmds.size() == 1)
         ft_print_error("JOIN", ERR_NEEDMOREPARAMS, client);
-    else if (cmds[1][0] == '0' && atoi(cmds[1].c_str()) == 0)
-        eraseUserFromChannels(client);
     else
     {
         std::vector<std::string> chanls;
