@@ -29,19 +29,20 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleUserCmd(client, spl, buffer);
     else if (strcmp("NICK", spl[0].c_str()) == 0)
         handleNickCmd(client, spl);
-    // else if (!client.isRegistered())
-    // {
-    //     if (isCmdExit(spl[0].c_str()))
-    //     {
-    //         if (client.isUserFinishRegistered() == 1)
-    //             client.setMsgTemp(" (Please Enter Password) ");
-    //         if (client.isUserFinishRegistered() == 2)
-    //             client.setMsgTemp(" (Please Enter NICKNAME) ");
-    //         if (client.isUserFinishRegistered() == 3)
-    //             client.setMsgTemp(" (Please Enter USERNAME) ");
-    //         ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
-    //     }
-    // }
+    else if (!client.isRegistered())
+    {
+        if (isCmdExit(spl[0].c_str()))
+        {
+            if (client.isUserFinishRegistered() == 1)
+                client.setMsgTemp(" (Please Enter Password) ");
+            if (client.isUserFinishRegistered() == 2)
+                client.setMsgTemp(" (Please Enter NICKNAME) ");
+            if (client.isUserFinishRegistered() == 3)
+                client.setMsgTemp(" (Please Enter USERNAME) ");
+            ft_print_error(spl[0].c_str(), ERR_NOTREGISTERED, client);
+            client.setMsgTemp("");
+        }
+    }
     else if (strcmp("PRIVMSG", spl[0].c_str()) == 0)
         handlePrivmsgCmd(client, spl, buffer);
     else if (strcmp("NOTICE", spl[0].c_str()) == 0)
@@ -106,7 +107,10 @@ void Server::handlePassCmd(Client &client, std::vector<std::string> cmds, char *
         else if (client.getPass())
             ft_print_error("PASS", ERR_ALREADYREGISTRED, client);
         else
+        {
             client.setPass(true);
+            client.loginMessage();
+        }
     }
 };
 
@@ -120,6 +124,10 @@ void Server::handleNickCmd(Client &client, std::vector<std::string> cmds)
         ft_print_error(cmds[1], ERR_NICKNAMEINUSE, client);
     else
     {
+        if (client.getNickName() == "")
+        {
+            client.loginMessage();
+        }
         if (ft_isregister(client))
         {
             std::string msg = ":" + client.getNickName() + "!~@localhost NICK :" + cmds[1] + "\n";
@@ -157,13 +165,11 @@ void Server::handleUserCmd(Client &client, std::vector<std::string> cmds, char *
         if (cmds[4][0] == ':')
         {
             std::string realnm = buffer + std::strlen((cmds[1] + cmds[2] + cmds[3]).c_str()) + 9;
-            std::cout << "realname" << realnm << "\n";
             client.setRealName(realnm);
         }
         else
             client.setRealName(cmds[4]);
-
-        std::cout << "USER " << client.getUserName() << " " << client.getHostName() << " " << client.getServerName() << " " << client.getRealName() << "\n";
+        client.loginMessage();
     }
 };
 
@@ -334,6 +340,10 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                 channel.add_Operator(client);
                 channel.setCreator(client.getFd());
                 _channels.push_back(channel);
+                std::vector<std::string> temp;
+                temp.push_back("NAMES");
+                temp.push_back(chanls[l]);
+                handleNamesCmd(client, temp);
             }
             else
             {
@@ -347,7 +357,13 @@ void Server::ft_joinCmd(Client &client, std::vector<std::string> cmds)
                     else if (_channels[indx].is_userInChannel(client) == -1)
                     {
                         if (_channels[indx].get_chanlPass().empty() || _channels[indx].get_chanlPass() == key)
+                        {
                             _channels[indx].add_user(client);
+                            std::vector<std::string> temp;
+                            temp.push_back("NAMES");
+                            temp.push_back(_channels[indx].get_chanlName());
+                            handleNamesCmd(client, temp);
+                        }
                         else
                             ft_print_error(_channels[indx].get_chanlName(), ERR_BADCHANNELKEY, client);
                     }

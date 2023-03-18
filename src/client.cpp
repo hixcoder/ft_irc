@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:57:00 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/16 15:41:16 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 12:38:36 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,21 @@ bool Client::operator==(Client &other) const
 };
 
 // seters and getters
-void Client::setAuth(int auth) { _is_auth = auth; }
+void Client::loginMessage()
+{
+	_is_auth++;
+	if (_is_auth == 3)
+	{
+		// 		NICK adaDa
+		// user dahsk * * *
+		// :IRC-1337 001 adaDa :Welcome to the Internet Relay Network adaDa!dahsk@127.0.0.1
+		// :IRC-1337 002 adaDa :Your host is IRC-1337 running on version 1.0
+		// :IRC-1337 003 adaDa :This server was created Sat Mar 18 12:31:27 2023
+		std::string msg;
+		msg = ":IRC-1337 001 " + this->_nickName + " :Welcome to the Internet Relay Network " + this->_nickName + "!" + this->_userName + "@127.0.0.1\n" + ":IRC-1337 002 " + this->_nickName + " :Your host is IRC-1337 running on version 1.0\n" + ":IRC-1337 003 " + this->_nickName + " :This server was created Sat Mar 18 12:31:27 2023\n";
+		send(this->_fd, msg.c_str(), strlen(msg.c_str()), 0);
+	}
+}
 void Client::setPass(bool pass) { _pass = pass; }
 void Client::setNickName(std::string nickName) { _nickName = nickName; }
 void Client::setUserName(std::string userName) { _userName = userName; }

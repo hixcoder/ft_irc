@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 10:28:33 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/18 12:27:59 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ public:
     bool operator==(Client &other) const;
 
     // seters and getters
-    void setAuth(int auth);
+    void loginMessage();
     void setPass(bool pass);
     void setNickName(std::string nickName);
     void setUserName(std::string userName);

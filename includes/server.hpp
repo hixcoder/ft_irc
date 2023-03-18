@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:15:43 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 12:23:47 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/18 12:26:43 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ private:
     void handlechanlModeCmd(Client &client, std::vector<std::string> cmds, int index);
     int is_chanel(std::string name);
 
-    int is_userExist(std::string nk);
+    int
+    is_userExist(std::string nk);
     // channel operator
     void ft_joinCmd(Client &client, std::vector<std::string> cmds);
     void ft_partCmd(Client &client, std::vector<std::string> cmds);

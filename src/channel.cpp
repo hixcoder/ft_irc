@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/18 10:21:12 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 11:56:23 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,16 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
 
 void Channel::add_user(Client &user)
 {
-    // :LKK!LKK00@127.0.0.1 JOIN #LK
+    //  :lho!ahammam@127.0.0.1 JOIN #ll
+    //  :IRC-1337 353 fas = #ll :hel @lho fas
+    // :IRC-1337 366 fas #ll :End of /NAMES list
     std::string msg;
-
     msg = ":" + user.getNickName() + "!" + user.getUserName() + "@127.0.0.1 JOIN " + _chanlName + "\n";
     _chanlUsers.push_back(user);
-    send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+    for (size_t i = 0; i < _chanlUsers.size(); i++)
+    {
+        send(_chanlUsers[i].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+    }
 };
 
 void Channel::add_Operator(Client clr)
