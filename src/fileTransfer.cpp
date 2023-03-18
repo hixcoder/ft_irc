@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fileTransfer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammam <ahammam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 14:49:46 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/17 16:57:58 by ahammam          ###   ########.fr       */
+/*   Updated: 2023/03/18 14:40:45 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ void Server::sendFile(Client &client, std::vector<std::string> cmds)
 	char buffer[1024];
 	std::string file;
 	FILE *fd = fopen(cmds[1].c_str(), "rb");
+	if (fd == NULL)
+	{
+		msg = "PRIVMSG " + client.getNickName() + " :" + "Error opening file" + "\r\n";
+		send(client.getFd(), msg.c_str(), msg.size(), 0);
+		return;
+	}
 	while (!feof(fd))
 	{
 		int size = fread(&buffer, 1, 1024, fd);

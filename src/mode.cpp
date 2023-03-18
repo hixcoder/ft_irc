@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/18 13:42:34 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 14:30:26 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ bool validchanelMode(std::string mode)
 		return (false);
 	while (i < mode.length())
 	{
+
 		if (mode[i] != 'o' && mode[i] != 'n' && mode[i] != 'l' && mode[i] != 't' && mode[i] != 'k' && mode[i] != 'i' && mode[i] != 's')
 			return (false);
 		i++;
@@ -74,9 +75,15 @@ bool validchanelMode(std::string mode)
 
 void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int i)
 {
-
+	std::string msg;
 	if (_channels[i].is_userInChannel(user) == -1)
 		return (ft_print_error(cmds[1], ERR_NOTONCHANNEL, user));
+	if (cmds.size() <= 2)
+	{
+		msg = ":@localhost MODE " + cmds[1] + " +\n";
+		send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+		return;
+	}
 	if (_channels[i].ft_isOperator(user) == false)
 		return (ft_print_error(_channels[i].get_chanlName(), ERR_CHANOPRIVSNEEDED, user));
 	if (!validchanelMode(cmds[2]))
@@ -112,6 +119,6 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 			_channels[i].setModes(cmds[2][l], false);
 		l++;
 	}
-	std::string msg = ":@localhost MODE " + cmds[1] + " " + cmds[2] + "\n";
+	msg = ":@localhost MODE " + cmds[1] + " " + cmds[2] + "\n";
 	send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 }
