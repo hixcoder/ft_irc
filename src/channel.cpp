@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 10:21:53 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/18 08:34:37 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 10:21:12 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ std::string Channel::getallUsers(std::string &existedUsers, std::vector<Client> 
 
 void Channel::add_user(Client &user)
 {
-    //: NICK665!~USER865@d2a6-9017-cfb7-6374-1329.iam.net.ma JOIN :#CHANEELNIM564
+    // :LKK!LKK00@127.0.0.1 JOIN #LK
     std::string msg;
 
-    msg = ":" + user.getNickName() + "!~" + user.getUserName() + "@127.0.0.1 JOIN " + _chanlName + " \n";
+    msg = ":" + user.getNickName() + "!" + user.getUserName() + "@127.0.0.1 JOIN " + _chanlName + "\n";
     _chanlUsers.push_back(user);
     send(user.getFd(), msg.c_str(), strlen(msg.c_str()), 0);
 };

@@ -195,11 +195,11 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                 else
                 {
                     std::string msg;
-                    msg = ":" + client.getNickName() + "!" + client.getUserName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName();
+                    msg = ":" + client.getNickName() + "!" + client.getUserName() + "@127.0.0.1 PRIVMSG " + _clients[fd].getNickName();
                     if (cmds[2][0] != ':')
-                        msg = msg + " :" + cmds[2] + "\r\n";
+                        msg = msg + " :" + cmds[2] + "\n";
                     else
-                        msg = msg + strchr(buffer, ':') + "\r\n";
+                        msg = msg + " " + strchr(buffer, ':') + "\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -214,17 +214,17 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                         ft_print_error(_channels[fd].get_chanlName(), ERR_NOTONCHANNEL, client);
                     else
                     {
+                        //: LKK!LKK00@127.0.0.1 PRIVMSG #LK :AFGASDG
                         std::string msg;
+                        msg = ":" + client.getNickName() + "!" + client.getUserName() + "@127.0.0.1 PRIVMSG " + _channels[fd].get_chanlName();
                         if (cmds[2][0] != ':')
-                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " :" + cmds[2] + "\n";
+                            msg = msg + " :" + cmds[2] + "\n";
                         else
-                        {
-                            msg = ":" + client.getNickName() + " PRIVMSG " + _channels[fd].get_chanlName() + " " + strchr(buffer, ':') + "\n";
-                            std::cout << strchr(buffer, ':') << "\n";
-                        }
+                            msg = msg + " " + strchr(buffer, ':') + "\n";
                         for (size_t l = 0; l < _channels[fd].get_chanlUsers().size(); l++)
                         {
-                            send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
+                            if (_channels[fd].get_chanlUsers()[l].getFd() != client.getFd())
+                                send(_channels[fd].get_chanlUsers()[l].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                         }
                     }
                 }
