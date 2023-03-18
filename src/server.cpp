@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboumahd <hboumahd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/17 12:26:07 by hboumahd         ###   ########.fr       */
+/*   Updated: 2023/03/18 11:01:45 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Server::Server(int port, char *passwd)
     _timeout = 0;
     _endServer = 0;
     _closeCon = 0;
-    _serverName = "irc_killers";
+    _serverName = ":IRC-1337 ";
     createSocket();
     bindSocket();
     listeningToClients(4);
@@ -160,7 +160,11 @@ void Server::addClient()
         newclient.setClientAddr(clt_addr);
         _clients.push_back(newclient);
         // :punch.wa.us.dal.net NOTICE AUTH :*** Looking up your hostname...
-        std::string welcomeMsg = ":@localhost " + std::to_string(RPL_WELCOME) + " NOTICE AUTH  :Welcome to the IRC server!\n";
+        std::string welcomeMsg;
+        // :IRC-1337 NOTICE AUTH :*** Looking up your hostname...
+        // :IRC-1337 NOTICE AUTH :*** Found your hostname
+        welcomeMsg = ":" + this->_serverName + " NOTICE AUTH  :*** Looking up your hostname...\n";
+        welcomeMsg = welcomeMsg + ":" + this->_serverName + " NOTICE AUTH  :*** Found your hostname\n";
         send(newclient.getFd(), welcomeMsg.c_str(), strlen(welcomeMsg.c_str()), 0);
     }
 }
