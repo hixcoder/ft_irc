@@ -80,6 +80,8 @@ void Server::ft_hundle_cmd(Client &client, char *buffer)
         handleLogTime(client);
     else if (strcmp("DOWNLOAD", spl[0].c_str()) == 0)
         sendFile(client, spl);
+    else if (strcmp("PONG", spl[0].c_str()) == 0)
+        ;
     else
         ft_print_error(spl[0].c_str(), ERR_UNKNOWNCOMMAND, client);
 }
@@ -193,11 +195,11 @@ void Server::handlePrivmsgCmd(Client &client, std::vector<std::string> cmds, cha
                 else
                 {
                     std::string msg;
-                    msg = ":" + client.getUserName() + "!" + client.getNickName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName() + " :";
+                    msg = ":" + client.getNickName() + "!" + client.getUserName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName();
                     if (cmds[2][0] != ':')
-                        msg = msg + cmds[2] + "\n";
+                        msg = msg + " :" + cmds[2] + "\r\n";
                     else
-                        msg = msg + strchr(buffer, ':') + "\n";
+                        msg = msg + strchr(buffer, ':') + "\r\n";
                     send(_clients[fd].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
                 }
             }
@@ -253,8 +255,9 @@ void Server::handleNoticeCmd(Client &client, std::vector<std::string> cmds, char
                     ;
                 else
                 {
+                    // :NICK996545!~USERRR965@d2a6-9017-cfb7-6374-1329.iam.net.ma PRIVMSG NICK665 :SAKLGDGSGSDGS
                     std::string msg;
-                    msg = ":" + client.getUserName() + "!" + client.getNickName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName() + " :";
+                    msg = ":" + client.getNickName() + "!~" + client.getUserName() + "@127.0.0.1 " + cmds[0] + " " + _clients[fd].getNickName() + " :";
                     if (cmds[2][0] != ':')
                         msg = msg + cmds[2] + "\n";
                     else
