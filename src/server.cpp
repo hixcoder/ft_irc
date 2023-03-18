@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:17:54 by hboumahd          #+#    #+#             */
-/*   Updated: 2023/03/18 15:37:50 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:09:48 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,12 @@ void Server::runServer()
 {
     do
     {
-        if (poll(&_pollfds[0], _pollfds.size(), 0) < 0)
+        if (poll(&_pollfds[0], _pollfds.size(), -1) < 0)
         {
             std::cout << "poll() call failed!\n";
             break;
         }
 
-        // determine the readable fds
         for (size_t i = 0; i < _pollfds.size(); i++)
         {
             if (_pollfds[i].revents == 0)

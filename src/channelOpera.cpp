@@ -6,7 +6,7 @@
 /*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 08:21:29 by lahammam          #+#    #+#             */
-/*   Updated: 2023/03/18 15:24:29 by lahammam         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:50:10 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ void Server::ft_inviteCmd(Client &client, std::vector<std::string> cmds)
                             std::string msg;
                             msg = ":" + client.getNickName() + "!@127.0.0.1 INVITE " + _clients[userIndex].getNickName() + " " + _channels[indexCha].get_chanlName() + "\n";
                             send(_clients[userIndex].getFd(), msg.c_str(), strlen(msg.c_str()), 0);
-
-                            // :U1!AFKS@127.0.0.1 INVITE U2 :#CH
                         }
                     }
                 }
