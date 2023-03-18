@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alouzizi <alouzizi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lahammam <lahammam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:39:04 by alouzizi          #+#    #+#             */
-/*   Updated: 2023/03/18 13:22:18 by alouzizi         ###   ########.fr       */
+/*   Updated: 2023/03/18 13:42:34 by lahammam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Server::modeCmd(std::vector<std::string> cmd, Client &user)
 	if (!validMode(cmd[2]))
 		return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
 	size_t l = 1;
-	while(l < cmd[1].length())
+	while (l < cmd[1].length())
 	{
 		if (cmd[2][0] == '+')
 			user.setModes(cmd[2][l], true);
@@ -63,15 +63,14 @@ bool validchanelMode(std::string mode)
 	size_t i = 1;
 	if ((mode[0] != '+' && mode[0] != '-'))
 		return (false);
-	while(i < mode.length())
+	while (i < mode.length())
 	{
-		if (mode[1] != 'o' && mode[1] != 'n' && mode[1] != 'l' && mode[1] != 't' && mode[1] != 'k' && mode[1] != 'i')
+		if (mode[i] != 'o' && mode[i] != 'n' && mode[i] != 'l' && mode[i] != 't' && mode[i] != 'k' && mode[i] != 'i' && mode[i] != 's')
 			return (false);
 		i++;
 	}
 	return (true);
 }
-
 
 void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int i)
 {
@@ -84,11 +83,10 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 		return (ft_print_error("MODE", ERR_UMODEUNKNOWNFLAG, user));
 	size_t l = 1;
 	size_t index = 2;
-	while(l < cmds[2].length())
+	while (l < cmds[2].length())
 	{
-		//if ((cmds[2][l] == 'l' || cmds[2][l] == 'k') && cmds.size() < 4)
-		// else
-		// {
+		if ((cmds[2][l] == 'l' || cmds[2][l] == 'k'))
+		{
 			if (index + 1 < cmds.size())
 			{
 				index++;
@@ -107,8 +105,7 @@ void Server::handlechanlModeCmd(Client &user, std::vector<std::string> cmds, int
 			}
 			else
 				return (ft_print_error("MODE", ERR_NEEDMOREPARAMS, user));
-				
-		// }
+		}
 		if (cmds[2][0] == '+')
 			_channels[i].setModes(cmds[2][l], true);
 		else if (cmds[2][0] == '-')
