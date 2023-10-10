@@ -78,7 +78,7 @@ void Client::loginMessage()
 		// :IRC-1337 002 adaDa :Your host is IRC-1337 running on version 1.0
 		// :IRC-1337 003 adaDa :This server was created Sat Mar 18 12:31:27 2023
 		std::string msg;
-		msg = ":IRC-1337 001 " + this->_nickName + " :Welcome to the Internet Relay Network " + this->_nickName + "!" + this->_userName + "@127.0.0.1\n" + ":IRC-1337 002 " + this->_nickName + " :Your host is IRC-1337 running on version 1.0\n" + ":IRC-1337 003 " + this->_nickName + " :This server was created Sat Mar 18 12:31:27 2023\n";
+		msg = ":IRC-1337 001 " + this->_nickName + " :Welcome to the Internet Relay Network " + this->_nickName + "!" + this->_userName + "@127.0.0.1\n" + ":IRC-1337 002 " + this->_nickName + " :Your host is IRC-1337 running onc version 1.0\n" + ":IRC-1337 003 " + this->_nickName + " :This server was created Sat Mar 18 12:31:27 2023\n";
 		send(this->_fd, msg.c_str(), strlen(msg.c_str()), 0);
 	}
 }

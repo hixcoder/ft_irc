@@ -65,7 +65,7 @@ void Server::createSocket()
 
     bzero((char *)&_server_addr, sizeof(_server_addr));
 
-    _server_addr.sin_addr.s_addr = INADDR_ANY;
+    _server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");;
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(_port);
 }
@@ -82,8 +82,9 @@ void Server::bindSocket()
         error("Error on fcntl", 1, _serverSocket);
 
     // bind the server host address
+    std::cout << _server_addr.sin_addr.s_addr;
     if (bind(_serverSocket, (struct sockaddr *)&_server_addr, sizeof(_server_addr)) < 0)
-        error("Error on binding host adress.", 1, _serverSocket);
+        error("Error on binding host adress. .", 1, _serverSocket);
 }
 
 void Server::listeningToClients(int backlog)
